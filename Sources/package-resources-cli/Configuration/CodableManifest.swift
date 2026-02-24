@@ -124,10 +124,35 @@ extension Manifest: Decodable {
 			case let .some(indentor): indentor
 			}
 
-			let indentSize: Int = try
-			container.decodeIfPresent("indent-size")
-			?? container.decodeIfPresent("tab-size")
-			?? (indentor == " " ? 2 : 1)
+			var indentSize: Int = 1
+
+			do {
+				do {
+					indentSize = try container.decode("indent-size")
+				} catch {
+					let alias: String = try container.decode("indent-size")
+					switch alias {
+					case "default":
+						indentSize = indentor == " " ? 2 : 1
+					default:
+						throw error
+					}
+				}
+			} catch {
+				do {
+					indentSize = try container.decode("tab-size")
+
+					if manifest.version.major > 1 {
+						print(
+							ANSI("⚠️ \"tab-size\" has been renamed to \"indent-size\"")
+								.foreground(.yellow)
+								.bold()
+						)
+					}
+				} catch {
+					indentSize = indentor == " " ? 2 : 1
+				}
+			}
 
 			manifest.output = try container.decodeIfPresent("output")
 			manifest.indentor = indentor
