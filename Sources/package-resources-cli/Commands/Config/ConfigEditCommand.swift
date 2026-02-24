@@ -221,6 +221,13 @@ extension App.ConfigCommand {
 					}
 				}
 			}
+
+
+			print(
+				 ANSI("✅ Successfully updated \(configFile.name) file")
+					 .foreground(.green)
+					 .bold()
+			 )
 		}
 	}
 }

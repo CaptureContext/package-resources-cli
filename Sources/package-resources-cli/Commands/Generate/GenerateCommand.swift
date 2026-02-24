@@ -147,6 +147,12 @@ extension App {
 					atPath: input,
 					toFileAtPath: outputPath
 				).get()
+
+				print(
+					ANSI("✅ Successfully generated package resources")
+						.foreground(.green)
+						.bold()
+				)
 			}
 		}
 	}

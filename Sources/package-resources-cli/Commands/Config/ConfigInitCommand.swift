@@ -35,7 +35,15 @@ extension App.ConfigCommand {
 			let configFile = File(uncheckedPath: parent.path)
 			let missing = (try? configFile.validatePath()) == nil
 
-			guard missing || mode != .default else { return }
+			guard missing || mode != .default else {
+				print(
+					ANSI("✅ \(configFile.name) file already exists")
+						.foreground(.yellow)
+						.bold()
+				)
+
+				return
+			}
 
 			let config = Manifest()
 			let format: Manifest.Format = self.format == .json ? .json : .yaml
@@ -46,6 +54,12 @@ extension App.ConfigCommand {
 			case .yaml:
 				try configFile.write(YAMLEncoder().encode(config))
 			}
+
+			print(
+				ANSI("✅ Successfully created \(configFile.name) file")
+					.foreground(.green)
+					.bold()
+			)
 		}
 	}
 }

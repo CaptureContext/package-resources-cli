@@ -70,7 +70,7 @@ let package = Package(
 					.writeToPackageDirectory(
 						reason: """
 						Write permission is needed to create and modify \
-						config file for package-resources-cli
+						config files for package-resources-cli
 						"""
 					)
 				]
