@@ -118,6 +118,7 @@ extension Manifest: Decodable {
 
 			let indentor: String = switch try container.decodeIfPresent(String.self, forKey: "indentor") {
 			case .none: "\t"
+			case "default": "\t"
 			case "tab": "\t"
 			case "space": " "
 			case let .some(indentor): indentor
@@ -147,13 +148,50 @@ extension Manifest: Decodable {
 					String.self,
 					forKey: "separator"
 				)
-				.map { manifest.camelCaseNumbers.separator = $0[...] }
+				.map {
+					switch $0 {
+					case "default":
+						manifest.camelCaseNumbers.separator = String
+							.Casification.Configuration
+							.CamelCase.Numbers.default.separator
+					case "current":
+						manifest.camelCaseNumbers.separator = String
+							.Casification.Configuration
+							.CamelCase.Numbers.current.separator
+					default:
+						manifest.camelCaseNumbers.separator = $0[...]
+					}
+				}
 
-				try container.decodeIfPresent(
-					[String].self,
-					forKey: "allowed-delimeters"
-				)
-				.map { manifest.commonNumbers.allowedDelimeters = Set($0.compactMap(\.first)) }
+				do {
+					try container.decodeIfPresent(
+						[String].self,
+						forKey: "allowed-delimeters"
+					)
+					.map { manifest.commonNumbers.allowedDelimeters = Set($0.compactMap(\.first)) }
+				} catch {
+					let e = error
+
+					do {
+						let alias = try container.decodeIfPresent(
+							String.self,
+							forKey: "allowed-delimeters"
+						)
+
+						switch alias {
+						case "default":
+							manifest.commonNumbers.allowedDelimeters = String
+								.Casification.Configuration.Common
+								.Numbers.default.allowedDelimeters
+						case "current":
+							manifest.commonNumbers.allowedDelimeters = String
+								.Casification.Configuration.Common
+								.Numbers.current.allowedDelimeters
+						default:
+							throw error
+						}
+					} catch { throw e }
+				}
 
 				try container.decodeIfPresent(
 					[String].self,
@@ -179,20 +217,40 @@ extension Manifest: Decodable {
 
 				manifest.commonAcronyms = Set(acronyms.map { $0[...] })
 			} catch {
-				// Primary path
-				try container.nestedIfPresent("acronyms") { container in
-					try container.decodeIfPresent(
-						String.self,
-						forKey: "processing-policy"
-					)
-					.flatMap { String.Casification.Configuration.CamelCase.Acronyms.ProcessingPolicy(_config: $0) }
-					.map { manifest.camelCaseAcronyms.processingPolicy = $0 }
+					// Primary path
+					try container.nestedIfPresent("acronyms") { container in
+						try container.decodeIfPresent(
+							String.self,
+							forKey: "processing-policy"
+						)
+						.flatMap { String.Casification.Configuration.CamelCase.Acronyms.ProcessingPolicy(_config: $0) }
+						.map { manifest.camelCaseAcronyms.processingPolicy = $0 }
 
-					try container.decodeIfPresent(
-						[String].self,
-						forKey: "values"
-					)
-					.map { manifest.commonAcronyms = Set($0.map { $0[...] }) }
+						do {
+							try container.decodeIfPresent(
+								[String].self,
+								forKey: "values"
+							)
+							.map { manifest.commonAcronyms = Set($0.map { $0[...] }) }
+						} catch {
+							let e = error
+
+							do {
+								let alias = try container.decodeIfPresent(
+									String.self,
+									forKey: "allowed-delimeters"
+								)
+
+								switch alias {
+								case "default":
+									manifest.commonAcronyms = .defaultAcronyms
+								case "current":
+									manifest.commonAcronyms = .currentAcronyms
+								default:
+									throw error
+								}
+							} catch { throw e }
+					}
 				}
 			}
 
