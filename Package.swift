@@ -48,7 +48,11 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
-			.upToNextMinor(from: "4.0.0")
+			.upToNextMajor(from: "4.0.0")
+		),
+		.package(
+			url: "https://github.com/pointfreeco/swift-case-paths.git",
+			.upToNextMajor(from: "1.7.0")
 		),
 	],
 	targets: [
@@ -90,6 +94,10 @@ let package = Package(
 				.product(
 					name: "Yams",
 					package: "yams"
+				),
+				.product(
+					name: "CasePaths",
+					package: "swift-case-paths"
 				),
 			],
 			path: "Sources/package-resources-cli"

@@ -31,6 +31,14 @@ extension App.ConfigCommand {
 		@Option(name: .shortAndLong, help: "Initialization mode")
 		var mode: Mode = .default
 
+		@Flag(
+			name: .customLong("encode-aliases"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Disables alias resolution for config values"
+		)
+		var encodeAliases: Bool = false
+
 		func run() throws {
 			let configFile = File(uncheckedPath: parent.path)
 			let missing = (try? configFile.validatePath()) == nil

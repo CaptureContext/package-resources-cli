@@ -11,22 +11,6 @@ extension App {
 			abstract: "Generates boilerplate for package resources"
 		)
 
-		init() {}
-
-		init(
-			input: String,
-			config: String? = nil,
-			output: String? = nil,
-			indentor: String? = nil,
-			indentSize: Int? = nil
-		) {
-			self.input = input
-			self.config = config
-			self.output = output
-			self.indentor = indentor
-			self.indentSize = indentSize
-		}
-
 		@Option(
 			name: .shortAndLong, help: "Path to root directory for scanning.",
 			transform: { $0 }
@@ -49,97 +33,95 @@ extension App {
 			name: .long,
 			help: "Indentation character"
 		)
-		public var indentor: String? = nil
+		public var indentor: Manifest.Indentor? = nil
 
 		@Option(
 			name: .customLong("indent-size"),
-			help: "Tab size"
+			help: "Number of indentors per indentation level"
 		)
-		public var indentSize: Int? = nil
-
-		@Option(
-			name: .customLong("numbers-next-token-mode"),
-			help: "Processsing mode for a token after a number"
-		)
-		public var numbersNextTokenMode: String? = nil
+		public var indentSize: Manifest.IndentSize? = nil
 
 		@Option(
 			name: .customLong("numbers-separator"),
 			help: "Separator for numbers"
 		)
-		public var numbersSeparator: String? = nil
+		public var numbersSeparator: Manifest.NumbersConfig.Separator? = nil
+
+		@Option(
+			name: .customLong("numbers-next-token-mode"),
+			help: "Processsing mode for a token after a number"
+		)
+		public var numbersNextTokenMode: Manifest.NumbersConfig.NextTokenMode? = nil
 
 		@Option(
 			name: .customLong("numbers-allowed-delimeters"),
 			help: "Allowed delimeters for numbers"
 		)
-		public var numbersAllowedDelimeters: String? = nil
+		public var numbersAllowedDelimeters: Manifest.NumbersConfig.AllowedDelimters? = nil
 
 		@Option(
 			name: .customLong("numbers-single-letter-boundary-options"),
 			help: "Processsing mode for a token after a number"
 		)
-		public var numbersSingleLetterBoundaryOptions: [String] = [._unspecified]
+		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.SingleLetterBoundaryOption] = [.current]
 
 		@Option(name: .customLong(
-			"acronyms-processing"),
+			"acronyms-processing-policy"),
 			help: "Acronyms processing"
 		)
-		public var acronymsProcessing: String? = nil
+		public var acronymsProcessingPolicy: Manifest.AcronymsConfig.ProcessingPolicy = .current
 
 		@Option(
 			name: .customLong("acronyms-values"),
 			help: "Acronyms to be treated as a single character in camelCasing"
 		)
-		public var acronymsValues: [String] = [._unspecified]
+		public var acronymsValues: [String] = ["current"]
 
 		public func run() throws {
 			let config = self.config.flatMap(Manifest.load(at:))
-				.or(.init())
+				.or(Manifest())
 				.ifLet(output, override: \.output)
 				.ifLet(indentor, override: \.indentor)
 				.ifLet(indentSize, override: \.indentSize)
 				.ifLet(
-					numbersNextTokenMode.flatMap { .init(_config: $0) },
-					override: \.camelCaseNumbers.nextTokenMode
+					numbersSeparator,
+					override: \.numbers.separator
 				)
 				.ifLet(
-					numbersSeparator.map { $0[...] },
-					override: \.camelCaseNumbers.separator
+					numbersNextTokenMode,
+					override: \.numbers.nextTokenMode
 				)
 				.ifLet(
-					numbersAllowedDelimeters.map { Set($0) },
-					override: \.commonNumbers.allowedDelimeters
+					numbersAllowedDelimeters,
+					override: \.numbers.allowedDelimeters
 				)
 				.ifLet(
-					numbersSingleLetterBoundaryOptions == [._unspecified] ? nil : [
-						.singleLetter(.init(_config: numbersSingleLetterBoundaryOptions))
-					],
-					override: \.commonNumbers.boundaryOptions
+					.init(rawValue: numbersSingleLetterBoundaryOptions),
+					override: \.numbers.singleLetterBoundaryOptions
 				)
 				.ifLet(
-					acronymsProcessing.flatMap { .init(_config: $0) },
-					override: \.camelCaseAcronyms.processingPolicy
+					acronymsProcessingPolicy,
+					override: \.acronyms.processingPolicy
 				)
 				.ifLet(
-					acronymsValues == [._unspecified] ? nil : Set(acronymsValues.map { $0[...] }),
-					override: \.commonAcronyms
+					acronymsValues,
+					override: \.acronyms.values
 				)
 
 			let outputPath = output ?? config.output ?? input.appending("/Resources.generated.swift")
 
 			try withCasification({
-				$0.camelCase.acronyms.processingPolicy = config.camelCaseAcronyms.processingPolicy
-				$0.camelCase.numbers.separator = config.camelCaseNumbers.separator
-				$0.camelCase.numbers.nextTokenMode = config.camelCaseNumbers.nextTokenMode
-				$0.common.numbers.allowedDelimeters = config.commonNumbers.allowedDelimeters
-				$0.common.numbers.boundaryOptions = config.commonNumbers.boundaryOptions
-				$0.acronyms = config.commonAcronyms
+				$0.camelCase.acronyms.processingPolicy = config.acronyms.processingPolicy.rawValue
+				$0.camelCase.numbers.separator = config.numbers.separator.rawValue
+				$0.camelCase.numbers.nextTokenMode = config.numbers.nextTokenMode.rawValue
+				$0.common.numbers.allowedDelimeters = config.numbers.allowedDelimeters.rawValue
+				$0.common.numbers.boundaryOptions = config.numbers.singleLetterBoundaryOptions.options
+				$0.acronyms = config.acronyms.resolvedValues
 			}) {
 				let client = PackageResourcesClient(
 					processResources: .standard(
-						indentor: config.indentor,
-						indentSize: config.indentSize
+						indentor: config.indentor.rawValue,
+						indentSize: config.indentSize.rawValue
 					)
 				)
 

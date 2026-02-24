@@ -36,49 +36,57 @@ extension App.ConfigCommand {
 			name: .long,
 			help: "Indentation character"
 		)
-		public var indentor: String? = nil
+		public var indentor: Manifest.Indentor? = nil
 
 		@Option(
 			name: .customLong("indent-size"),
-			help: "Indent size"
+			help: "Number of indentors per indentation level"
 		)
-		public var indentSize: Int? = nil
-
-		@Option(
-			name: .customLong("numbers-next-token-mode"),
-			help: "Processsing mode for a token after a number"
-		)
-		public var numbersNextTokenMode: String? = nil
+		public var indentSize: Manifest.IndentSize? = nil
 
 		@Option(
 			name: .customLong("numbers-separator"),
 			help: "Separator for numbers"
 		)
-		public var numbersSeparator: String? = nil
+		public var numbersSeparator: Manifest.NumbersConfig.Separator? = nil
+
+		@Option(
+			name: .customLong("numbers-next-token-mode"),
+			help: "Processsing mode for a token after a number"
+		)
+		public var numbersNextTokenMode: Manifest.NumbersConfig.NextTokenMode? = nil
 
 		@Option(
 			name: .customLong("numbers-allowed-delimeters"),
 			help: "Allowed delimeters for numbers"
 		)
-		public var numbersAllowedDelimeters: String? = nil
+		public var numbersAllowedDelimeters: Manifest.NumbersConfig.AllowedDelimters? = nil
 
 		@Option(
 			name: .customLong("numbers-single-letter-boundary-options"),
 			help: "Processsing mode for a token after a number"
 		)
-		public var numbersSingleLetterBoundaryOptions: [String] = [._unspecified]
+		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.SingleLetterBoundaryOption] = [.current]
 
 		@Option(name: .customLong(
-			"acronyms-processing"),
+			"acronyms-processing-policy"),
 			help: "Acronyms processing"
 		)
-		public var acronymsProcessing: String? = nil
+		public var acronymsProcessingPolicy: Manifest.AcronymsConfig.ProcessingPolicy = .current
 
 		@Option(
-			name: .long,
+			name: .customLong("acronyms-values"),
 			help: "Acronyms to be treated as a single character in camelCasing"
 		)
-		public var acronymsValues: [String] = [._unspecified]
+		public var acronymsValues: [String] = ["current"]
+
+		@Flag(
+			name: .customLong("encode-aliases"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Disables alias resolution for config values"
+		)
+		var encodeAliases: Bool = false
 
 		@Flag(
 			name: .customLong("remove-output"),
@@ -105,20 +113,20 @@ extension App.ConfigCommand {
 		var removeIndentSize: Bool = false
 
 		@Flag(
+			name: .customLong("remove-numbers-separator"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes numbers.separator from the config file"
+		)
+		var removeNumbersSeparator: Bool = false
+
+		@Flag(
 			name: .customLong("remove-numbers-next-token-mode"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
 			help: "Removes numbers.next-token-mode from the config file"
 		)
 		var removeNumbersNextTokenMode: Bool = false
-
-		@Flag(
-			name: .customLong("remove-acronyms-processing"),
-			inversion: .prefixedNo,
-			exclusivity: .exclusive,
-			help: "Removes numbers.separator from the config file"
-		)
-		var removeNumbersSeparator: Bool = false
 
 		@Flag(
 			name: .customLong("remove-numbers-allowed-delimeters"),
@@ -137,12 +145,12 @@ extension App.ConfigCommand {
 		var removeNumbersSingleLetterBoundaryOptions: Bool = false
 
 		@Flag(
-			name: .customLong("remove-acronyms-processing"),
+			name: .customLong("remove-acronyms-processing-policy"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
 			help: "Removes acronyms.processing-policy from the config file"
 		)
-		var removeAcronymsProcessing: Bool = false
+		var removeAcronymsProcessingPolicy: Bool = false
 
 		@Flag(
 			name: .customLong("remove-acronyms-values"),
@@ -163,30 +171,28 @@ extension App.ConfigCommand {
 					.ifLet(indentor, override: \.indentor)
 					.ifLet(indentSize, override: \.indentSize)
 					.ifLet(
-						numbersNextTokenMode.flatMap { .init(_config: $0) },
-						override: \.camelCaseNumbers.nextTokenMode
+						numbersSeparator,
+						override: \.numbers.separator
 					)
 					.ifLet(
-						numbersSeparator.map { $0[...] },
-						override: \.camelCaseNumbers.separator
+						numbersNextTokenMode,
+						override: \.numbers.nextTokenMode
 					)
 					.ifLet(
-						numbersAllowedDelimeters.map { Set($0) },
-						override: \.commonNumbers.allowedDelimeters
+						numbersAllowedDelimeters,
+						override: \.numbers.allowedDelimeters
 					)
 					.ifLet(
-						numbersSingleLetterBoundaryOptions == [._unspecified] ? nil : [
-							.singleLetter(.init(_config: numbersSingleLetterBoundaryOptions))
-						],
-						override: \.commonNumbers.boundaryOptions
+						.init(rawValue: numbersSingleLetterBoundaryOptions),
+						override: \.numbers.singleLetterBoundaryOptions
 					)
 					.ifLet(
-						acronymsProcessing.flatMap { .init(_config: $0) },
-						override: \.camelCaseAcronyms.processingPolicy
+						acronymsProcessingPolicy,
+						override: \.acronyms.processingPolicy
 					)
 					.ifLet(
-						acronymsValues == [._unspecified] ? nil : Set(acronymsValues.map { $0[...] }),
-						override: \.commonAcronyms
+						acronymsValues,
+						override: \.acronyms.values
 					)
 			}
 
@@ -198,7 +204,7 @@ extension App.ConfigCommand {
 				if removeNumbersAllowedDelimeters { ignoredKeys.insert(["numbers", "allowed-delimeters"]) }
 				if removeNumbersSingleLetterBoundaryOptions { ignoredKeys.insert(["numbers", "single-letter-boundary-options"]) }
 				if removeNumbersSeparator { ignoredKeys.insert(["numbers", "next-token-mode"]) }
-				if removeAcronymsProcessing { ignoredKeys.insert(["acronyms", "processing-policy"]) }
+				if removeAcronymsProcessingPolicy { ignoredKeys.insert(["acronyms", "processing-policy"]) }
 				if removeAcronymsValues { ignoredKeys.insert(["acronyms", "values"]) }
 			}
 
@@ -210,18 +216,19 @@ extension App.ConfigCommand {
 				try configFile.write(YAMLEncoder().encode(config))
 			}
 
-			try Manifest.$ignoredKeys.withValue(ignoredKeys) {
-				switch self.format {
-				case .json: try encodeJSON()
-				case .yaml: try encodeYAML()
-				case .keep:
-					switch format {
+			try Manifest.$encodeAliases.withValue(encodeAliases) {
+				try Manifest.$ignoredKeys.withValue(ignoredKeys) {
+					switch self.format {
 					case .json: try encodeJSON()
 					case .yaml: try encodeYAML()
+					case .keep:
+						switch format {
+						case .json: try encodeJSON()
+						case .yaml: try encodeYAML()
+						}
 					}
 				}
 			}
-
 
 			print(
 				 ANSI("✅ Successfully updated \(configFile.name) file")
