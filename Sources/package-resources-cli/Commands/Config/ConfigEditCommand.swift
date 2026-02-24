@@ -20,23 +20,65 @@ extension App.ConfigCommand {
 		@ParentCommand
 		var parent: App.ConfigCommand
 
-		@Option(name: .shortAndLong, help: "Format override")
+		@Option(
+			name: .shortAndLong,
+			help: "Format override"
+		)
 		var format: Format = .keep
 
-		@Option(name: .shortAndLong, help: "Path to output file")
+		@Option(
+			name: .shortAndLong,
+			help: "Path to output file"
+		)
 		public var output: String? = nil
 
-		@Option(name: .long, help: "Indentation character")
+		@Option(
+			name: .long,
+			help: "Indentation character"
+		)
 		public var indentor: String? = nil
 
-		@Option(name: .customLong("tab-size"), help: "Tab size")
-		public var tabSize: Int? = nil
+		@Option(
+			name: .customLong("indent-size"),
+			help: "Indent size"
+		)
+		public var indentSize: Int? = nil
 
-		@Option(name: .customLong("acronyms-processing"), help: "Acronyms processing")
+		@Option(
+			name: .customLong("numbers-next-token-mode"),
+			help: "Processsing mode for a token after a number"
+		)
+		public var numbersNextTokenMode: String? = nil
+
+		@Option(
+			name: .customLong("numbers-separator"),
+			help: "Separator for numbers"
+		)
+		public var numbersSeparator: String? = nil
+
+		@Option(
+			name: .customLong("numbers-allowed-delimeters"),
+			help: "Allowed delimeters for numbers"
+		)
+		public var numbersAllowedDelimeters: String? = nil
+
+		@Option(
+			name: .customLong("numbers-single-letter-boundary-options"),
+			help: "Processsing mode for a token after a number"
+		)
+		public var numbersSingleLetterBoundaryOptions: [String] = [._unspecified]
+
+		@Option(name: .customLong(
+			"acronyms-processing"),
+			help: "Acronyms processing"
+		)
 		public var acronymsProcessing: String? = nil
 
-		@Option(name: .long, help: "Acronyms to be treated as a single character in camelCasing")
-		public var acronyms: [String] = ["__package_resources_unspecified"]
+		@Option(
+			name: .long,
+			help: "Acronyms to be treated as a single character in camelCasing"
+		)
+		public var acronymsValues: [String] = [._unspecified]
 
 		@Flag(
 			name: .customLong("remove-output"),
@@ -55,52 +97,109 @@ extension App.ConfigCommand {
 		var removeIndentor: Bool = false
 
 		@Flag(
-			name: .customLong("remove-tab-size"),
+			name: .customLong("remove-indent-size"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
-			help: "Removes tab-size from the config file"
+			help: "Removes indent-size from the config file"
 		)
-		var removeTabSize: Bool = false
+		var removeIndentSize: Bool = false
+
+		@Flag(
+			name: .customLong("remove-numbers-next-token-mode"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes numbers.next-token-mode from the config file"
+		)
+		var removeNumbersNextTokenMode: Bool = false
 
 		@Flag(
 			name: .customLong("remove-acronyms-processing"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
-			help: "Removes acronyms-processing from the config file"
+			help: "Removes numbers.separator from the config file"
+		)
+		var removeNumbersSeparator: Bool = false
+
+		@Flag(
+			name: .customLong("remove-numbers-allowed-delimeters"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes numbers.allowed-delimeters from the config file"
+		)
+		var removeNumbersAllowedDelimeters: Bool = false
+
+		@Flag(
+			name: .customLong("remove-numbers-single-letter-boundary-options"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes numbers.single-letter-boundary-options from the config file"
+		)
+		var removeNumbersSingleLetterBoundaryOptions: Bool = false
+
+		@Flag(
+			name: .customLong("remove-acronyms-processing"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes acronyms.processing-policy from the config file"
 		)
 		var removeAcronymsProcessing: Bool = false
 
 		@Flag(
-			name: .customLong("remove-acronyms"),
+			name: .customLong("remove-acronyms-values"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
-			help: "Removes acronyms from the config file"
+			help: "Removes acronyms.values from the config file"
 		)
-		var removeAcronyms: Bool = false
+		var removeAcronymsValues: Bool = false
 
 		func run() throws {
 			let configFile = try File(path: parent.path)
 
-			var (config, format) = App.CodableConfig.loadWithFormat(at: parent.path) ?? (.init(), .yaml)
+			var (config, format) = Manifest.loadWithFormat(at: parent.path) ?? (.init(), .yaml)
 
 			do {
 				config = config
 					.ifLet(output, override: \.output)
 					.ifLet(indentor, override: \.indentor)
-					.ifLet(tabSize, override: \.tabSize)
-					.ifLet(acronymsProcessing, override: \.acronymsProcessing)
-
-				if !(acronyms.count == 1 && acronyms[0] == "__package_resources_unspecified") {
-					config.acronyms = acronyms
-				}
+					.ifLet(indentSize, override: \.indentSize)
+					.ifLet(
+						numbersNextTokenMode.flatMap { .init(_config: $0) },
+						override: \.camelCaseNumbers.nextTokenMode
+					)
+					.ifLet(
+						numbersSeparator.map { $0[...] },
+						override: \.camelCaseNumbers.separator
+					)
+					.ifLet(
+						numbersAllowedDelimeters.map { Set($0) },
+						override: \.commonNumbers.allowedDelimeters
+					)
+					.ifLet(
+						numbersSingleLetterBoundaryOptions == [._unspecified] ? nil : [
+							.singleLetter(.init(_config: numbersSingleLetterBoundaryOptions))
+						],
+						override: \.commonNumbers.boundaryOptions
+					)
+					.ifLet(
+						acronymsProcessing.flatMap { .init(_config: $0) },
+						override: \.camelCaseAcronyms.processingPolicy
+					)
+					.ifLet(
+						acronymsValues == [._unspecified] ? nil : Set(acronymsValues.map { $0[...] }),
+						override: \.commonAcronyms
+					)
 			}
 
-			do {
-				if removeOutput { config.output = nil }
-				if removeIndentor { config.indentor = nil }
-				if removeTabSize { config.tabSize = nil }
-				if removeAcronymsProcessing { config.acronymsProcessing = nil }
-				if removeAcronyms { config.acronyms = nil }
+			let ignoredKeys: Set<[RawCodingKey]> = reduce([]) { ignoredKeys in
+				if removeOutput { ignoredKeys.insert(["output"]) }
+				if removeIndentor { ignoredKeys.insert(["indentor"]) }
+				if removeIndentSize { ignoredKeys.insert(["indent-size"]) }
+				if removeNumbersNextTokenMode { ignoredKeys.insert(["numbers", "separator"]) }
+				if removeNumbersAllowedDelimeters { ignoredKeys.insert(["numbers", "allowed-delimeters"]) }
+				if removeNumbersSingleLetterBoundaryOptions { ignoredKeys.insert(["numbers", "single-letter-boundary-options"]) }
+				if removeNumbersSeparator { ignoredKeys.insert(["numbers", "next-token-mode"]) }
+				if removeAcronymsProcessing { ignoredKeys.insert(["acronyms", "processing-policy"]) }
+				if removeAcronymsValues { ignoredKeys.insert(["acronyms", "values"]) }
 			}
 
 			let encodeJSON: () throws -> Void = {
@@ -111,15 +210,18 @@ extension App.ConfigCommand {
 				try configFile.write(YAMLEncoder().encode(config))
 			}
 
-			switch self.format {
-			case .json: try encodeJSON()
-			case .yaml: try encodeYAML()
-			case .keep:
-				switch format {
+			try Manifest.$ignoredKeys.withValue(ignoredKeys) {
+				switch self.format {
 				case .json: try encodeJSON()
 				case .yaml: try encodeYAML()
+				case .keep:
+					switch format {
+					case .json: try encodeJSON()
+					case .yaml: try encodeYAML()
+					}
 				}
 			}
 		}
 	}
 }
+

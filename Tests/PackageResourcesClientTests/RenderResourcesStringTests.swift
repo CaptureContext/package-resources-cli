@@ -3,6 +3,7 @@ import Testing
 
 @Suite
 struct RenderResourcesStringTests {
+	@Test
 	func main() async throws {
 		let resources: [PRCLIResource] = [
 			.color(.init(name: "AccentColor")),
@@ -25,7 +26,10 @@ struct RenderResourcesStringTests {
 		}
 		
 		extension Array where Element == PackageResources.Font {
-			public static var _spmgen: Self {[
+			@available(*, deprecated, renamed: "_customFonts")
+			public static var _spmgen: Self { _customFonts }
+
+			public static var _customFonts: Self {[
 				.robotoBold,
 			]}
 		}
@@ -50,7 +54,7 @@ struct RenderResourcesStringTests {
 		
 		extension PackageResources.SCNScene {
 			public static var defaultScene: Self {
-				return .init(name: "DefaultScene", catalog: "SCNCatalog")
+				return .init(name: "DefaultScene", catalog: "SCNCatalog", bundle: .module)
 			}
 		}
 		

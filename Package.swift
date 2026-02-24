@@ -44,7 +44,7 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-casification.git",
-			.upToNextMinor(from: "0.1.0")
+			.upToNextMinor(from: "0.5.0")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",

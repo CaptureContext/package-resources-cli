@@ -7,18 +7,16 @@ extension PackageResourcesClient.Operations.ProcessResources {
 	}
 
 	public static func standard(
-		tabSize: Int,
 		indentor: String,
-		acronyms: String.Casification.Modifiers.CamelCaseConfig.Acronyms = .default
+		indentSize: Int
 	) -> Self {
 		let indent: PackageResourcesClient.Operations.IndentUp = .standard(
-			tabSize: tabSize,
-			indentor: indentor
+			indentor: indentor,
+			indentSize: indentSize
 		)
 
 		let camelCase: PackageResourcesClient.Operations.CamelCase = .standard(
-			.camel,
-			acronyms: acronyms
+			.camel
 		)
 
 		return .standard(

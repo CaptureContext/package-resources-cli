@@ -14,7 +14,6 @@ extension App.ConfigCommand {
 		enum Mode: String, Codable, CaseIterable, ExpressibleByArgument {
 			case `default`
 			case force
-			case append
 		}
 
 		static let configuration: CommandConfiguration = .init(
@@ -38,19 +37,14 @@ extension App.ConfigCommand {
 
 			guard missing || mode != .default else { return }
 
-			var config = App.Config.default
-			var format: App.CodableConfig.Format = self.format == .json ? .json : .yaml
-
-			if mode == .append, let existing = App.CodableConfig.loadWithFormat(at: parent.path) {
-				config = config.applying(existing.config)
-				if self.format == .keep { format = existing.format }
-			}
+			let config = Manifest()
+			let format: Manifest.Format = self.format == .json ? .json : .yaml
 
 			switch format {
 			case .json:
-				try configFile.write(JSONEncoder().encode(config.asCodable()))
+				try configFile.write(JSONEncoder().encode(config))
 			case .yaml:
-				try configFile.write(YAMLEncoder().encode(config.asCodable()))
+				try configFile.write(YAMLEncoder().encode(config))
 			}
 		}
 	}

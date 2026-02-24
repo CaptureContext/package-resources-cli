@@ -18,7 +18,7 @@ Code generator for [swift-package-resources](https://github.com/capturecontext/s
 ```swift
 .package(
   url: "https://github.com/capturecontext/package-resources-cli.git", 
-  .upToNextMajor(from: "1.0.0")
+  .upToNextMajor(from: "2.0.0")
 ),
 .package(
   url: "https://github.com/capturecontext/swift-package-resources.git", 

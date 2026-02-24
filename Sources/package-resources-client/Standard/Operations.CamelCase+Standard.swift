@@ -2,11 +2,10 @@ import Casification
 
 extension PackageResourcesClient.Operations.CamelCase {
 	public static func standard(
-		_ policy: String.Casification.Modifiers.CamelCaseConfig.Mode = .automatic,
-		acronyms: String.Casification.Modifiers.CamelCaseConfig.Acronyms = .init()
+		_ mode: String.Casification.Configuration.CamelCase.Mode = .automatic
 	) -> Self {
 		return .init {
-			$0.case(.camel(policy, acronyms: acronyms))
+			$0.case(.camel(mode))
 		}
 	}
 }
