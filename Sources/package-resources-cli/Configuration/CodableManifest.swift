@@ -15,6 +15,10 @@ extension Manifest: Encodable {
 
 	public func encode(to encoder: any Encoder) throws {
 		try encoder.encode { container in
+			try key(["version"]) {
+				try container.encode(version, forKey: $0.last!)
+			}
+
 			try key(["output"]) {
 				try container.encodeIfPresent(output, forKey: $0.last!)
 			}
@@ -24,7 +28,11 @@ extension Manifest: Encodable {
 			}
 
 			try key(["indent-size"]) {
-				try container.encodeIfPresent(indentSize, forKey: $0.last!)
+				if version.major == 1 {
+					try container.encodeIfPresent(indentSize, forKey: "tab-size")
+				} else {
+					try container.encodeIfPresent(indentSize, forKey: $0.last!)
+				}
 			}
 
 			try key(["numbers"]) { k in
@@ -55,19 +63,33 @@ extension Manifest: Encodable {
 			try key(["acronyms"]) { k in
 				try container.nested(k.last!) { container in
 					try key(k + ["processing-policy"]) {
-						try container.encode(
-							camelCaseAcronyms.processingPolicy._config,
-							forKey: $0.last!
-						)
+						if version.major == 1 {
+							try container.encode(
+								camelCaseAcronyms.processingPolicy._config,
+								forKey: "acronyms-processing-policy"
+							)
+						} else {
+							try container.encode(
+								camelCaseAcronyms.processingPolicy._config,
+								forKey: $0.last!
+							)
+						}
 					}
 
 					try key(k + ["values"]) {
-						try container.encode(
-							commonAcronyms.map(String.init).sorted(),
-							forKey: $0.last!
-						)
+						if version.major == 1 {
+							try container.encode(
+								camelCaseAcronyms.processingPolicy._config,
+								forKey: "acronyms"
+							)
+						} else {
+							try container.encode(
+								commonAcronyms.map(String.init).sorted(),
+								forKey: $0.last!
+							)
+						}
 					}
-			 }
+				}
 			}
 		}
 	}
@@ -110,6 +132,9 @@ extension Manifest: Decodable {
 			manifest.indentor = indentor
 			manifest.indentSize = indentSize
 
+			try container.decodeIfPresent("version")
+				.map { manifest.version = $0 }
+
 			try container.nestedIfPresent("numbers") { container in
 				try container.decodeIfPresent(
 					String.self,
@@ -139,19 +164,36 @@ extension Manifest: Decodable {
 				}
 			}
 
-			try container.nestedIfPresent("acronyms") { container in
-				try container.decodeIfPresent(
-					String.self,
-					forKey: "processing-policy"
-				)
-				.flatMap { String.Casification.Configuration.CamelCase.Acronyms.ProcessingPolicy(_config: $0) }
-				.map { manifest.camelCaseAcronyms.processingPolicy = $0 }
+			do {
+				// Depreacted path for backward compatibility
+				guard manifest.version.major == 1
+				else { throw _Error("<go-to-catch-block>") }
 
-				try container.decodeIfPresent(
-					[String].self,
-					forKey: "values"
+				let acronyms: [String] = try container.decode("acronyms")
+
+				print(
+					ANSI("⚠️ Values for acronyms should be declared for \"acronyms.values\" key instead of \"acronyms\"")
+						.foreground(.yellow)
+						.bold()
 				)
-				.map { manifest.commonAcronyms = Set($0.map { $0[...] }) }
+
+				manifest.commonAcronyms = Set(acronyms.map { $0[...] })
+			} catch {
+				// Primary path
+				try container.nestedIfPresent("acronyms") { container in
+					try container.decodeIfPresent(
+						String.self,
+						forKey: "processing-policy"
+					)
+					.flatMap { String.Casification.Configuration.CamelCase.Acronyms.ProcessingPolicy(_config: $0) }
+					.map { manifest.camelCaseAcronyms.processingPolicy = $0 }
+
+					try container.decodeIfPresent(
+						[String].self,
+						forKey: "values"
+					)
+					.map { manifest.commonAcronyms = Set($0.map { $0[...] }) }
+				}
 			}
 
 			return manifest
