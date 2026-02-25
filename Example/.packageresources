@@ -1,61 +1,11 @@
-indentor: "\t"
-indent-size: 1
+version: '2.0'
+indentor: default
+indent-size: default
 numbers:
-  separator: _
-  allowed-delimeters: []
-  next-token-mode: inherit
-  single-letter-boundary-options:
-  - disable-separators
-  - disable-next-token-processing
+  separator: default
+  next-token-mode: default
+  allowed-delimeters: default
+  single-letter-boundary-options: default
 acronyms:
-  processing-policy: always-match-case
-  values:
-  - ID
-  - IDFA
-  - Id
-  - Idfa
-  - JSON
-  - Json
-  - NPM
-  - NS
-  - Npm
-  - SF
-  - SK
-  - SPM
-  - Spm
-  - UI
-  - ULID
-  - URI
-  - URL
-  - USID
-  - UUID
-  - UX
-  - Ulid
-  - Uri
-  - Url
-  - Usid
-  - Uuid
-  - VOID
-  - Void
-  - XML
-  - Xml
-  - YAML
-  - Yaml
-  - id
-  - idfa
-  - json
-  - npm
-  - ns
-  - sf
-  - sk
-  - spm
-  - ui
-  - ulid
-  - uri
-  - url
-  - usid
-  - uuid
-  - ux
-  - void
-  - xml
-  - yaml
+  processing-policy: default
+  values: default

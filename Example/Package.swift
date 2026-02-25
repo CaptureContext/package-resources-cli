@@ -27,7 +27,7 @@ let package = Package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
 			from: "4.0.0"
 		),
-	],
+	].useLocalPackageResourcesCLI(),
 	targets: [
 		.target(
 			name: "AppFeature", // entry-point
