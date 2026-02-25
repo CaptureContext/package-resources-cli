@@ -54,8 +54,8 @@ Code generator for [swift-package-resources](https://github.com/capturecontext/s
 >
 > ```swift
 > .product(
->     name: "_ExportedPackageResources",
->     package: "package-resources-cli
+>      name: "_ExportedPackageResources",
+>      package: "package-resources-cli
 > )
 > ```
 > 
@@ -113,22 +113,34 @@ Package plugin uses `.packageresources` file at the root of the package with as 
 ```yml
 output: "<path-to-output-file>"
 indentor: "\t"
-tab-size: 1
-acronyms-processing: default
+indent-size: 1
+numbers:
+  separator: "_"
+  allowed-delimeters: []
+  next-token-mode: inherit
+  single-letter-boundary-options:
+  - disable-separators
+  - disable-next-token-processing
 acronyms:
-- id
-- ID
-- Id
-...
+  processing-policy: default
+  values
+  - id
+  - ID
+  - Id
+  ...
 ```
 
-| Argument              | Description                                                  |
-| --------------------- | ------------------------------------------------------------ |
-| `output`              | Path to output file. Default is dynamically calculated as `input` + `/Resources.generated.swift` |
-| `indentor`            | Indentation symbol. Default is `\t`                          |
-| `tab-size`            | Amount of indentors per indent level. Default is `1`         |
-| `acronyms-processing` | See [CamelCaseConfig.Acronyms.ProcessingPolicy](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/CaseModifiers/CaseModifiers%2BCamel.swift). Default is `always-match-case`. |
-| `acronyms`            | Overrides all default acronyms. Default ones can be found [here](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Casification.swift). |
+| Argument                                 | Description                                                  |
+| ---------------------------------------- | ------------------------------------------------------------ |
+| `output`                                 | Path to output file. <br />Default is dynamically calculated as `input` + `/Resources.generated.swift` |
+| `indentor`                               | Indentation symbol. <br />Default is `\t`                    |
+| `indent-size`                            | Amount of indentors per indent level. <br />`default` is `1`<br />`default` for `space`/`whitespace`/`" "`  indentors is `2` |
+| `numbers.separator`                      | Separator for numeric values.<br />`default` is `"_"`        |
+| `numbers.allowed-delimeters`             | Extends allowed characters for numbers, specifying `["."]` might be helpful for enabling `FloatingPoint` numbers, however it's only allowed delimiter, so with this setting `"1.2.3_value"` will be tokenized as `["1.2.3", "_", "value"]`<br />`default` is `[]` |
+| `numbers.next-token-mode`                | Camel case mode for a token after a number.<br />`default` is `inherit` (equivalent to `automatic`) |
+| `numbers.single-letter-boundary-options` | Options for numeric boundary with single letter tokens.<br />Both options are enabled by `default` |
+| `acronyms.processing-policy`             | See [CamelCaseConfig.Acronyms.ProcessingPolicy](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/CamelCase/CamelCaseConfig.swift).<br />`default` is `always-match-case`. |
+| `acronyms.values`                        | Overrides all default acronyms.<br />`default` can be found [here](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/Common/Acronyms/AcronymsConfig.swift). |
 
 ### Command plugin
 
@@ -142,9 +154,13 @@ swift package resources generate \
   --config "<path-to-configuration-file>" \
   --output "<path-to-output-file>" \
   --indentor "\t" \
-  --tab-size 1 \
-  --acronyms-processing default \
-  --acronyms "acronym1" "acronym2"
+  --indent-size 1 \
+  --numbers-separator "_" \
+  --numbers-allowed-delimeters "__package_resources_unspecified" \
+  --numbers-next-token-mode inherit \
+  --numbers-single-letter-boundary-options default \
+  --acronyms-processing-policy default \
+  --acronyms-values "acronym1" "acronym2"
 ```
 
 #### Config init command
@@ -153,14 +169,7 @@ Dumps default configuration into a config file
 
 ```bash
 swift package resources config init --format yaml # `json` is also supported
-```
-
-If you already have a config file you can also use
-
-
-```bash
-swift package resources config init --mode force # rewrite config file
-swift package resources config init --mode append # add missing entries
+swift package resources config init --force # rewrite config file
 ```
 
 #### Config edit command
@@ -170,13 +179,13 @@ Utility for editing config files, overrides specific values in config file
 ```bash
 swift package resources config edit \
   --indentor "\s" \
-  --tab-size 2
+  --indent-size 2
 ```
 
 Also can remove specific keys from the config, just pass `--remove-` prefixed arguments as flags
 
 ```bash
-swift package resources config edit --remove-acronyms 
+swift package resources config edit --remove-acronyms-values
 ```
 
 > [!TIP]
@@ -185,8 +194,8 @@ swift package resources config edit --remove-acronyms
 >
 > ```bash
 > swift package resources config \
->     --path "<path-to-config-file>" \
->     edit --remove-output
+>      --path "<path-to-config-file>" \
+>      edit --remove-output
 > ```
 
 ## Todos
