@@ -1,8 +1,12 @@
 import Casification
 
 extension Manifest {
-	public struct AcronymsConfig: Codable {
+	public struct AcronymsConfig: Codable, Sendable {
 		public static var current: Self { .init() }
+		public static let `default`: Self = .init(
+			processingPolicy: .default,
+			values: ["default"]
+		)
 
 		public var processingPolicy: ProcessingPolicy
 		public var values: [String]
@@ -69,9 +73,19 @@ extension Manifest {
 					try container.encode(processingPolicy, forKey: "processing-policy")
 
 					if !Manifest.encodeAliases {
-						try container.encode(resolvedValues.sorted().map(String.init), forKey: "values")
+						let codableValues = resolvedValues.sorted().map(String.init)
+						try container.encode(codableValues, forKey: "values")
 					} else {
-						try container.encode(values.uniqued(), forKey: "values")
+						let uniquedValues = values.uniqued()
+						if
+							uniquedValues.count == 1,
+							let value = uniquedValues.first,
+							["current", "default", "none"].contains(value)
+						{
+							try container.encode(value, forKey: "values")
+						} else {
+							try container.encode(uniquedValues, forKey: "values")
+						}
 					}
 				}
 			}

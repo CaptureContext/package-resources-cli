@@ -105,7 +105,7 @@ extension Manifest {
 
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
-			if Manifest.encodeAliases, Manifest.Version.current.major > 2 {
+			if Manifest.encodeAliases, Manifest.Version.current.major > 1 {
 				try container.encode(description)
 			} else {
 				try container.encode(rawValue)

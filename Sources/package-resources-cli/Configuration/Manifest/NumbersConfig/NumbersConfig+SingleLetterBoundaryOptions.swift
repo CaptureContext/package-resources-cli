@@ -83,14 +83,16 @@ extension Manifest.NumbersConfig {
 
 		public var rawValue: RawValue
 
+		public var numericBoundaryOptions: String.Casification.Configuration.NumericBoundaryOptions {
+			rawValue.reduce([]) {
+				switch $1 {
+				case let .alias(alias): $0.union(alias.aliasedValue)
+				}
+			}
+		}
+
 		public var options: Set<String.Casification.Configuration.Common.Numbers.BoundaryOption> {
-			[
-				.singleLetter(rawValue.reduce([]) {
-					switch $1 {
-					case let .alias(alias): $0.union(alias.aliasedValue)
-					}
-				})
-			]
+			[.singleLetter(numericBoundaryOptions)]
 		}
 
 		/// Creates a new instance of this type from a characters set representation
@@ -116,23 +118,29 @@ extension Manifest.NumbersConfig {
 
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
-			if Manifest.encodeAliases, Manifest.Version.current.major > 2 {
+			if Manifest.encodeAliases, Manifest.Version.current.major > 1 {
 				let options = Set(rawValue.map(\.description)).sorted()
 				if options.count == 1, let option = options.first {
 					try container.encode(option)
+				} else if
+					numericBoundaryOptions.contains([
+						.disableSeparators,
+						.disableNextTokenProcessing
+					])
+				{
+					try container.encode("current")
 				} else {
 					try container.encode(options)
 				}
 			} else {
 				var options: RawValue = []
 
-				self.options.map(\.options).forEach { o in
-					if o.contains(.disableSeparators) {
-						options.append(.disableSeparators)
-					}
-					if o.contains(.disableNextTokenProcessing) {
-						options.append(.disableNextTokenProcessing)
-					}
+				if numericBoundaryOptions.contains(.disableSeparators) {
+					options.append(.disableSeparators)
+				}
+
+				if numericBoundaryOptions.contains(.disableNextTokenProcessing) {
+					options.append(.disableNextTokenProcessing)
 				}
 
 				let encodableOptions = Set(options.map(\.description)).sorted()

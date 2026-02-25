@@ -72,7 +72,7 @@ extension Manifest.NumbersConfig {
 
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
-			if Manifest.encodeAliases, Manifest.Version.current.major > 2, let description {
+			if Manifest.encodeAliases, Manifest.Version.current.major > 1, let description {
 				try container.encode(description)
 			} else {
 				try container.encode(String(rawValue.sorted()))

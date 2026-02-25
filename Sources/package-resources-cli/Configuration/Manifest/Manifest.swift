@@ -19,8 +19,8 @@ public struct Manifest {
 		output: String? = nil,
 		indentor: Indentor = .default,
 		indentSize: IndentSize = .default,
-		numbers: NumbersConfig = .current,
-		acronyms: AcronymsConfig = .current
+		numbers: NumbersConfig = .default,
+		acronyms: AcronymsConfig = .default
 	) {
 		self.version = version
 		self.output = output

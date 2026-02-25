@@ -99,7 +99,11 @@ extension Manifest.NumbersConfig {
 
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
-			try container.encode(description)
+			if !Manifest.encodeAliases {
+				try container.encode(Alias(self.rawValue).rawValue)
+			} else {
+				try container.encode(description)
+			}
 		}
 	}
 }

@@ -64,7 +64,7 @@ extension Manifest {
 
 		public func encode(to encoder: any Encoder) throws {
 			var container = encoder.singleValueContainer()
-			if Manifest.encodeAliases, Manifest.Version.current.major > 2, let alias = self[case: \.alias] {
+			if Manifest.encodeAliases, Manifest.Version.current.major > 1, let alias = self[case: \.alias] {
 				try container.encode(alias.rawValue)
 			} else {
 				try container.encode(rawValue)
