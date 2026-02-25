@@ -1,5 +1,4 @@
 import Casification
-import SystemConfiguration
 
 public struct Manifest {
 	@TaskLocal
