@@ -78,7 +78,7 @@ extension App {
 		public var acronymsValues: [String] = ["current"]
 
 		public func run() throws {
-			let config = self.config.flatMap(Manifest.load(at:))
+			let config = (try? self.config.flatMap(Manifest.load(at:)))
 				.or(Manifest())
 				.ifLet(output, override: \.output)
 				.ifLet(indentor, override: \.indentor)

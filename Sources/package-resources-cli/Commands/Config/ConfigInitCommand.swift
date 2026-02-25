@@ -11,11 +11,6 @@ extension App.ConfigCommand {
 			case keep
 		}
 
-		enum Mode: String, Codable, CaseIterable, ExpressibleByArgument {
-			case `default`
-			case force
-		}
-
 		static let configuration: CommandConfiguration = .init(
 			commandName: "init",
 			abstract: "Creates default configuration file",
@@ -28,9 +23,6 @@ extension App.ConfigCommand {
 		@Option(name: .shortAndLong, help: "Custom format")
 		var format: Format = .keep
 
-		@Option(name: .shortAndLong, help: "Initialization mode")
-		var mode: Mode = .default
-
 		@Flag(
 			name: .customLong("encode-aliases"),
 			inversion: .prefixedNo,
@@ -39,11 +31,19 @@ extension App.ConfigCommand {
 		)
 		var encodeAliases: Bool = false
 
+		@Flag(
+			name: .customLong("force"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Forces overwritting of an existing config file"
+		)
+		var force: Bool = false
+
 		func run() throws {
 			let configFile = File(uncheckedPath: parent.path)
 			let missing = (try? configFile.validatePath()) == nil
 
-			guard missing || mode != .default else {
+			guard missing || force else {
 				print(
 					ANSI("✅ \(configFile.name) file already exists")
 						.foreground(.yellow)
@@ -56,11 +56,13 @@ extension App.ConfigCommand {
 			let config = Manifest()
 			let format: Manifest.Format = self.format == .json ? .json : .yaml
 
-			switch format {
-			case .json:
-				try configFile.write(JSONEncoder().encode(config))
-			case .yaml:
-				try configFile.write(YAMLEncoder().encode(config))
+			try Manifest.$encodeAliases.withValue(encodeAliases) {
+				switch format {
+				case .json:
+					try configFile.write(JSONEncoder().encode(config))
+				case .yaml:
+					try configFile.write(YAMLEncoder().encode(config))
+				}
 			}
 
 			print(

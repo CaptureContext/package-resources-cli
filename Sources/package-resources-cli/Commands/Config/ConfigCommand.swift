@@ -8,7 +8,7 @@ extension App {
 		static let configuration: CommandConfiguration = .init(
 			commandName: "config",
 			abstract: "Manages configuration file.",
-			subcommands: [InitCommand.self, EditCommand.self]
+			subcommands: [InitCommand.self, EditCommand.self, ValidateCommand.self]
 		)
 
 		@Option(name: .shortAndLong, help: "Path to configuration file")

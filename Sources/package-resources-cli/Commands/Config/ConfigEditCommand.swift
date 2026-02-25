@@ -163,7 +163,7 @@ extension App.ConfigCommand {
 		func run() throws {
 			let configFile = try File(path: parent.path)
 
-			var (config, format) = Manifest.loadWithFormat(at: parent.path) ?? (.init(), .yaml)
+			var (config, format) = (try? Manifest.loadWithFormat(at: parent.path)) ?? (Manifest(), .yaml)
 
 			do {
 				config = config
@@ -231,10 +231,10 @@ extension App.ConfigCommand {
 			}
 
 			print(
-				 ANSI("✅ Successfully updated \(configFile.name) file")
-					 .foreground(.green)
-					 .bold()
-			 )
+				ANSI("✅ Successfully updated \(configFile.name) file")
+					.foreground(.green)
+					.bold()
+			)
 		}
 	}
 }
