@@ -21,7 +21,7 @@ let package = Package(
 	dependencies: [
 		.package(
 			url: "https://github.com/capturecontext/package-resources-cli.git",
-			from: "1.0.0"
+			from: "2.0.0"
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
