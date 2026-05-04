@@ -1,5 +1,6 @@
 import SomeFeature
 import SwiftUI
+import CocoaAliases
 import PackageResources
 
 public struct ContentView: View {
@@ -12,6 +13,7 @@ public struct ContentView: View {
 			List {
 				systemFontsContent()
 				customFontsContent()
+				SomeView()
 			}
 			.navigationBarTitle("Example")
 			.navigationBarItems(

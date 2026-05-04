@@ -1,4 +1,5 @@
 import SomeFeature
+import CocoaAliases
 
 #if os(iOS)
 import UIKit

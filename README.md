@@ -18,11 +18,11 @@ Code generator for [swift-package-resources](https://github.com/capturecontext/s
 ```swift
 .package(
   url: "https://github.com/capturecontext/package-resources-cli.git", 
-  .upToNextMajor(from: "2.0.0")
+  .upToNextMajor(from: "3.0.0")
 ),
 .package(
   url: "https://github.com/capturecontext/swift-package-resources.git", 
-  .upToNextMajor(from: "4.0.0")
+  .upToNextMajor(from: "5.0.0")
 ),
 ```
 
@@ -114,13 +114,19 @@ Package plugin uses `.packageresources` file at the root of the package with as 
 output: "<path-to-output-file>"
 indentor: "\t"
 indent-size: 1
+access-level: internal
+group-xcstrings-by-catalog-name: true
+resource-types:
+- all
 numbers:
   separator: "_"
   allowed-delimeters: []
   next-token-mode: inherit
+  ending-number-boundary-options:
+  - disable-token-processing
   single-letter-boundary-options:
   - disable-separators
-  - disable-next-token-processing
+  - disable-token-processing
 acronyms:
   processing-policy: default
   values
@@ -130,15 +136,23 @@ acronyms:
   ...
 ```
 
+> [!Tip]
+>
+> _Use **package-specific configs** for your defaults and **target-specific configs** for separate targets, this way it's possible to expose shared resources from your design-system target and allow for local resources in feature targets._ 
+
 | Argument                                 | Description                                                  |
 | ---------------------------------------- | ------------------------------------------------------------ |
 | `output`                                 | Path to output file. <br />Default is dynamically calculated as `input` + `/Resources.generated.swift` |
 | `indentor`                               | Indentation symbol. <br />Default is `\t`                    |
 | `indent-size`                            | Amount of indentors per indent level. <br />`default` is `1`<br />`default` for `space`/`whitespace`/`" "`  indentors is `2` |
+| `access-level`                           | Access level for generated declarations (`private`, `internal`, `package`, `public`, or `none`). <br />Default is `internal` |
+| `group-xcstrings-by-catalog-name`        | Whether generated localized string accessors are nested under a catalog-name enum. <br />Default is `true` |
+| `resource-types`                         | Resource types to generate (`colors`, `fonts`, `images`, `nibs`, `storyboards`, `xc-strings`). Aliases: `none`, `all`, `default`, `interface-builder`. <br />Default is `all` |
 | `numbers.separator`                      | Separator for numeric values.<br />`default` is `"_"`        |
 | `numbers.allowed-delimeters`             | Extends allowed characters for numbers, specifying `["."]` might be helpful for enabling `FloatingPoint` numbers, however it's only allowed delimiter, so with this setting `"1.2.3_value"` will be tokenized as `["1.2.3", "_", "value"]`<br />`default` is `[]` |
 | `numbers.next-token-mode`                | Camel case mode for a token after a number.<br />`default` is `inherit` (equivalent to `automatic`) |
-| `numbers.single-letter-boundary-options` | Options for numeric boundary with single letter tokens.<br />Both options are enabled by `default` |
+| `numbers.ending-number-boundary-options` | Options for numeric boundaries at ending number tokens (`disable-separators`, `disable-token-processing`, `none`, `current`, `default`). |
+| `numbers.single-letter-boundary-options` | Options for numeric boundaries around single-letter tokens (`disable-separators`, `disable-token-processing`, `none`, `current`, `default`). |
 | `acronyms.processing-policy`             | See [CamelCaseConfig.Acronyms.ProcessingPolicy](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/CamelCase/CamelCaseConfig.swift).<br />`default` is `always-match-case`. |
 | `acronyms.values`                        | Overrides all default acronyms.<br />`default` can be found [here](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/Common/Acronyms/AcronymsConfig.swift). |
 
@@ -155,9 +169,13 @@ swift package resources generate \
   --output "<path-to-output-file>" \
   --indentor "\t" \
   --indent-size 1 \
+  --access-level internal \
+  --no-group-xcstrings-by-catalog-name \
+  --resource-types all \
   --numbers-separator "_" \
   --numbers-allowed-delimeters "__package_resources_unspecified" \
   --numbers-next-token-mode inherit \
+  --numbers-ending-number-boundary-options default \
   --numbers-single-letter-boundary-options default \
   --acronyms-processing-policy default \
   --acronyms-values "acronym1" "acronym2"
@@ -165,7 +183,7 @@ swift package resources generate \
 
 #### Config init command
 
-Dumps default configuration into a config file
+Dumps default configuration into a config file at the root of the package
 
 ```bash
 swift package resources config init --format yaml # `json` is also supported
@@ -206,7 +224,6 @@ swift package resources config edit --remove-acronyms-values
 >
 > _You can find docc reference generated by swift-argument-parser [here]( .github/package-resources-cli.md)_
 
-- [ ] Localized strings support
 - [ ] Excludes support
 - [ ] Filesystem expressions support
 - [ ] Resources validation

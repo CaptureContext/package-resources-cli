@@ -1,17 +1,21 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 
 import PackageDescription
 
 let package = Package(
 	name: "PackageResourcesPluginExample",
 	platforms: [
-		.macOS(.v10_15),
-		.iOS(.v13),
+		.macOS(.v15),
+		.iOS(.v18),
 	],
 	products: [
 		.library(
 			name: "AppFeature",
 			targets: ["AppFeature"]
+		),
+		.library(
+			name: "AppUI",
+			targets: ["AppUI"]
 		),
 		.library(
 			name: "SomeFeature",
@@ -21,11 +25,15 @@ let package = Package(
 	dependencies: [
 		.package(
 			url: "https://github.com/capturecontext/package-resources-cli.git",
-			from: "2.0.0"
+			from: "3.0.0"
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
 			from: "4.0.0"
+		),
+		.package(
+			url: "https://github.com/capturecontext/cocoa-aliases.git",
+			from: "3.3.0"
 		),
 	],
 	targets: [
@@ -36,12 +44,31 @@ let package = Package(
 			]
 		),
 		.target(
-			name: "SomeFeature",
+			name: "AppUI", // design-system
 			dependencies: [
 				.product(
 					name: "PackageResources",
 					package: "swift-package-resources"
 				),
+				.product(
+					name: "CocoaAliases",
+					package: "cocoa-aliases"
+				),
+			],
+			resources: [
+				.process("Resources"),
+			],
+			plugins: [
+				.plugin(
+					name: "package-resources-plugin",
+					package: "package-resources-cli"
+				),
+			]
+		),
+		.target(
+			name: "SomeFeature", // feature-module
+			dependencies: [
+				.target(name: "AppUI"),
 			],
 			resources: [
 				.process("Resources"),

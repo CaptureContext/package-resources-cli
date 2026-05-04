@@ -1,11 +1,12 @@
 import ArgumentParser
 import Foundation
 import Casification
+import Dependencies
 import PackageResourcesClient
 import Yams
 
 extension App {
-	struct GenerateCommand: ParsableCommand {
+	struct GenerateCommand: AsyncParsableCommand {
 		static let configuration: CommandConfiguration = .init(
 			commandName: "generate",
 			abstract: "Generates boilerplate for package resources"
@@ -42,6 +43,25 @@ extension App {
 		public var indentSize: Manifest.IndentSize? = nil
 
 		@Option(
+			name: .customLong("access-level"),
+			help: "Access level for generated declarations"
+		)
+		public var accessLevel: Manifest.AccessLevelConfig? = nil
+
+		@Flag(
+			name: .customLong("group-xcstrings-by-catalog-name"),
+			inversion: .prefixedNo,
+			help: "Groups xcstrings accessors under a catalog-name enum"
+		)
+		public var groupXCStringsByCatalogName: Bool?
+
+		@Option(
+			name: .customLong("resource-types"),
+			help: "Resource types to generate"
+		)
+		public var resourceTypes: [Manifest.ResourceType] = [.__not_set__]
+
+		@Option(
 			name: .customLong("numbers-separator"),
 			help: "Separator for numbers"
 		)
@@ -60,10 +80,16 @@ extension App {
 		public var numbersAllowedDelimeters: Manifest.NumbersConfig.AllowedDelimters? = nil
 
 		@Option(
-			name: .customLong("numbers-single-letter-boundary-options"),
-			help: "Processsing mode for a token after a number"
+			name: .customLong("numbers-ending-number-boundary-options"),
+			help: "Boundary options for ending number tokens"
 		)
-		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.SingleLetterBoundaryOption] = [.current]
+		public var numbersEndingNumberBoundaryOptions: [Manifest.NumbersConfig.BoundaryOption] = []
+
+		@Option(
+			name: .customLong("numbers-single-letter-boundary-options"),
+			help: "Boundary options for single-letter tokens near numbers"
+		)
+		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.BoundaryOption] = []
 
 		@Option(name: .customLong(
 			"acronyms-processing-policy"),
@@ -77,12 +103,21 @@ extension App {
 		)
 		public var acronymsValues: [String] = ["current"]
 
-		public func run() throws {
+		public func run() async throws {
 			let config = (try? self.config.flatMap(Manifest.load(at:)))
 				.or(Manifest())
 				.ifLet(output, override: \.output)
 				.ifLet(indentor, override: \.indentor)
 				.ifLet(indentSize, override: \.indentSize)
+				.ifLet(accessLevel, override: \.accessLevel)
+				.ifLet(
+					groupXCStringsByCatalogName,
+					override: \.groupXCStringsByCatalogName
+				)
+				.ifLet(
+					resourceTypesOverride,
+					override: \.resourceTypes
+				)
 				.ifLet(
 					numbersSeparator,
 					override: \.numbers.separator
@@ -96,7 +131,11 @@ extension App {
 					override: \.numbers.allowedDelimeters
 				)
 				.ifLet(
-					.init(rawValue: numbersSingleLetterBoundaryOptions),
+					numbersEndingNumberBoundaryOptionsOverride,
+					override: \.numbers.endingNumberBoundaryOptions
+				)
+				.ifLet(
+					numbersSingleLetterBoundaryOptionsOverride,
 					override: \.numbers.singleLetterBoundaryOptions
 				)
 				.ifLet(
@@ -110,25 +149,31 @@ extension App {
 
 			let outputPath = output ?? config.output ?? input.appending("/Resources.generated.swift")
 
-			try withCasification({
+			try await withCasification({
 				$0.camelCase.acronyms.processingPolicy = config.acronyms.processingPolicy.rawValue
 				$0.camelCase.numbers.separator = config.numbers.separator.rawValue
 				$0.camelCase.numbers.nextTokenMode = config.numbers.nextTokenMode.rawValue
 				$0.common.numbers.allowedDelimeters = config.numbers.allowedDelimeters.rawValue
-				$0.common.numbers.boundaryOptions = config.numbers.singleLetterBoundaryOptions.options
+				$0.common.numbers.boundaryOptions = config.numbers.aliasedNumericBoundaryOptions
 				$0.acronyms = config.acronyms.resolvedValues
 			}) {
-				let client = PackageResourcesClient(
-					processResources: .standard(
+				try await withDependencies {
+					$0.formatClient = .standard(
 						indentor: config.indentor.rawValue,
-						indentSize: config.indentSize.rawValue
+						indentSize: config.indentSize.rawValue,
+						accessLevel: config.accessLevel.rawValue,
+						groupXCStringsByCatalogName: config.groupXCStringsByCatalogName
 					)
-				)
+				} operation: {
+					@Dependency(\.packageResourcesClient)
+					var client
 
-				try client.processResources(
-					atPath: input,
-					toFileAtPath: outputPath
-				).get()
+					try await client.processResources(
+						for: config.resourceTypes.enabledResourceTypes,
+						atPath: input,
+						into: outputPath
+					)
+				}
 
 				print(
 					ANSI("✅ Successfully generated package resources")
@@ -136,6 +181,18 @@ extension App {
 						.bold()
 				)
 			}
+		}
+
+		private var resourceTypesOverride: Manifest.ResourceTypes? {
+			resourceTypes == [.__not_set__] ? nil : .init(rawValue: resourceTypes)
+		}
+
+		private var numbersEndingNumberBoundaryOptionsOverride: Manifest.NumbersConfig.BoundaryOptions? {
+			numbersEndingNumberBoundaryOptions.isEmpty ? nil : .init(rawValue: numbersEndingNumberBoundaryOptions)
+		}
+
+		private var numbersSingleLetterBoundaryOptionsOverride: Manifest.NumbersConfig.BoundaryOptions? {
+			numbersSingleLetterBoundaryOptions.isEmpty ? nil : .init(rawValue: numbersSingleLetterBoundaryOptions)
 		}
 	}
 }

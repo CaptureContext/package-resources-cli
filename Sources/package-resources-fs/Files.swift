@@ -1230,10 +1230,12 @@ extension Folder {
 		_ f: (FSObject) throws -> T?
 	) rethrows -> [T] {
 		let partialResult: [T] = try withoutActuallyEscaping(f) { f in
-			try files
-				.compactMap { try f(.file($0)) }
-			+ subfolders
+			try subfolders
+				.sorted(by: { $0.name < $1.name })
 				.compactMap { try f(.folder($0)) }
+			+ files
+				.sorted(by: { $0.name < $1.name })
+				.compactMap { try f(.file($0)) }
 		}
 
 		return recursive

@@ -1,0 +1,30 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "common.reset" : {
+      "comment" : "Generic “Reset” button title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset"
+          }
+        }
+      }
+    },
+    "common.tap" : {
+      "comment" : "Generic placeholder button title",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tap me!"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.2"
+}

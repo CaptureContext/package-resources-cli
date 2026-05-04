@@ -1,0 +1,18 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "unformatted.test_key.withValues" : {
+      "comment" : "Some comment",
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default localization %1$(string)@ %2$(int)lld and unnamed %3$lf"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.2"
+}

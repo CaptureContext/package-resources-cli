@@ -35,6 +35,18 @@ extension Manifest: Encodable {
 						try container.encodeIfPresent(indentSize, forKey: $0.last!)
 					}
 				}
+
+				try key(["access-level"]) {
+					try container.encode(accessLevel, forKey: $0.last!)
+				}
+
+				try key(["group-xcstrings-by-catalog-name"]) {
+					try container.encode(groupXCStringsByCatalogName, forKey: $0.last!)
+				}
+
+				try key(["resource-types"]) {
+					try container.encode(resourceTypes, forKey: $0.last!)
+				}
 				
 				try key(["numbers"]) { k in
 					try container.encode(numbers, forKey: k.last!)
@@ -80,6 +92,12 @@ extension Manifest: Decodable {
 				manifest.indentSize = indentSize
 
 				try manifest.ifLet(container.decodeIfPresent("output"), set: \.output)
+				try manifest.ifLet(container.decodeIfPresent("access-level"), set: \.accessLevel)
+				try manifest.ifLet(
+					container.decodeIfPresent("group-xcstrings-by-catalog-name"),
+					set: \.groupXCStringsByCatalogName
+				)
+				try manifest.ifLet(container.decodeIfPresent("resource-types"), set: \.resourceTypes)
 				try manifest.ifLet(container.decodeIfPresent("numbers"), set: \.numbers)
 
 				if manifest.version.major == 1 {

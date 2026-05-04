@@ -45,6 +45,25 @@ extension App.ConfigCommand {
 		public var indentSize: Manifest.IndentSize? = nil
 
 		@Option(
+			name: .customLong("access-level"),
+			help: "Access level for generated declarations"
+		)
+		public var accessLevel: Manifest.AccessLevelConfig? = nil
+
+		@Flag(
+			name: .customLong("group-xcstrings-by-catalog-name"),
+			inversion: .prefixedNo,
+			help: "Groups xcstrings accessors under a catalog-name enum"
+		)
+		public var groupXCStringsByCatalogName: Bool?
+
+		@Option(
+			name: .customLong("resource-types"),
+			help: "Resource types to generate"
+		)
+		public var resourceTypes: [Manifest.ResourceType] = [.__not_set__]
+
+		@Option(
 			name: .customLong("numbers-separator"),
 			help: "Separator for numbers"
 		)
@@ -63,10 +82,16 @@ extension App.ConfigCommand {
 		public var numbersAllowedDelimeters: Manifest.NumbersConfig.AllowedDelimters? = nil
 
 		@Option(
-			name: .customLong("numbers-single-letter-boundary-options"),
-			help: "Processsing mode for a token after a number"
+			name: .customLong("numbers-ending-number-boundary-options"),
+			help: "Boundary options for ending number tokens"
 		)
-		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.SingleLetterBoundaryOption] = [.current]
+		public var numbersEndingNumberBoundaryOptions: [Manifest.NumbersConfig.BoundaryOption] = []
+
+		@Option(
+			name: .customLong("numbers-single-letter-boundary-options"),
+			help: "Boundary options for single-letter tokens near numbers"
+		)
+		public var numbersSingleLetterBoundaryOptions: [Manifest.NumbersConfig.BoundaryOption] = []
 
 		@Option(name: .customLong(
 			"acronyms-processing-policy"),
@@ -113,6 +138,30 @@ extension App.ConfigCommand {
 		var removeIndentSize: Bool = false
 
 		@Flag(
+			name: .customLong("remove-access-level"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes access-level from the config file"
+		)
+		var removeAccessLevel: Bool = false
+
+		@Flag(
+			name: .customLong("remove-group-xcstrings-by-catalog-name"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes group-xcstrings-by-catalog-name from the config file"
+		)
+		var removeGroupXCStringsByCatalogName: Bool = false
+
+		@Flag(
+			name: .customLong("remove-resource-types"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes resource-types from the config file"
+		)
+		var removeResourceTypes: Bool = false
+
+		@Flag(
 			name: .customLong("remove-numbers-separator"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
@@ -135,6 +184,14 @@ extension App.ConfigCommand {
 			help: "Removes numbers.allowed-delimeters from the config file"
 		)
 		var removeNumbersAllowedDelimeters: Bool = false
+
+		@Flag(
+			name: .customLong("remove-numbers-ending-number-boundary-options"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes numbers.ending-number-boundary-options from the config file"
+		)
+		var removeNumbersEndingNumberBoundaryOptions: Bool = false
 
 		@Flag(
 			name: .customLong("remove-numbers-single-letter-boundary-options"),
@@ -170,6 +227,15 @@ extension App.ConfigCommand {
 					.ifLet(output, override: \.output)
 					.ifLet(indentor, override: \.indentor)
 					.ifLet(indentSize, override: \.indentSize)
+					.ifLet(accessLevel, override: \.accessLevel)
+					.ifLet(
+						groupXCStringsByCatalogName,
+						override: \.groupXCStringsByCatalogName
+					)
+					.ifLet(
+						resourceTypesOverride,
+						override: \.resourceTypes
+					)
 					.ifLet(
 						numbersSeparator,
 						override: \.numbers.separator
@@ -183,7 +249,11 @@ extension App.ConfigCommand {
 						override: \.numbers.allowedDelimeters
 					)
 					.ifLet(
-						.init(rawValue: numbersSingleLetterBoundaryOptions),
+						numbersEndingNumberBoundaryOptionsOverride,
+						override: \.numbers.endingNumberBoundaryOptions
+					)
+					.ifLet(
+						numbersSingleLetterBoundaryOptionsOverride,
 						override: \.numbers.singleLetterBoundaryOptions
 					)
 					.ifLet(
@@ -200,10 +270,14 @@ extension App.ConfigCommand {
 				if removeOutput { ignoredKeys.insert(["output"]) }
 				if removeIndentor { ignoredKeys.insert(["indentor"]) }
 				if removeIndentSize { ignoredKeys.insert(["indent-size"]) }
-				if removeNumbersNextTokenMode { ignoredKeys.insert(["numbers", "separator"]) }
+				if removeAccessLevel { ignoredKeys.insert(["access-level"]) }
+				if removeGroupXCStringsByCatalogName { ignoredKeys.insert(["group-xcstrings-by-catalog-name"]) }
+				if removeResourceTypes { ignoredKeys.insert(["resource-types"]) }
+				if removeNumbersSeparator { ignoredKeys.insert(["numbers", "separator"]) }
 				if removeNumbersAllowedDelimeters { ignoredKeys.insert(["numbers", "allowed-delimeters"]) }
+				if removeNumbersEndingNumberBoundaryOptions { ignoredKeys.insert(["numbers", "ending-number-boundary-options"]) }
 				if removeNumbersSingleLetterBoundaryOptions { ignoredKeys.insert(["numbers", "single-letter-boundary-options"]) }
-				if removeNumbersSeparator { ignoredKeys.insert(["numbers", "next-token-mode"]) }
+				if removeNumbersNextTokenMode { ignoredKeys.insert(["numbers", "next-token-mode"]) }
 				if removeAcronymsProcessingPolicy { ignoredKeys.insert(["acronyms", "processing-policy"]) }
 				if removeAcronymsValues { ignoredKeys.insert(["acronyms", "values"]) }
 			}
@@ -236,6 +310,17 @@ extension App.ConfigCommand {
 					.bold()
 			)
 		}
+
+		private var resourceTypesOverride: Manifest.ResourceTypes? {
+			resourceTypes == [.__not_set__] ? nil : .init(rawValue: resourceTypes)
+		}
+
+		private var numbersEndingNumberBoundaryOptionsOverride: Manifest.NumbersConfig.BoundaryOptions? {
+			numbersEndingNumberBoundaryOptions.isEmpty ? nil : .init(rawValue: numbersEndingNumberBoundaryOptions)
+		}
+
+		private var numbersSingleLetterBoundaryOptionsOverride: Manifest.NumbersConfig.BoundaryOptions? {
+			numbersSingleLetterBoundaryOptions.isEmpty ? nil : .init(rawValue: numbersSingleLetterBoundaryOptions)
+		}
 	}
 }
-

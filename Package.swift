@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.1
 
 import PackageDescription
 
@@ -43,16 +43,42 @@ let package = Package(
 			.upToNextMajor(from: "6.2.0")
 		),
 		.package(
-			url: "https://github.com/capturecontext/swift-casification.git",
-			.upToNextMinor(from: "0.5.0")
+			url: "https://github.com/capturecontext/swift-package-resources.git",
+			.upToNextMajor(from: "5.0.0")
 		),
 		.package(
-			url: "https://github.com/capturecontext/swift-package-resources.git",
-			.upToNextMajor(from: "4.0.0")
+			url: "https://github.com/capturecontext/swift-xcstrings-catalog.git",
+			.upToNextMajor(from: "1.0.0"),
+			traits: ["Parsing"]
+		),
+		.package(
+			url: "https://github.com/capturecontext/swift-casification.git",
+			.upToNextMinor(from: "0.6.0")
+		),
+		.package(
+			url: "https://github.com/capturecontext/swift-function-composition.git",
+			.upToNextMinor(from: "0.0.2"),
+			traits: ["NominalTypes", "Operators"]
+		),
+		.package(
+			url: "https://github.com/capturecontext/swift-result-builders.git",
+			.upToNextMinor(from: "0.0.2")
+		),
+		.package(
+			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
+			.upToNextMinor(from: "0.2.0")
 		),
 		.package(
 			url: "https://github.com/pointfreeco/swift-case-paths.git",
 			.upToNextMajor(from: "1.7.0")
+		),
+		.package(
+			url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
+			.upToNextMajor(from: "1.19.2")
+		),
+		.package(
+			url: "https://github.com/pointfreeco/swift-dependencies.git",
+			.upToNextMajor(from: "1.12.0")
 		),
 	],
 	targets: [
@@ -111,8 +137,24 @@ let package = Package(
 					package: "swift-package-resources"
 				),
 				.product(
+					name: "XCStringsCatalog",
+					package: "swift-xcstrings-catalog"
+				),
+				.product(
 					name: "Casification",
 					package: "swift-casification"
+				),
+				.product(
+					name: "FunctionComposition",
+					package: "swift-function-composition"
+				),
+				.product(
+					name: "ArrayBuilder",
+					package: "swift-result-builders"
+				),
+				.product(
+					name: "KeyPathsExtensions",
+					package: "swift-keypaths-extensions"
 				),
 			],
 			path: "Sources/package-resources-client"
@@ -144,10 +186,15 @@ let package = Package(
 		.testTarget(
 			name: "PackageResourcesClientTests",
 			dependencies: [
-				.target(name: "PackageResourcesClient")
+				.target(name: "PackageResourcesClient"),
+				.product(
+					name: "SnapshotTestingCustomDump",
+					package: "swift-snapshot-testing"
+				),
 			],
 			exclude: [
-				"_Resources"
+				"__Fixtures__",
+				"__Snapshots__",
 			]
 		),
 	],

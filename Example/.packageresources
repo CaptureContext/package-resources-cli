@@ -1,6 +1,8 @@
-version: '2.0'
+version: '3.0'
 indentor: default
 indent-size: default
+access-level: internal
+group-xcstrings-by-catalog-name: false
 numbers:
   separator: default
   next-token-mode: default

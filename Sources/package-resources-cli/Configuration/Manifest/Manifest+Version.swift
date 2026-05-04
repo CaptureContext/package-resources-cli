@@ -7,7 +7,7 @@ extension Manifest {
 	/// in a more stable way
 	public struct Version: Codable, Sendable, RawRepresentable, LosslessStringConvertible {
 		@TaskLocal
-		static var current: Self = .init(major: 2)
+		static var current: Self = .init(major: 3, minor: 0)
 
 		public let major: Int
 		public let minor: Int
