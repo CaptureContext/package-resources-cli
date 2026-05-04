@@ -9,6 +9,7 @@ Code generator for [swift-package-resources](https://github.com/capturecontext/s
 - [Installation](#installation)
 - [Usage](#usage)
 - [Todos](#todos)
+- [Alternatives](alternatives)
 - [License](#license)
 
 ## Installation
@@ -227,6 +228,13 @@ swift package resources config edit --remove-acronyms-values
 - [ ] Excludes support
 - [ ] Filesystem expressions support
 - [ ] Resources validation
+
+## Alternatives
+
+- [swiftgen/swiftgen](https://github.com/swiftgen/swiftgen) – Generic codegen
+- [mac-cain13/r.swift](https://github.com/mac-cain13/r.swift) – Codegen for resources
+- [liamnichols/xcstrings-tool](https://github.com/liamnichols/xcstrings-tool/) – Localized strings
+- Xcode supports generating internal symbols from resources out of the box
 
 ## License
 
