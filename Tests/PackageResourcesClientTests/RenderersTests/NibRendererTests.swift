@@ -14,7 +14,7 @@ struct NibRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.Nib {
+		extension _NibResource {
 			internal static var main: Self {
 				.init(
 					name: "Main",
@@ -38,7 +38,7 @@ struct NibRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.Nib {
+		extension _NibResource {
 		  public static var main: Self {
 		    .init(
 		      name: "Main",

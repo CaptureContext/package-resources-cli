@@ -6,7 +6,7 @@
 import Foundation
 import PackageResourcesCore
 
-extension PackageResources.Color {
+extension _ColorResource {
 	internal static var colorExample: Self {
 		.init(
 			name: "ColorExample",
@@ -15,7 +15,7 @@ extension PackageResources.Color {
 	}
 }
 
-extension PackageResources.Image {
+extension _ImageResource {
 	internal static var imageExample: Self {
 		.init(
 			name: "ImageExample",
@@ -24,7 +24,7 @@ extension PackageResources.Image {
 	}
 }
 
-extension PackageResources.Storyboard {
+extension _StoryboardResource {
 	internal static var main: Self {
 		.init(
 			name: "Main",
@@ -33,7 +33,7 @@ extension PackageResources.Storyboard {
 	}
 }
 
-extension PackageResources.Nib {
+extension _NibResource {
 	internal static var main: Self {
 		.init(
 			name: "Main",
@@ -42,16 +42,16 @@ extension PackageResources.Nib {
 	}
 }
 
-extension Array where Element == PackageResources.Font {
+extension Array where Element == _FontResource {
 	internal static var _customFonts: Self {
 		return [
 			.arimoBold,
-			.montserratBlack
+			.montserratBlack,
 		]
 	}
 }
 
-extension PackageResources.Font {
+extension _FontResource {
 	internal static var arimoBold: Self {
 		.init(name: "Arimo-Bold")
 	}
@@ -61,12 +61,12 @@ extension PackageResources.Font {
 	}
 }
 
-extension PackageResources.LocalizedString {
+extension _XCStringResource {
 	internal enum localizable {
 		internal enum unformatted {
 			internal enum testKey {
 				/// "Default localization %1$(string)@ %2$(int)lld and unnamed %3$lf"
-				/// 
+				///
 				/// > Some comment
 				internal static func withValues(
 					string arg1: String,
@@ -78,7 +78,7 @@ extension PackageResources.LocalizedString {
 						arguments: [
 							.object(arg1),
 							.int(arg2),
-							.double(arg3)
+							.double(arg3),
 						],
 						table: "Localizable",
 						bundle: .module

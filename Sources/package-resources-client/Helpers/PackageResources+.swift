@@ -1,29 +1,29 @@
 import PackageResourcesCore
 
 extension PackageResources.Color: NamedType {
-	static var typeName: String { "PackageResources.Color" }
+	static var typeName: String { "_ColorResource" }
 }
 
 extension PackageResources.Font: NamedType {
-	static var typeName: String { "PackageResources.Font" }
+	static var typeName: String { "_FontResource" }
 }
 
 extension PackageResources.Image: NamedType {
-	static var typeName: String { "PackageResources.Image" }
+	static var typeName: String { "_ImageResource" }
 }
 
 extension PackageResources.Nib: NamedType {
-	static var typeName: String { "PackageResources.Nib" }
+	static var typeName: String { "_NibResource" }
 }
 
 extension PackageResources.SCNScene: NamedType {
-	static var typeName: String { "PackageResources.SCNScene" }
+	static var typeName: String { "_SCNSceneResource" }
 }
 
 extension PackageResources.Storyboard: NamedType {
-	static var typeName: String { "PackageResources.Storyboard" }
+	static var typeName: String { "_StoryboardResource" }
 }
 
 extension PackageResources.LocalizedString: NamedType {
-	static var typeName: String { "PackageResources.LocalizedString" }
+	static var typeName: String { "_XCStringResource" }
 }

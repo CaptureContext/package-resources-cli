@@ -94,18 +94,26 @@ Overwrites configuration file entries
 ```
 package-resources-cli config edit [--format=<format>] [--output=<output>]
   [--indentor=<indentor>] [--indent-size=<indent-size>]
+  [--access-level=<access-level>] [--group-xcstrings-by-catalog-name]
+  [--no-group-xcstrings-by-catalog-name] [--resource-types=<resource-types>...]
   [--numbers-separator=<numbers-separator>]
   [--numbers-next-token-mode=<numbers-next-token-mode>]
   [--numbers-allowed-delimeters=<numbers-allowed-delimeters>]
+  [--numbers-ending-number-boundary-options=<numbers-ending-number-boundary-options>...]
   [--numbers-single-letter-boundary-options=<numbers-single-letter-boundary-options>...]
   [--acronyms-processing-policy=<acronyms-processing-policy>]
   [--acronyms-values=<acronyms-values>...] [--encode-aliases]
   [--no-encode-aliases] [--remove-output] [--no-remove-output]
   [--remove-indentor] [--no-remove-indentor] [--remove-indent-size]
-  [--no-remove-indent-size] [--remove-numbers-separator]
+  [--no-remove-indent-size] [--remove-access-level] [--no-remove-access-level]
+  [--remove-group-xcstrings-by-catalog-name]
+  [--no-remove-group-xcstrings-by-catalog-name] [--remove-resource-types]
+  [--no-remove-resource-types] [--remove-numbers-separator]
   [--no-remove-numbers-separator] [--remove-numbers-next-token-mode]
   [--no-remove-numbers-next-token-mode] [--remove-numbers-allowed-delimeters]
   [--no-remove-numbers-allowed-delimeters]
+  [--remove-numbers-ending-number-boundary-options]
+  [--no-remove-numbers-ending-number-boundary-options]
   [--remove-numbers-single-letter-boundary-options]
   [--no-remove-numbers-single-letter-boundary-options]
   [--remove-acronyms-processing-policy] [--no-remove-acronyms-processing-policy]
@@ -132,6 +140,26 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 *Number of indentors per indentation level*
 
 
+**--access-level=\<access-level\>:**
+
+*Access level for generated declarations*
+
+
+**--group-xcstrings-by-catalog-name:**
+
+*Groups xcstrings accessors under a catalog-name enum*
+
+
+**--no-group-xcstrings-by-catalog-name:**
+
+*Groups xcstrings accessors under a catalog-name enum*
+
+
+**--resource-types=\<resource-types\>:**
+
+*Resource types to generate*
+
+
 **--numbers-separator=\<numbers-separator\>:**
 
 *Separator for numbers*
@@ -147,9 +175,14 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 *Allowed delimeters for numbers*
 
 
+**--numbers-ending-number-boundary-options=\<numbers-ending-number-boundary-options\>:**
+
+*Boundary options for ending number tokens*
+
+
 **--numbers-single-letter-boundary-options=\<numbers-single-letter-boundary-options\>:**
 
-*Processsing mode for a token after a number*
+*Boundary options for single-letter tokens near numbers*
 
 
 **--acronyms-processing-policy=\<acronyms-processing-policy\>:**
@@ -202,6 +235,36 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 *Removes indent-size from the config file*
 
 
+**--remove-access-level:**
+
+*Removes access-level from the config file*
+
+
+**--no-remove-access-level:**
+
+*Removes access-level from the config file*
+
+
+**--remove-group-xcstrings-by-catalog-name:**
+
+*Removes group-xcstrings-by-catalog-name from the config file*
+
+
+**--no-remove-group-xcstrings-by-catalog-name:**
+
+*Removes group-xcstrings-by-catalog-name from the config file*
+
+
+**--remove-resource-types:**
+
+*Removes resource-types from the config file*
+
+
+**--no-remove-resource-types:**
+
+*Removes resource-types from the config file*
+
+
 **--remove-numbers-separator:**
 
 *Removes numbers.separator from the config file*
@@ -230,6 +293,16 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 **--no-remove-numbers-allowed-delimeters:**
 
 *Removes numbers.allowed-delimeters from the config file*
+
+
+**--remove-numbers-ending-number-boundary-options:**
+
+*Removes numbers.ending-number-boundary-options from the config file*
+
+
+**--no-remove-numbers-ending-number-boundary-options:**
+
+*Removes numbers.ending-number-boundary-options from the config file*
 
 
 **--remove-numbers-single-letter-boundary-options:**
@@ -303,9 +376,12 @@ Generates boilerplate for package resources
 ```
 package-resources-cli generate [--input=<input>] [--config=<config>]
   [--output=<output>] [--indentor=<indentor>] [--indent-size=<indent-size>]
+  [--access-level=<access-level>] [--group-xcstrings-by-catalog-name]
+  [--no-group-xcstrings-by-catalog-name] [--resource-types=<resource-types>...]
   [--numbers-separator=<numbers-separator>]
   [--numbers-next-token-mode=<numbers-next-token-mode>]
   [--numbers-allowed-delimeters=<numbers-allowed-delimeters>]
+  [--numbers-ending-number-boundary-options=<numbers-ending-number-boundary-options>...]
   [--numbers-single-letter-boundary-options=<numbers-single-letter-boundary-options>...]
   [--acronyms-processing-policy=<acronyms-processing-policy>]
   [--acronyms-values=<acronyms-values>...] [--version] [--help]
@@ -336,6 +412,26 @@ package-resources-cli generate [--input=<input>] [--config=<config>]
 *Number of indentors per indentation level*
 
 
+**--access-level=\<access-level\>:**
+
+*Access level for generated declarations*
+
+
+**--group-xcstrings-by-catalog-name:**
+
+*Groups xcstrings accessors under a catalog-name enum*
+
+
+**--no-group-xcstrings-by-catalog-name:**
+
+*Groups xcstrings accessors under a catalog-name enum*
+
+
+**--resource-types=\<resource-types\>:**
+
+*Resource types to generate*
+
+
 **--numbers-separator=\<numbers-separator\>:**
 
 *Separator for numbers*
@@ -351,9 +447,14 @@ package-resources-cli generate [--input=<input>] [--config=<config>]
 *Allowed delimeters for numbers*
 
 
+**--numbers-ending-number-boundary-options=\<numbers-ending-number-boundary-options\>:**
+
+*Boundary options for ending number tokens*
+
+
 **--numbers-single-letter-boundary-options=\<numbers-single-letter-boundary-options\>:**
 
-*Processsing mode for a token after a number*
+*Boundary options for single-letter tokens near numbers*
 
 
 **--acronyms-processing-policy=\<acronyms-processing-policy\>:**

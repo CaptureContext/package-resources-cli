@@ -15,16 +15,16 @@ struct FontRendererTests {
 		])
 
 		let expected = """
-		extension Array where Element == PackageResources.Font {
+		extension Array where Element == _FontResource {
 			internal static var _customFonts: Self {
 				return [
 					.arimoBold,
-					.montserratBlack
+					.montserratBlack,
 				]
 			}
 		}
 		
-		extension PackageResources.Font {
+		extension _FontResource {
 			internal static var montserratBlack: Self {
 				.init(name: "Montserrat-Black")
 			}
@@ -53,15 +53,15 @@ struct FontRendererTests {
 		}
 
 		let expected = """
-		extension Array where Element == PackageResources.Font {
+		extension Array where Element == _FontResource {
 		  public static var _customFonts: Self {
 		    return [
-		      .arimoBold
+		      .arimoBold,
 		    ]
 		  }
 		}
 
-		extension PackageResources.Font {
+		extension _FontResource {
 		  public static var arimoBold: Self {
 		    .init(name: "Arimo-Bold")
 		  }

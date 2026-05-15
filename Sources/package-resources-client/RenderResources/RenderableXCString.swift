@@ -1,7 +1,8 @@
-import PackageResourcesCore
-import XCStringsCatalog
 import Dependencies
-import IssueReporting
+import PackageResourcesCore
+import Snippets
+import SwiftSnippets
+import XCStringsCatalog
 
 extension PackageResources.LocalizedString.Source: _RenderableResourceType {
 	public static func render(_ resources: [Self]) throws -> String {
@@ -10,13 +11,12 @@ extension PackageResources.LocalizedString.Source: _RenderableResourceType {
 		@Dependency(\.formatClient.constants.groupXCStringsByCatalogName)
 		var groupXCStringsByCatalogName
 
-		return renderSnippet(.extensionDecl(
-			name: PackageResources.LocalizedString.typeName,
-			contents: renderXCStringsTree(
+		return renderPackageResourceSnippet(
+			Snippets.LocalizedStringsExtension(
 				for: resources,
 				groupXCStringsByCatalogName: groupXCStringsByCatalogName
 			)
-		))
+		)
 	}
 }
 
@@ -38,131 +38,223 @@ private struct XCStringNode {
 	}
 }
 
-private func renderXCStringsTree(
-	for resources: [PackageResources.LocalizedString.Source],
-	groupXCStringsByCatalogName: Bool
-) -> String {
-	var root = XCStringNode()
+extension Snippets {
+	fileprivate struct LocalizedStringsExtension: Snippet {
+		let root: XCStringNode
 
-	for resource in resources {
-		let keyPath = resource.resource.key.components(separatedBy: ".")
-		let path: [String]
-		if groupXCStringsByCatalogName, let table = resource.table {
-			path = [table] + Array(keyPath.dropLast())
-		} else {
-			path = Array(keyPath.dropLast())
-		}
+		init(
+			for resources: [PackageResources.LocalizedString.Source],
+			groupXCStringsByCatalogName: Bool
+		) {
+			var root = XCStringNode()
 
-		root.insert(resource, path: path[...])
-	}
+			for resource in resources {
+				let keyPath = resource.resource.key.components(separatedBy: ".")
+				let path: [String]
+				if groupXCStringsByCatalogName, let table = resource.table {
+					path = [table] + Array(keyPath.dropLast())
+				} else {
+					path = Array(keyPath.dropLast())
+				}
 
-	return renderNode(root)
-}
-
-private func renderNode(_ node: XCStringNode) -> String {
-	let children = node.children
-		.sorted { $0.key < $1.key }
-		.map { name, child in
-			renderSnippet(.enumDecl(
-				name: .identifier(name),
-				contents: renderNode(child)
-			))
-		}
-
-	let accessors = node.accessors
-		.sorted { $0.resource.key < $1.resource.key }
-		.map(renderAccessor)
-
-	return renderSnippet(.join("\n\n") {
-		children
-		accessors
-	})
-}
-
-private func renderAccessor(
-	for source: PackageResources.LocalizedString.Source
-) -> String {
-	let resource = source.resource
-	let identifier: some Snippet = .identifier(
-		source.resource.key.components(separatedBy: ".").last
-		?? source.resource.key
-	)
-	let body: some Snippet = .join(" ") {
-		"return"
-		renderSnippet(.methodCall(
-			name: ".init",
-			args: Array {
-				Snippets.MethodCall.Argument(
-					name: "key",
-					value: source.resource.key.escapedUsingQuotes
-				)
-				Snippets.MethodCall.Argument(
-					name: "arguments",
-					value: renderArguments(source.resource.arguments)
-				)
-				Snippets.MethodCall.Argument(
-					name: "table",
-					value: source.table?.escapedUsingQuotes ?? "nil"
-				)
-				Snippets.MethodCall.Argument(
-					name: "bundle",
-					value: ".module"
-				)
+				root.insert(resource, path: path[...])
 			}
-		))
+
+			self.root = root
+		}
+
+		var content: some Snippet<String> {
+			ExtensionDecl(
+				extendedType: .init(snippetLiteral: PackageResources.LocalizedString.typeName)
+			) {
+				XCStringNodeContents(root)
+			}
+		}
 	}
 
-	let returnType = "_XCStringResource"
+	private struct XCStringNodeContents: Snippet {
+		let node: XCStringNode
 
-	return renderSnippet(.join("\n") {
-		"""
-		/// "\(resource.sourceLocalization)"
-		/// 
-		/// > \(resource.comment ?? "<no_comment>")
-		"""
+		init(_ node: XCStringNode) {
+			self.node = node
+		}
 
-		if resource.arguments.isEmpty {
-			renderSnippet(.propertyDecl(
-				identifier: identifier,
-				returnType: returnType,
-				body: body
-			))
-		} else {
-			renderSnippet(.methodDecl(
-				identifier: identifier,
-				arguments: resource.arguments.map { argument in
-					.init(
-						label: argument.label ?? "_",
-						name: .identifier(argument.name),
-						type: swiftType(for: argument.placeholderType)
+		var content: some Snippet<String> {
+			Join(String.const(.newlines(2))) {
+				node.children
+					.sorted { $0.key < $1.key }
+					.map { name, child in
+						XCStringNodeEnum(name: name, node: child)
+					}
+
+				node.accessors
+					.sorted { $0.resource.key < $1.resource.key }
+					.map { source in
+						XCStringAccessorDecl(source)
+					}
+			}
+		}
+	}
+
+	private struct XCStringNodeEnum: Snippet {
+		let name: String
+		let node: XCStringNode
+
+		var content: some Snippet<String> {
+			EnumDecl(
+				accessLevel: .current,
+				identifier: packageResourceIdentifier(name)
+			) {
+				XCStringNodeContents(node)
+			}
+		}
+	}
+
+	private struct XCStringAccessorDecl: Snippet {
+		let source: PackageResources.LocalizedString.Source
+
+		init(_ source: PackageResources.LocalizedString.Source) {
+			self.source = source
+		}
+
+		var resource: XCStringResource {
+			source.resource
+		}
+
+		var identifier: IdentifierLiteral<String> {
+			packageResourceIdentifier(
+				resource.key.components(separatedBy: ".").last
+				?? resource.key
+			)
+		}
+
+		var content: some Snippet<String> {
+			Join(String.const(.newline)) {
+				Comment(.doc) {
+					"""
+					"\(resource.sourceLocalization)"
+					
+					> \(resource.comment ?? "<no_comment>")
+					"""
+				}
+
+				if resource.arguments.isEmpty {
+					ComputedPropertyDecl(
+						accessLevel: .current,
+						isStatic: true,
+						identifier: identifier,
+						type: TypeExpr(snippetLiteral: "_XCStringResource"),
+						getter: PropertyGetterDecl {
+							XCStringInitReturn(source)
+						}
 					)
-				},
-				returnType: returnType,
-				body: body
-			))
+				} else {
+					FunctionDecl(
+						accessLevel: .current,
+						isStatic: true,
+						identifier: identifier,
+						parameters: SwiftFunctionParameterClause(
+							resource.arguments.map(functionParameter)
+						),
+						returnType: TypeExpr(snippetLiteral: "_XCStringResource")
+					) {
+						XCStringInitReturn(source)
+					}
+				}
+			}
 		}
-	})
-}
 
-private func renderArguments(
-	_ arguments: [XCStringResource.Argument]
-) -> String {
-	guard !arguments.isEmpty else { return "[]" }
-
-	func renderArgumentValue(
-	 for argument: XCStringResource.Argument
- ) -> String {
-	 let _case = argument.placeholderType.rawValue
-	 let _value = renderSnippet(.identifier(argument.name))
-	 return ".\(_case)(\(_value))"
- }
-
-	return renderSnippet(.bracketedBlock(
-		in: .square,
-		contents: .join(",\n") {
-			arguments.map(renderArgumentValue)
+		private func functionParameter(
+			for argument: XCStringResource.Argument
+		) -> SwiftFunctionParameter {
+			.init(
+				label: packageResourceIdentifier(argument.label ?? "_"),
+				name: packageResourceIdentifier(argument.name),
+				type: TypeExpr(snippetLiteral: swiftType(for: argument.placeholderType))
+			)
 		}
-	))
+	}
+
+	private struct XCStringInitReturn: Snippet {
+		let source: PackageResources.LocalizedString.Source
+
+		init(_ source: PackageResources.LocalizedString.Source) {
+			self.source = source
+		}
+
+		var content: some Snippet<String> {
+			Join(String.const(.whitespace)) {
+				"return"
+				XCStringInitCall(source)
+			}
+		}
+	}
+
+	private struct XCStringInitCall: Snippet {
+		let source: PackageResources.LocalizedString.Source
+
+		init(_ source: PackageResources.LocalizedString.Source) {
+			self.source = source
+		}
+
+		var content: some Snippet<String> {
+			CallExpr(
+				callee: ".init",
+				clause: SwiftCallClause([
+					SwiftCallArgument(
+						label: .init("key"),
+						value: source.resource.key.escapedUsingQuotes
+					),
+					SwiftCallArgument(
+						label: .init("arguments"),
+						value: XCStringArgumentsLiteral(source.resource.arguments)
+					),
+					SwiftCallArgument(
+						label: .init("table"),
+						value: source.table?.escapedUsingQuotes ?? "nil"
+					),
+					SwiftCallArgument(
+						label: .init("bundle"),
+						value: ".module"
+					)
+				])
+			)
+		}
+	}
+
+	private struct XCStringArgumentsLiteral: Snippet {
+		let arguments: [XCStringResource.Argument]
+
+		init(_ arguments: [XCStringResource.Argument]) {
+			self.arguments = arguments
+		}
+
+		func render() -> String {
+			ArrayLiteral(
+				arguments.map { AnySnippet(XCStringArgumentValue($0)) }
+			)
+			.render()
+		}
+	}
+
+	private struct XCStringArgumentValue: Snippet {
+		let argument: XCStringResource.Argument
+
+		init(_ argument: XCStringResource.Argument) {
+			self.argument = argument
+		}
+
+		var content: some Snippet<String> {
+			CallExpr(
+				callee: ".\(argument.placeholderType.rawValue)",
+				clause: SwiftCallClause([
+					SwiftCallArgument(
+						value: packageResourceIdentifier(argument.name)
+					)
+				])
+			)
+		}
+	}
 }
 
 private func swiftType(

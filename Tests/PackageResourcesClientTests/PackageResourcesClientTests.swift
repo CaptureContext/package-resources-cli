@@ -5,6 +5,8 @@ import Dependencies
 import PackageResourcesCore
 import SnapshotTesting
 import SnapshotTestingCustomDump
+import Snippets
+import SwiftSnippets
 
 @Suite
 struct PackageResourcesClientTests {
@@ -52,10 +54,15 @@ struct PackageResourcesClientTests {
 		)
 
 		assertSnapshot(
-			of: renderSnippet(.join("\n\n") {
-				renderSnippet(disclaimerString)
-				outputString
-			}),
+			of: renderPackageResourceSnippet(
+				Snippets.Join(String.const(.newlines(2))) {
+					if let disclaimerString {
+						disclaimerString
+					}
+					outputString
+				}
+				.skipEmpty()
+			),
 			as: .swift,
 			named: "default"
 		)

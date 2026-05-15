@@ -19,13 +19,25 @@ Code generator for [swift-package-resources](https://github.com/capturecontext/s
 ```swift
 .package(
   url: "https://github.com/capturecontext/package-resources-cli.git", 
-  .upToNextMajor(from: "3.0.0")
+  .upToNextMajor(from: "4.0.0")
 ),
 .package(
   url: "https://github.com/capturecontext/swift-package-resources.git", 
   .upToNextMajor(from: "5.0.0")
 ),
 ```
+
+> [!Note]
+>
+> **Version update policy**
+>
+> Starting from `4.0.0` semver is only applied to CLI itself:
+>
+> - `major` updates are reserved for breaking config or output changes and major dependency updates
+> - `minor` updates are reserved for additive changes in config or output
+> - `patch` updates are reserved for other updates
+>
+> _`PackageResourcesClient` is treated as implementation details and changes in it's APIs are not subject to semantic versioning unless it involves changes in CLI behavior_
 
 2. Add plugin and target dependency
 
@@ -84,14 +96,15 @@ make install
 
 Supported resource types:
 
-| Resource           | Extensions        | Is reliable     |
-| ------------------ | ----------------- | --------------- |
-| ColorResource      | `.xcassets`       | yes             |
-| FontResource       | `.ttf` `.otf`     | yes             |
-| ImageResource      | `.xcassets`       | yes             |
-| SCNSceneResource   | `.scnassets/.scn` | yes             |
-| NibResource        | `.xib`            | not used/tested |
-| StoryboardResource | `.storyboard`     | not used/tested |
+| Resource            | Extensions        | Is reliable     |
+| ------------------- | ----------------- | --------------- |
+| _ColorResource      | `.xcassets`       | yes             |
+| _FontResource       | `.ttf` `.otf`     | yes             |
+| _ImageResource      | `.xcassets`       | yes             |
+| _SCNSceneResource   | `.scnassets/.scn` | yes             |
+| _XCStringResource   | `xcstrings`       | yes             |
+| _NibResource        | `.xib`            | not used/tested |
+| _StoryboardResource | `.storyboard`     | not used/tested |
 
 > [!WARNING]
 >
@@ -130,7 +143,7 @@ numbers:
   - disable-token-processing
 acronyms:
   processing-policy: default
-  values
+  values:
   - id
   - ID
   - Id
@@ -228,6 +241,8 @@ swift package resources config edit --remove-acronyms-values
 - [ ] Excludes support
 - [ ] Filesystem expressions support
 - [ ] Resources validation
+- [ ] Images optimizations
+- [ ] Legacy strings support
 
 ## Alternatives
 

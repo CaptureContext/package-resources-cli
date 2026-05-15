@@ -14,7 +14,7 @@ struct StoryboardRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.Storyboard {
+		extension _StoryboardResource {
 			internal static var main: Self {
 				.init(
 					name: "Main",
@@ -38,7 +38,7 @@ struct StoryboardRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.Storyboard {
+		extension _StoryboardResource {
 		  public static var main: Self {
 		    .init(
 		      name: "Main",

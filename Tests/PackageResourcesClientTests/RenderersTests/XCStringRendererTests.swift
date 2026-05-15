@@ -32,12 +32,12 @@ struct XCStringRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.LocalizedString {
+		extension _XCStringResource {
 			internal enum localizable {
 				internal enum auth {
 					internal enum login {
 						/// "Log in"
-						/// 
+						///
 						/// > Login title
 						internal static var title: _XCStringResource {
 							return .init(
@@ -51,7 +51,7 @@ struct XCStringRendererTests {
 		
 					internal enum logout {
 						/// "Log out"
-						/// 
+						///
 						/// > Logout title
 						internal static var title: _XCStringResource {
 							return .init(
@@ -98,10 +98,10 @@ struct XCStringRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.LocalizedString {
+		extension _XCStringResource {
 			internal enum stats {
 				/// "%1$lld %2$llu %3$f %4$lf %5$@"
-				/// 
+				///
 				/// > Stats summary
 				internal static func summary(
 					count: Int,
@@ -117,7 +117,7 @@ struct XCStringRendererTests {
 							.uint(total),
 							.float(ratio),
 							.double(average),
-							.object(name)
+							.object(name),
 						],
 						table: nil,
 						bundle: .module
@@ -126,7 +126,7 @@ struct XCStringRendererTests {
 			}
 		
 			/// "Welcome"
-			/// 
+			///
 			/// > <no_comment>
 			internal static var welcome: _XCStringResource {
 				return .init(
@@ -161,12 +161,12 @@ struct XCStringRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.LocalizedString {
+		extension _XCStringResource {
 		  public enum localizable {
 		    public enum auth {
 		      public enum login {
 		        /// "Log in"
-		        /// 
+		        ///
 		        /// > Login title
 		        public static var title: _XCStringResource {
 		          return .init(
@@ -204,11 +204,11 @@ struct XCStringRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.LocalizedString {
+		extension _XCStringResource {
 			internal enum auth {
 				internal enum login {
 					/// "Log in"
-					/// 
+					///
 					/// > Login title
 					internal static var title: _XCStringResource {
 						return .init(

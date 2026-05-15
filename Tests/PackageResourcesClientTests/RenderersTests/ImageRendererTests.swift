@@ -14,7 +14,7 @@ struct ImageRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.Image {
+		extension _ImageResource {
 			internal static var imageExample: Self {
 				.init(
 					name: "image-example",
@@ -38,7 +38,7 @@ struct ImageRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.Image {
+		extension _ImageResource {
 		  public static var imageExample: Self {
 		    .init(
 		      name: "image-example",

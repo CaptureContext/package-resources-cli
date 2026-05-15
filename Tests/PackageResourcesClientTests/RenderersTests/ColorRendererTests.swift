@@ -14,7 +14,7 @@ struct ColorRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.Color {
+		extension _ColorResource {
 			internal static var accentColor: Self {
 				.init(
 					name: "AccentColor",
@@ -38,7 +38,7 @@ struct ColorRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.Color {
+		extension _ColorResource {
 		  public static var accentColor: Self {
 		    .init(
 		      name: "AccentColor",

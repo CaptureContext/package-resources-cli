@@ -15,7 +15,7 @@ struct SCNSceneRendererTests {
 		])
 
 		let expected = """
-		extension PackageResources.SCNScene {
+		extension _SCNSceneResource {
 			internal static var defaultScene: Self {
 				.init(
 					name: "DefaultScene",
@@ -47,7 +47,7 @@ struct SCNSceneRendererTests {
 		}
 
 		let expected = """
-		extension PackageResources.SCNScene {
+		extension _SCNSceneResource {
 		  public static var defaultScene: Self {
 		    .init(
 		      name: "DefaultScene",

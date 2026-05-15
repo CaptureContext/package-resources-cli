@@ -44,12 +44,8 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-xcstrings-catalog.git",
-			.upToNextMajor(from: "1.0.0"),
+			.upToNextMajor(from: "1.0.1"),
 			traits: ["Parsing"]
-		),
-		.package(
-			url: "https://github.com/capturecontext/swift-casification.git",
-			.upToNextMinor(from: "0.6.0")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
@@ -57,12 +53,12 @@ let package = Package(
 			traits: ["NominalTypes", "Operators"]
 		),
 		.package(
-			url: "https://github.com/capturecontext/swift-result-builders.git",
-			.upToNextMinor(from: "0.0.2")
-		),
-		.package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
 			.upToNextMinor(from: "0.2.0")
+		),
+		.package(
+			url: "https://github.com/capturecontext/swiftlang-snippets.git",
+			.upToNextMinor(from: "0.0.1")
 		),
 		.package(
 			url: "https://github.com/pointfreeco/swift-case-paths.git",
@@ -71,10 +67,6 @@ let package = Package(
 		.package(
 			url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
 			.upToNextMajor(from: "1.19.2")
-		),
-		.package(
-			url: "https://github.com/pointfreeco/swift-dependencies.git",
-			.upToNextMajor(from: "1.12.0")
 		),
 	],
 	targets: [
@@ -137,20 +129,16 @@ let package = Package(
 					package: "swift-xcstrings-catalog"
 				),
 				.product(
-					name: "Casification",
-					package: "swift-casification"
-				),
-				.product(
 					name: "FunctionComposition",
 					package: "swift-function-composition"
 				),
 				.product(
-					name: "ArrayBuilder",
-					package: "swift-result-builders"
-				),
-				.product(
 					name: "KeyPathsExtensions",
 					package: "swift-keypaths-extensions"
+				),
+				.product(
+					name: "SwiftSnippets",
+					package: "swiftlang-snippets"
 				),
 			],
 			path: "Sources/package-resources-client"

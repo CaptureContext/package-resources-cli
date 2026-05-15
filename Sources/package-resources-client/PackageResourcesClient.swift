@@ -3,6 +3,8 @@ import PackageResourcesCore
 import FunctionComposition
 import PackageResourcesFS
 import Foundation
+import Snippets
+import SwiftSnippets
 
 public protocol PackageResourcesClient: Sendable {
 	func processResources(
@@ -55,10 +57,15 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 			atPath: path
 		)
 
-		let output = renderSnippet(.join("\n\n") {
-			renderSnippet(disclaimer(outputFile.name))
-			processed
-		})
+		let output = renderPackageResourceSnippet(
+			Snippets.Join(String.const(.newlines(2))) {
+				if let disclaimer = disclaimer(outputFile.name) {
+					disclaimer
+				}
+				processed
+			}
+			.skipEmpty()
+		)
 
 		try outputFile.write(output)
 	}
@@ -132,11 +139,18 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 		import Foundation
 		import PackageResourcesCore
 		"""
+		let renderedResults = results
+			.compactMap { $0 }
+			.filter { !$0.isEmpty }
+			.joined(separator: "\n\n")
 
-		return renderSnippet(.join("\n\n") {
-			imports
-			results
-		}) + "\n"
+		return renderPackageResourceSnippet(
+			Snippets.Join(String.const(.newlines(2))) {
+				imports
+				renderedResults
+			}
+			.skipEmpty()
+		) + "\n"
 	}
 }
 
