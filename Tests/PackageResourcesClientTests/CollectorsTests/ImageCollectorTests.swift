@@ -11,7 +11,8 @@ struct ImageCollectorTests {
 		let output = try PackageResources.Image.collect(atPath: testFixturesDirectoryPath)
 
 		let expected: [PackageResources.Image.Source] = [
-			.init(name: "ImageExample")
+			.init(name: "ImageExample"),
+			.init(name: "NestedImage", path: ["NestedFolder"])
 		]
 
 		expectNoDifference(expected, output)

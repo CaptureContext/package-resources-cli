@@ -7,6 +7,15 @@ import Foundation
 import PackageResourcesCore
 
 extension _ColorResource {
+	internal enum nestedFolder {
+		internal static var nestedColor: Self {
+			.init(
+				name: "NestedColor",
+				bundle: .module
+			)
+		}
+	}
+
 	internal static var colorExample: Self {
 		.init(
 			name: "ColorExample",
@@ -16,6 +25,15 @@ extension _ColorResource {
 }
 
 extension _ImageResource {
+	internal enum nestedFolder {
+		internal static var nestedImage: Self {
+			.init(
+				name: "NestedImage",
+				bundle: .module
+			)
+		}
+	}
+
 	internal static var imageExample: Self {
 		.init(
 			name: "ImageExample",

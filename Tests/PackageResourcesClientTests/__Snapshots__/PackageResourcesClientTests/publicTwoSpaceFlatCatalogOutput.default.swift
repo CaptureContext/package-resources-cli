@@ -8,12 +8,26 @@ extension _ColorResource {
       bundle: .module
     )
   }
+
+  public static var nestedColor: Self {
+    .init(
+      name: "NestedColor",
+      bundle: .module
+    )
+  }
 }
 
 extension _ImageResource {
   public static var imageExample: Self {
     .init(
       name: "ImageExample",
+      bundle: .module
+    )
+  }
+
+  public static var nestedImage: Self {
+    .init(
+      name: "NestedImage",
       bundle: .module
     )
   }

@@ -11,7 +11,8 @@ struct ColorCollectorTests {
 		let output = try PackageResources.Color.collect(atPath: testFixturesDirectoryPath)
 
 		let expected: [PackageResources.Color.Source] = [
-			.init(name: "ColorExample")
+			.init(name: "ColorExample"),
+			.init(name: "NestedColor", path: ["NestedFolder"])
 		]
 
 		expectNoDifference(expected, output)
