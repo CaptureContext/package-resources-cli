@@ -1,4 +1,5 @@
 import Dependencies
+import Foundation
 import PackageResourcesCore
 import Snippets
 import SwiftSnippets
@@ -11,12 +12,43 @@ extension PackageResources.LocalizedString.Source: _RenderableResourceType {
 		@Dependency(\.formatClient.constants.groupXCStringsByCatalogName)
 		var groupXCStringsByCatalogName
 
-		return renderPackageResourceSnippet(
-			Snippets.LocalizedStringsExtension(
-				for: resources,
-				groupXCStringsByCatalogName: groupXCStringsByCatalogName
-			)
+		let snippet = try Snippets.LocalizedStringsExtension(
+			for: resources,
+			groupXCStringsByCatalogName: groupXCStringsByCatalogName
 		)
+
+		return renderPackageResourceSnippet(snippet)
+	}
+}
+
+struct XCStringResourceKeyPathConflict: Equatable, Sendable {
+	var accessorKey: String
+	var nestedKey: String
+}
+
+enum XCStringResourceValidationError: CustomStringConvertible, Equatable, LocalizedError {
+	case conflictingKeyPaths([XCStringResourceKeyPathConflict])
+
+	var description: String {
+		errorDescription ?? "String resource validation error."
+	}
+
+	var errorDescription: String? {
+		switch self {
+		case let .conflictingKeyPaths(conflicts):
+			let conflictDescriptions = conflicts
+				.map { conflict in
+					"""
+					"\(conflict.accessorKey)" conflicts with "\(conflict.nestedKey)"
+					"""
+				}
+				.joined(separator: ", ")
+
+			return """
+			String resource key path conflict: \(conflictDescriptions). \
+			The accessor key would be generated where the nested key needs an enum namespace.
+			"""
+		}
 	}
 }
 
@@ -27,15 +59,59 @@ private struct XCStringNode {
 	mutating func insert(
 		_ resource: PackageResources.LocalizedString.Source,
 		path: ArraySlice<String>
-	) {
+	) throws {
 		guard let pathComponent = path.first else {
+			if let child = children.first(
+				where: { child in
+					packageResourceIdentifierValue(child.key) == accessorIdentifier(for: resource)
+				}
+			) {
+				throw XCStringResourceValidationError.conflictingKeyPaths([
+					.init(
+						accessorKey: resource.resource.key,
+						nestedKey: child.value.firstResource?.resource.key ?? resource.resource.key
+					)
+				])
+			}
+
 			accessors.append(resource)
 			return
 		}
 
-		children[pathComponent, default: .init()]
+		if let accessor = accessors.first(
+			where: { accessor in
+				accessorIdentifier(for: accessor) == packageResourceIdentifierValue(pathComponent)
+			}
+		) {
+			throw XCStringResourceValidationError.conflictingKeyPaths([
+				.init(
+					accessorKey: accessor.resource.key,
+					nestedKey: resource.resource.key
+				)
+			])
+		}
+
+		try children[pathComponent, default: .init()]
 			.insert(resource, path: path.dropFirst())
 	}
+
+	var firstResource: PackageResources.LocalizedString.Source? {
+		accessors.first
+			?? children
+				.sorted { $0.key < $1.key }
+				.lazy
+				.compactMap(\.value.firstResource)
+				.first
+	}
+}
+
+private func accessorIdentifier(
+	for source: PackageResources.LocalizedString.Source
+) -> String {
+	packageResourceIdentifierValue(
+		source.resource.key.components(separatedBy: ".").last
+		?? source.resource.key
+	)
 }
 
 extension Snippets {
@@ -45,7 +121,7 @@ extension Snippets {
 		init(
 			for resources: [PackageResources.LocalizedString.Source],
 			groupXCStringsByCatalogName: Bool
-		) {
+		) throws {
 			var root = XCStringNode()
 
 			for resource in resources {
@@ -57,7 +133,7 @@ extension Snippets {
 					path = Array(keyPath.dropLast())
 				}
 
-				root.insert(resource, path: path[...])
+				try root.insert(resource, path: path[...])
 			}
 
 			self.root = root

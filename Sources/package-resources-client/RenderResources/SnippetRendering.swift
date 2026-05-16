@@ -22,7 +22,11 @@ internal func renderPackageResourceSnippet(
 internal func packageResourceIdentifier(
 	_ rawValue: String
 ) -> Snippets.IdentifierLiteral<String> {
-	.init(snippetLiteral: rawValue.case(.camel))
+	.init(snippetLiteral: packageResourceIdentifierValue(rawValue))
+}
+
+internal func packageResourceIdentifierValue(_ rawValue: String) -> String {
+	rawValue.case(.camel)
 }
 
 extension Optional<Snippets.AccessLevel<String>> {

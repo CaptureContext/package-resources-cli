@@ -225,4 +225,42 @@ struct XCStringRendererTests {
 
 		expectNoDifference(expected, output)
 	}
+
+	@Test
+	func rejectsConflictingAccessorAndNestedKeyPaths() throws {
+		let resources = [
+			PackageResources.LocalizedString.Source(
+				resource: .init(
+					key: "some.key",
+					comment: nil,
+					arguments: [],
+					sourceLocalization: "Some key"
+				)
+			),
+			.init(
+				resource: .init(
+					key: "some.key.label",
+					comment: nil,
+					arguments: [],
+					sourceLocalization: "Some key label"
+				)
+			)
+		]
+
+		for resources in [resources, resources.reversed()] {
+			do {
+				_ = try PackageResources.LocalizedString.Source.render(Array(resources))
+				Issue.record("Expected conflicting key paths to throw.")
+			} catch let error as XCStringResourceValidationError {
+				expectNoDifference(
+					.conflictingKeyPaths([
+						.init(accessorKey: "some.key", nestedKey: "some.key.label")
+					]),
+					error
+				)
+			} catch {
+				Issue.record("Expected XCStringResourceValidationError, got \(error).")
+			}
+		}
+	}
 }

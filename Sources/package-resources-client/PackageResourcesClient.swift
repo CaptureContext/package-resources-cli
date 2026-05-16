@@ -52,7 +52,7 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 		@Dependency(\.formatClient.disclaimerProvider)
 		var disclaimer
 
-		let processed = await processResources(
+		let processed = try await processResourcesThrowing(
 			for: resourceTypes,
 			atPath: path
 		)
@@ -74,6 +74,52 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 		for resourceTypes: EnabledResourceTypes,
 		atPath path: String,
 	) async -> String {
+		let processors = processors(for: resourceTypes)
+		var results = Array<String?>(repeating: nil, count: processors.count)
+
+		await withTaskGroup(of: (Int, String?).self) { group in
+			for (index, processor) in processors.enumerated() {
+				group.addTask {
+					let result = withErrorReporting {
+						try processor(path)
+					}
+					return (index, result)
+				}
+			}
+
+			for await (index, result) in group {
+				results[index] = result
+			}
+		}
+
+		return renderResults(results)
+	}
+
+	private func processResourcesThrowing(
+		for resourceTypes: EnabledResourceTypes,
+		atPath path: String,
+	) async throws -> String {
+		let processors = processors(for: resourceTypes)
+		var results = Array<String?>(repeating: nil, count: processors.count)
+
+		try await withThrowingTaskGroup(of: (Int, String).self) { group in
+			for (index, processor) in processors.enumerated() {
+				group.addTask {
+					(index, try processor(path))
+				}
+			}
+
+			for try await (index, result) in group {
+				results[index] = result
+			}
+		}
+
+		return renderResults(results)
+	}
+
+	private func processors(
+		for resourceTypes: EnabledResourceTypes
+	) -> [SendableSyncThrowingFunc<String, String, Error>] {
 		var processors: [SendableSyncThrowingFunc<String, String, Error>] = []
 
 		if resourceTypes.contains(.colors) {
@@ -118,23 +164,10 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 			processors.append(processor)
 		}
 
-		var results = Array<String?>(repeating: nil, count: processors.count)
+		return processors
+	}
 
-		await withTaskGroup(of: (Int, String?).self) { group in
-			for (index, processor) in processors.enumerated() {
-				group.addTask {
-					let result = withErrorReporting {
-						try processor(path)
-					}
-					return (index, result)
-				}
-			}
-
-			for await (index, result) in group {
-				results[index] = result
-			}
-		}
-
+	private func renderResults(_ results: [String?]) -> String {
 		let imports = """
 		import Foundation
 		import PackageResourcesCore
