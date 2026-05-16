@@ -69,6 +69,34 @@ extension App {
 		)
 		public var xcStringsSplitByKeyPath: Bool?
 
+		@Flag(
+			name: .customLong("colors-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups colors by folders inside an xcassets catalog"
+		)
+		public var colorsGroupByFolders: Bool?
+
+		@Flag(
+			name: .customLong("images-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups images by folders inside an xcassets catalog"
+		)
+		public var imagesGroupByFolders: Bool?
+
+		@Flag(
+			name: .customLong("colors-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted color asset names and path components into nested enums"
+		)
+		public var colorsSplitByKeyPath: Bool?
+
+		@Flag(
+			name: .customLong("images-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted image asset names and path components into nested enums"
+		)
+		public var imagesSplitByKeyPath: Bool?
+
 		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
 		public var ignoreColors: Bool?
 
@@ -153,6 +181,22 @@ extension App {
 				.ifLet(
 					xcStringsSplitByKeyPath,
 					override: \.xcStringsSplitByKeyPath
+				)
+				.ifLet(
+					colorsGroupByFolders,
+					override: \.colorsGroupByFolders
+				)
+				.ifLet(
+					imagesGroupByFolders,
+					override: \.imagesGroupByFolders
+				)
+				.ifLet(
+					colorsSplitByKeyPath,
+					override: \.colorsSplitByKeyPath
+				)
+				.ifLet(
+					imagesSplitByKeyPath,
+					override: \.imagesSplitByKeyPath
 				)
 				.ifLet(ignoreColors, override: \.ignoreColors)
 				.ifLet(ignoreImages, override: \.ignoreImages)

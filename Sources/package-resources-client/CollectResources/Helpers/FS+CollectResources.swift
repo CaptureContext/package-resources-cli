@@ -26,3 +26,36 @@ internal func xcAssetFolderComponents(
 
 	return []
 }
+
+internal func xcAssetCatalogName(
+	for location: any _Location
+) -> String? {
+	var parent = location.parent
+
+	while let folder = parent {
+		if folder.extension == "xcassets" {
+			return folder.name.removingSuffix(".xcassets")
+		}
+
+		parent = folder.parent
+	}
+
+	return nil
+}
+
+internal func resourceSetName(
+	for location: any _Location
+) -> String {
+	if let locationExtension = location.extension {
+		return location.name.removingSuffix(".\(locationExtension)")
+	} else {
+		return location.name
+	}
+}
+
+private extension String {
+	func removingSuffix(_ suffix: String) -> String {
+		guard hasSuffix(suffix) else { return self }
+		return String(dropLast(suffix.count))
+	}
+}

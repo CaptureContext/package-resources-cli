@@ -60,10 +60,13 @@ struct PackageResourcesClientTests {
 			indentor: "  ",
 			accessLevel: .public
 		)
+		config.colors.groupByFolders = false
+		config.colors.splitByKeyPath = false
 		config.images.common = .init(
 			indentor: "    ",
 			accessLevel: .package
 		)
+		config.images.groupByFolders = false
 		config.fonts = .init(
 			indentor: "  ",
 			accessLevel: nil

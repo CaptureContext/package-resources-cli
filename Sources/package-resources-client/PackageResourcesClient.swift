@@ -32,11 +32,12 @@ public struct EnabledResourceTypes: Equatable, OptionSet, Sendable {
 	public static var nibs: Self { .init(rawValue: 1 << 3) }
 	public static var storyboards: Self { .init(rawValue: 1 << 4) }
 	public static var xcStrings: Self { .init(rawValue: 1 << 5) }
+	public static var scnScenes: Self { .init(rawValue: 1 << 6) }
 	public static var interfaceBuilder: Self { [.nibs, .storyboards] }
 	public static var all: Self {
 		[
 			.colors, .fonts, .images,
-			.nibs, .storyboards, .xcStrings
+			.nibs, .scnScenes, .storyboards, .xcStrings
 		]
 	}
 }
@@ -154,6 +155,13 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 			var processor
 
 			processors.append(.init(kind: .storyboards, run: processor))
+		}
+
+		if resourceTypes.contains(.scnScenes) {
+			@Dependency(KeyPath.processResources(of: PackageResources.SCNScene.self))
+			var processor
+
+			processors.append(.init(kind: .scnScenes, run: processor))
 		}
 
 		if resourceTypes.contains(.nibs) {

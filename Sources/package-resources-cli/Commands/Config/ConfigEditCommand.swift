@@ -72,6 +72,34 @@ extension App.ConfigCommand {
 		)
 		public var xcStringsSplitByKeyPath: Bool?
 
+		@Flag(
+			name: .customLong("colors-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups colors by folders inside an xcassets catalog"
+		)
+		public var colorsGroupByFolders: Bool?
+
+		@Flag(
+			name: .customLong("images-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups images by folders inside an xcassets catalog"
+		)
+		public var imagesGroupByFolders: Bool?
+
+		@Flag(
+			name: .customLong("colors-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted color asset names and path components into nested enums"
+		)
+		public var colorsSplitByKeyPath: Bool?
+
+		@Flag(
+			name: .customLong("images-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted image asset names and path components into nested enums"
+		)
+		public var imagesSplitByKeyPath: Bool?
+
 		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
 		public var ignoreColors: Bool?
 
@@ -202,6 +230,18 @@ extension App.ConfigCommand {
 		)
 		var removeXCStringsSplitByKeyPath: Bool = false
 
+		@Flag(name: .customLong("remove-colors-group-by-folders"), inversion: .prefixedNo)
+		var removeColorsGroupByFolders: Bool = false
+
+		@Flag(name: .customLong("remove-images-group-by-folders"), inversion: .prefixedNo)
+		var removeImagesGroupByFolders: Bool = false
+
+		@Flag(name: .customLong("remove-colors-split-by-key-path"), inversion: .prefixedNo)
+		var removeColorsSplitByKeyPath: Bool = false
+
+		@Flag(name: .customLong("remove-images-split-by-key-path"), inversion: .prefixedNo)
+		var removeImagesSplitByKeyPath: Bool = false
+
 		@Flag(name: .customLong("remove-ignore-colors"), inversion: .prefixedNo)
 		var removeIgnoreColors: Bool = false
 
@@ -307,6 +347,22 @@ extension App.ConfigCommand {
 						xcStringsSplitByKeyPath,
 						override: \.xcStringsSplitByKeyPath
 					)
+					.ifLet(
+						colorsGroupByFolders,
+						override: \.colorsGroupByFolders
+					)
+					.ifLet(
+						imagesGroupByFolders,
+						override: \.imagesGroupByFolders
+					)
+					.ifLet(
+						colorsSplitByKeyPath,
+						override: \.colorsSplitByKeyPath
+					)
+					.ifLet(
+						imagesSplitByKeyPath,
+						override: \.imagesSplitByKeyPath
+					)
 					.ifLet(ignoreColors, override: \.ignoreColors)
 					.ifLet(ignoreImages, override: \.ignoreImages)
 					.ifLet(ignoreFonts, override: \.ignoreFonts)
@@ -355,6 +411,10 @@ extension App.ConfigCommand {
 
 			if removeGroupByCatalogName { config.groupByCatalogName = Manifest.FormatConfig.Root.default.groupByCatalogName }
 			if removeXCStringsSplitByKeyPath { config.xcStringsSplitByKeyPath = true }
+			if removeColorsGroupByFolders { config.colorsGroupByFolders = true }
+			if removeImagesGroupByFolders { config.imagesGroupByFolders = true }
+			if removeColorsSplitByKeyPath { config.colorsSplitByKeyPath = true }
+			if removeImagesSplitByKeyPath { config.imagesSplitByKeyPath = true }
 			if removeIgnoreColors { config.ignoreColors = false }
 			if removeIgnoreImages { config.ignoreImages = false }
 			if removeIgnoreFonts { config.ignoreFonts = false }
@@ -370,6 +430,10 @@ extension App.ConfigCommand {
 				if removeGroupXCStringsByCatalogName { ignoredKeys.insert(["group-xcstrings-by-catalog-name"]) }
 				if removeGroupByCatalogName { ignoredKeys.insert(["group-by-catalog"]) }
 				if removeXCStringsSplitByKeyPath { ignoredKeys.insert(["xcstrings", "split-by-key-path"]) }
+				if removeColorsGroupByFolders { ignoredKeys.insert(["colors", "group-by-folders"]) }
+				if removeImagesGroupByFolders { ignoredKeys.insert(["images", "group-by-folders"]) }
+				if removeColorsSplitByKeyPath { ignoredKeys.insert(["colors", "split-by-key-path"]) }
+				if removeImagesSplitByKeyPath { ignoredKeys.insert(["images", "split-by-key-path"]) }
 				if removeIgnoreColors { ignoredKeys.insert(["colors", "ignore"]) }
 				if removeIgnoreImages { ignoredKeys.insert(["images", "ignore"]) }
 				if removeIgnoreFonts { ignoredKeys.insert(["fonts", "ignore"]) }

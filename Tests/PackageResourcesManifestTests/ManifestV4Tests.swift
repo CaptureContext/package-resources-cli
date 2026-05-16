@@ -23,6 +23,8 @@ struct ManifestV4Tests {
 			images: default
 			colors:
 			  ignore: true
+			  group-by-folders: false
+			  split-by-key-path: false
 			xcstrings:
 			  split-by-key-path: false
 			"""
@@ -32,10 +34,14 @@ struct ManifestV4Tests {
 		expectNoDifference("whitespace", manifest.format.root.indentor.description)
 		expectNoDifference(false, manifest.format.root.groupByCatalogName)
 		expectNoDifference(true, manifest.format.colors.resolved.ignore)
+		expectNoDifference(false, manifest.format.colors.resolved.groupByFolders)
+		expectNoDifference(false, manifest.format.colors.resolved.splitByKeyPath)
 		expectNoDifference(false, manifest.enabledResourceTypes.contains(.colors))
 		expectNoDifference(true, manifest.enabledResourceTypes.contains(.images))
 		expectNoDifference("default", manifest.format.images.resolved.indentor.description)
 		expectNoDifference(true, manifest.format.images.resolved.groupByCatalogName)
+		expectNoDifference(true, manifest.format.images.resolved.groupByFolders)
+		expectNoDifference(true, manifest.format.images.resolved.splitByKeyPath)
 		expectNoDifference(false, manifest.format.xcStrings.resolved.splitByKeyPath)
 
 		if case .alias(.default) = manifest.format.images {
@@ -62,6 +68,33 @@ struct ManifestV4Tests {
 	}
 
 	@Test
+	func decodesAssetCatalogSpecificKeysAndMapsToRuntimeConfig() throws {
+		let manifest = try YAMLDecoder().decode(
+			Manifest.self,
+			from: """
+			version: "4.0"
+			colors:
+			  group-by-folders: false
+			  split-by-key-path: false
+			images:
+			  group-by-folders: false
+			  split-by-key-path: false
+			"""
+		)
+
+		expectNoDifference(false, manifest.format.colors.resolved.groupByFolders)
+		expectNoDifference(false, manifest.format.colors.resolved.splitByKeyPath)
+		expectNoDifference(false, manifest.format.images.resolved.groupByFolders)
+		expectNoDifference(false, manifest.format.images.resolved.splitByKeyPath)
+
+		let runtimeConfig = manifest.format.resourceFormatConfig
+		expectNoDifference(false, runtimeConfig.resolved(for: .colors).groupByFolders)
+		expectNoDifference(false, runtimeConfig.resolved(for: .colors).splitByKeyPath)
+		expectNoDifference(false, runtimeConfig.resolved(for: .images).groupByFolders)
+		expectNoDifference(false, runtimeConfig.resolved(for: .images).splitByKeyPath)
+	}
+
+	@Test
 	func encodesAliasesWhenRequestedAndOmitsResourceTypesForV4() throws {
 		let manifest = Manifest(
 			format: .init(
@@ -69,7 +102,11 @@ struct ManifestV4Tests {
 					indentor: .whitespace,
 					groupByCatalogName: false
 				),
-				colors: .value(.init(ignore: true)),
+				colors: .value(.init(
+					ignore: true,
+					groupByFolders: false,
+					splitByKeyPath: false
+				)),
 				images: .default
 			)
 		)
@@ -81,6 +118,8 @@ struct ManifestV4Tests {
 		expectNoDifference(true, yaml.contains("images: default"))
 		expectNoDifference(true, yaml.contains("group-by-catalog: false"))
 		expectNoDifference(true, yaml.contains("ignore: true"))
+		expectNoDifference(true, yaml.contains("group-by-folders: false"))
+		expectNoDifference(true, yaml.contains("split-by-key-path: false"))
 		expectNoDifference(false, yaml.contains("resource-types"))
 	}
 
@@ -130,5 +169,7 @@ struct ManifestV4Tests {
 
 		expectNoDifference("  ", format.resourceFormatConfig.resolved(for: nil).indentor)
 		expectNoDifference("\t", format.resourceFormatConfig.resolved(for: .images).indentor)
+		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .images).groupByFolders)
+		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .images).splitByKeyPath)
 	}
 }

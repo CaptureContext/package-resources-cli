@@ -65,6 +65,8 @@ acronyms:
   - yaml
 colors:
   ignore: true
+  group-by-folders: false
+  split-by-key-path: false
 images:
   indentor: "\t"
   group-by-catalog: true

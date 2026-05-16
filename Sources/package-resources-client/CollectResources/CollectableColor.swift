@@ -8,8 +8,9 @@ extension PackageResources.Color: _CollectableResourceType {
 
 			return [
 				.init(
-					name: location.nameExcludingExtension,
-					path: xcAssetFolderComponents(for: location)
+					name: resourceSetName(for: location),
+					path: xcAssetFolderComponents(for: location),
+					catalog: xcAssetCatalogName(for: location)
 				)
 			]
 		}

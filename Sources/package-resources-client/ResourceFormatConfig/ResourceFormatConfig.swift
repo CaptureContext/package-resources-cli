@@ -34,6 +34,7 @@ public struct ResourceFormatConfig: Sendable {
 		case images
 		case fonts
 		case nibs
+		case scnScenes
 		case storyboards
 		case xcStrings
 	}
@@ -70,6 +71,25 @@ public struct ResourceFormatConfig: Sendable {
 		}
 	}
 
+	public struct AssetCatalog: Sendable {
+		public var common: Common
+		public var groupByCatalogName: Bool
+		public var groupByFolders: Bool
+		public var splitByKeyPath: Bool
+
+		public init(
+			common: Common = .init(),
+			groupByCatalogName: Bool = true,
+			groupByFolders: Bool = true,
+			splitByKeyPath: Bool = true
+		) {
+			self.common = common
+			self.groupByCatalogName = groupByCatalogName
+			self.groupByFolders = groupByFolders
+			self.splitByKeyPath = splitByKeyPath
+		}
+	}
+
 	public struct XCStrings: Sendable {
 		public var catalog: Catalog
 		public var splitByKeyPath: Bool
@@ -86,6 +106,7 @@ public struct ResourceFormatConfig: Sendable {
 	public struct Resolved: Sendable {
 		public var common: Common
 		public var groupByCatalogName: Bool
+		public var groupByFolders: Bool
 		public var splitByKeyPath: Bool
 
 		public var indentor: String { common.indentor }
@@ -97,27 +118,31 @@ public struct ResourceFormatConfig: Sendable {
 		public init(
 			common: Common = .init(),
 			groupByCatalogName: Bool = true,
+			groupByFolders: Bool = true,
 			splitByKeyPath: Bool = true
 		) {
 			self.common = common
 			self.groupByCatalogName = groupByCatalogName
+			self.groupByFolders = groupByFolders
 			self.splitByKeyPath = splitByKeyPath
 		}
 	}
 
-	public var colors: Catalog
-	public var images: Catalog
+	public var colors: AssetCatalog
+	public var images: AssetCatalog
 	public var fonts: Common
 	public var nibs: Common
+	public var scnScenes: Common
 	public var storyboards: Common
 	public var xcStrings: XCStrings
 	public var defaultFormat: Resolved
 
 	public init(
-		colors: Catalog = .init(),
-		images: Catalog = .init(),
+		colors: AssetCatalog = .init(),
+		images: AssetCatalog = .init(),
 		fonts: Common = .init(),
 		nibs: Common = .init(),
+		scnScenes: Common = .init(),
 		storyboards: Common = .init(),
 		xcStrings: XCStrings = .init(),
 		defaultFormat: Resolved = .init()
@@ -126,6 +151,7 @@ public struct ResourceFormatConfig: Sendable {
 		self.images = images
 		self.fonts = fonts
 		self.nibs = nibs
+		self.scnScenes = scnScenes
 		self.storyboards = storyboards
 		self.xcStrings = xcStrings
 		self.defaultFormat = defaultFormat
@@ -142,23 +168,30 @@ public struct ResourceFormatConfig: Sendable {
 		case .some(.colors):
 			Resolved(
 				common: colors.common,
-				groupByCatalogName: colors.groupByCatalogName
+				groupByCatalogName: colors.groupByCatalogName,
+				groupByFolders: colors.groupByFolders,
+				splitByKeyPath: colors.splitByKeyPath
 			)
 		case .some(.images):
 			Resolved(
 				common: images.common,
-				groupByCatalogName: images.groupByCatalogName
+				groupByCatalogName: images.groupByCatalogName,
+				groupByFolders: images.groupByFolders,
+				splitByKeyPath: images.splitByKeyPath
 			)
 		case .some(.fonts):
 			Resolved(common: fonts)
 		case .some(.nibs):
 			Resolved(common: nibs)
+		case .some(.scnScenes):
+			Resolved(common: scnScenes)
 		case .some(.storyboards):
 			Resolved(common: storyboards)
 		case .some(.xcStrings):
 			Resolved(
 				common: xcStrings.catalog.common,
 				groupByCatalogName: xcStrings.catalog.groupByCatalogName,
+				groupByFolders: false,
 				splitByKeyPath: xcStrings.splitByKeyPath
 			)
 		}
@@ -182,7 +215,9 @@ extension ResourceFormatConfig {
 		indentor: String = "\t",
 		indentSize: Int = 1,
 		accessLevel: AccessLevel? = .internal,
-		groupByCatalogName: Bool = true
+		groupByCatalogName: Bool = true,
+		groupByFolders: Bool = true,
+		splitByKeyPath: Bool = true
 	) -> Self {
 		let common = Common(
 			indentor: String(repeating: indentor, count: indentSize),
@@ -192,21 +227,29 @@ extension ResourceFormatConfig {
 			common: common,
 			groupByCatalogName: groupByCatalogName
 		)
+		let assetCatalog = AssetCatalog(
+			common: common,
+			groupByCatalogName: groupByCatalogName,
+			groupByFolders: groupByFolders,
+			splitByKeyPath: splitByKeyPath
+		)
 
 		return .init(
-			colors: catalog,
-			images: catalog,
+			colors: assetCatalog,
+			images: assetCatalog,
 			fonts: common,
 			nibs: common,
+			scnScenes: common,
 			storyboards: common,
 			xcStrings: .init(
 				catalog: catalog,
-				splitByKeyPath: true
+				splitByKeyPath: splitByKeyPath
 			),
 			defaultFormat: .init(
 				common: common,
 				groupByCatalogName: groupByCatalogName,
-				splitByKeyPath: true
+				groupByFolders: groupByFolders,
+				splitByKeyPath: splitByKeyPath
 			)
 		)
 	}

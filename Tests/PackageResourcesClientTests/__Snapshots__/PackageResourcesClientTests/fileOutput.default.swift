@@ -7,38 +7,44 @@ import Foundation
 import PackageResourcesCore
 
 extension _ColorResource {
-	internal enum nestedFolder {
-		internal static var nestedColor: Self {
+	internal enum media {
+		internal enum nestedFolder {
+			internal enum nested {
+				internal static var color: Self {
+					.init(
+						name: "Nested.Color",
+						bundle: .module
+					)
+				}
+			}
+		}
+
+		internal static var colorExample: Self {
 			.init(
-				name: "NestedColor",
+				name: "ColorExample",
 				bundle: .module
 			)
 		}
-	}
-
-	internal static var colorExample: Self {
-		.init(
-			name: "ColorExample",
-			bundle: .module
-		)
 	}
 }
 
 extension _ImageResource {
-	internal enum nestedFolder {
-		internal static var nestedImage: Self {
+	internal enum media {
+		internal enum nestedFolder {
+			internal static var nestedImage: Self {
+				.init(
+					name: "NestedImage",
+					bundle: .module
+				)
+			}
+		}
+
+		internal static var imageExample: Self {
 			.init(
-				name: "NestedImage",
+				name: "ImageExample",
 				bundle: .module
 			)
 		}
-	}
-
-	internal static var imageExample: Self {
-		.init(
-			name: "ImageExample",
-			bundle: .module
-		)
 	}
 }
 
@@ -46,6 +52,16 @@ extension _StoryboardResource {
 	internal static var main: Self {
 		.init(
 			name: "Main",
+			bundle: .module
+		)
+	}
+}
+
+extension _SCNSceneResource {
+	internal static var defaultScene: Self {
+		.init(
+			name: "DefaultScene",
+			catalog: "SCNCatalog",
 			bundle: .module
 		)
 	}

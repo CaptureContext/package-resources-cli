@@ -14,7 +14,7 @@ extension PackageResources.Image.Source: _RenderableResourceType {
 		return renderPackageResourceSnippet(
 			Snippets.ImagesExtension(
 				for: resources,
-				groupByCatalogName: format.groupByCatalogName
+				format: format
 			)
 		)
 	}
@@ -41,14 +41,14 @@ private struct ImageNode {
 extension Snippets {
 	fileprivate struct ImagesExtension: Snippet {
 		let resources: [PackageResources.Image.Source]
-		let groupByCatalogName: Bool
+		let format: ResourceFormatConfig.Resolved
 
 		init(
 			for resources: [PackageResources.Image.Source],
-			groupByCatalogName: Bool
+			format: ResourceFormatConfig.Resolved
 		) {
 			self.resources = resources
-			self.groupByCatalogName = groupByCatalogName
+			self.format = format
 		}
 
 		var typeName: String {
@@ -58,19 +58,43 @@ extension Snippets {
 		var root: ImageNode {
 			var root = ImageNode()
 			for resource in resources {
-				root.insert(resource, path: resource.path[...])
+				root.insert(resource, path: path(for: resource)[...])
 			}
 			return root
 		}
 
 		var content: some Snippet<String> {
 			ExtensionDecl(extendedType: .init(snippetLiteral: typeName)) {
-				if groupByCatalogName {
+				if shouldGroup {
 					ImageNodeContents(root)
 				} else {
 					ImageComputedPropertiesList(for: resources)
 				}
 			}
+		}
+
+		private var shouldGroup: Bool {
+			format.groupByCatalogName
+				|| format.groupByFolders
+				|| format.splitByKeyPath
+		}
+
+		private func path(for resource: PackageResources.Image.Source) -> [String] {
+			var path: [String] = []
+			if format.groupByCatalogName, let catalog = resource.catalog {
+				path.append(catalog)
+			}
+			if format.groupByFolders {
+				path.append(contentsOf: resource.path)
+			}
+
+			if format.splitByKeyPath {
+				path = path.flatMap(\.keyPathComponents)
+				let namePath = resource.name.keyPathComponents
+				path.append(contentsOf: namePath.dropLast())
+			}
+
+			return path
 		}
 	}
 
@@ -133,7 +157,7 @@ extension Snippets {
 			ComputedPropertyDecl(
 				accessLevel: .current,
 				isStatic: true,
-				identifier: packageResourceIdentifier(resource.name),
+				identifier: packageResourceIdentifier(identifierName),
 				type: TypeExpr(snippetLiteral: "Self"),
 				getter: PropertyGetterDecl {
 					CallExpr(
@@ -151,6 +175,18 @@ extension Snippets {
 					)
 				}
 			)
+		}
+
+		private var identifierName: String {
+			@Dependency(\.resourceFormatConfig)
+			var resourceFormatConfig
+			let format = resourceFormatConfig.resolved(for: .images)
+
+			if format.splitByKeyPath {
+				return resource.name.keyPathComponents.last ?? resource.name
+			} else {
+				return resource.name
+			}
 		}
 	}
 }

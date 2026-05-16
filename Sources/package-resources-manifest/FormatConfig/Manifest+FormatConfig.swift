@@ -6,8 +6,8 @@ extension Manifest {
 		public static var root: Root = .default
 
 		public var root: Root
-		public var colors: CatalogResource
-		public var images: CatalogResource
+		public var colors: AssetCatalogResource
+		public var images: AssetCatalogResource
 		public var fonts: CommonResource
 		public var nibs: CommonResource
 		public var storyboards: CommonResource
@@ -15,8 +15,8 @@ extension Manifest {
 
 		public init(
 			root: Root = .default,
-			colors: CatalogResource? = nil,
-			images: CatalogResource? = nil,
+			colors: AssetCatalogResource? = nil,
+			images: AssetCatalogResource? = nil,
 			fonts: CommonResource? = nil,
 			nibs: CommonResource? = nil,
 			storyboards: CommonResource? = nil,
@@ -182,6 +182,119 @@ extension Manifest.FormatConfig {
 			if accessLevel == oldRoot.accessLevel { accessLevel = newRoot.accessLevel }
 			if numbers == oldRoot.numbers { numbers = newRoot.numbers }
 			if acronyms == oldRoot.acronyms { acronyms = newRoot.acronyms }
+		}
+	}
+
+	public struct AssetCatalog: Codable, Equatable, Sendable {
+		public var common: Common
+		public var groupByCatalogName: Bool
+		public var groupByFolders: Bool
+		public var splitByKeyPath: Bool
+
+		public var ignore: Bool {
+			get { common.ignore }
+			set { common.ignore = newValue }
+		}
+		public var indentor: Manifest.Indentor {
+			get { common.indentor }
+			set { common.indentor = newValue }
+		}
+		public var indentSize: Manifest.IndentSize {
+			get { common.indentSize }
+			set { common.indentSize = newValue }
+		}
+		public var accessLevel: Manifest.AccessLevelConfig {
+			get { common.accessLevel }
+			set { common.accessLevel = newValue }
+		}
+		public var numbers: Manifest.NumbersConfig {
+			get { common.numbers }
+			set { common.numbers = newValue }
+		}
+		public var acronyms: Manifest.AcronymsConfig {
+			get { common.acronyms }
+			set { common.acronyms = newValue }
+		}
+
+		public init(
+			ignore: Bool = false,
+			indentor: Manifest.Indentor = Manifest.FormatConfig.root.indentor,
+			indentSize: Manifest.IndentSize = Manifest.FormatConfig.root.indentSize,
+			accessLevel: Manifest.AccessLevelConfig = Manifest.FormatConfig.root.accessLevel,
+			numbers: Manifest.NumbersConfig = Manifest.FormatConfig.root.numbers,
+			acronyms: Manifest.AcronymsConfig = Manifest.FormatConfig.root.acronyms,
+			groupByCatalogName: Bool = Manifest.FormatConfig.root.groupByCatalogName,
+			groupByFolders: Bool = true,
+			splitByKeyPath: Bool = true
+		) {
+			self.common = .init(
+				ignore: ignore,
+				indentor: indentor,
+				indentSize: indentSize,
+				accessLevel: accessLevel,
+				numbers: numbers,
+				acronyms: acronyms
+			)
+			self.groupByCatalogName = groupByCatalogName
+			self.groupByFolders = groupByFolders
+			self.splitByKeyPath = splitByKeyPath
+		}
+
+		public init(from decoder: any Decoder) throws {
+			let common = try Common(from: decoder)
+			self = try decoder.decode { container in
+				try Self(
+					ignore: common.ignore,
+					indentor: common.indentor,
+					indentSize: common.indentSize,
+					accessLevel: common.accessLevel,
+					numbers: common.numbers,
+					acronyms: common.acronyms,
+					groupByCatalogName: container.decodeIfPresent("group-by-catalog")
+						.or(Manifest.FormatConfig.root.groupByCatalogName),
+					groupByFolders: container.decodeIfPresent("group-by-folders").or(true),
+					splitByKeyPath: container.decodeIfPresent("split-by-key-path").or(true)
+				)
+			}
+		}
+
+		public func encode(to encoder: any Encoder) throws {
+			try encoder.encode { container in
+				try encodeContents(to: &container, relativeTo: Manifest.FormatConfig.root)
+			}
+		}
+
+		func hasDifferences(relativeTo root: Root) -> Bool {
+			common.hasDifferences(relativeTo: root)
+				|| groupByCatalogName != root.groupByCatalogName
+				|| !groupByFolders
+				|| !splitByKeyPath
+		}
+
+		func encodeContents(
+			to container: inout KeyedEncodingContainer<RawCodingKey>,
+			relativeTo root: Root
+		) throws {
+			try common.encodeContents(to: &container, relativeTo: root)
+			if groupByCatalogName != root.groupByCatalogName {
+				try container.encode(groupByCatalogName, forKey: "group-by-catalog")
+			}
+			if !groupByFolders {
+				try container.encode(groupByFolders, forKey: "group-by-folders")
+			}
+			if !splitByKeyPath {
+				try container.encode(splitByKeyPath, forKey: "split-by-key-path")
+			}
+		}
+
+		mutating func inheritValues(
+			movingFrom oldRoot: Root,
+			to newRoot: Root
+		) {
+			common.inheritValues(movingFrom: oldRoot, to: newRoot)
+			if groupByCatalogName == oldRoot.groupByCatalogName {
+				groupByCatalogName = newRoot.groupByCatalogName
+			}
 		}
 	}
 
@@ -436,6 +549,61 @@ extension Manifest.FormatConfig {
 		}
 	}
 
+	public enum AssetCatalogResource: Codable, Equatable, Sendable {
+		case alias(Alias)
+		case value(AssetCatalog)
+
+		public static var `default`: Self { .alias(.default) }
+		public static func inherited() -> Self { .value(.init()) }
+
+		public var resolved: AssetCatalog {
+			switch self {
+			case .alias(.default):
+				return AssetCatalog(defaultsFrom: .default)
+			case let .value(value):
+				return value
+			}
+		}
+
+		public init(from decoder: any Decoder) throws {
+			let container = try decoder.singleValueContainer()
+			if let alias = try? container.decode(Alias.self) {
+				self = .alias(alias)
+			} else {
+				self = .value(try AssetCatalog(from: decoder))
+			}
+		}
+
+		public func encode(to encoder: any Encoder) throws {
+			if Manifest.encodeAliases, case let .alias(alias) = self {
+				var container = encoder.singleValueContainer()
+				try container.encode(alias)
+			} else {
+				try resolved.encode(to: encoder)
+			}
+		}
+
+		public mutating func update(_ update: (inout AssetCatalog) -> Void) {
+			var value = resolved
+			update(&value)
+			self = .value(value)
+		}
+
+		func shouldEncode(relativeTo root: Root) -> Bool {
+			if Manifest.encodeAliases, case .alias = self { return true }
+			return resolved.hasDifferences(relativeTo: root)
+		}
+
+		mutating func inheritValues(
+			movingFrom oldRoot: Root,
+			to newRoot: Root
+		) {
+			guard case var .value(value) = self else { return }
+			value.inheritValues(movingFrom: oldRoot, to: newRoot)
+			self = .value(value)
+		}
+	}
+
 	public enum CatalogResource: Codable, Equatable, Sendable {
 		case alias(Alias)
 		case value(Catalog)
@@ -556,6 +724,22 @@ private extension Manifest.FormatConfig.Common {
 			accessLevel: root.accessLevel,
 			numbers: root.numbers,
 			acronyms: root.acronyms
+		)
+	}
+}
+
+private extension Manifest.FormatConfig.AssetCatalog {
+	init(defaultsFrom root: Manifest.FormatConfig.Root) {
+		self.init(
+			ignore: false,
+			indentor: root.indentor,
+			indentSize: root.indentSize,
+			accessLevel: root.accessLevel,
+			numbers: root.numbers,
+			acronyms: root.acronyms,
+			groupByCatalogName: root.groupByCatalogName,
+			groupByFolders: true,
+			splitByKeyPath: true
 		)
 	}
 }

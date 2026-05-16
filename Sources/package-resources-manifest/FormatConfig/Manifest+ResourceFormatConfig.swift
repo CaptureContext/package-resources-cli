@@ -6,13 +6,17 @@ extension Manifest.FormatConfig {
 		let rootCommon = makeCommon(root)
 
 		return ResourceFormatConfig(
-			colors: ResourceFormatConfig.Catalog(
+			colors: ResourceFormatConfig.AssetCatalog(
 				common: makeCommon(colors.resolved),
-				groupByCatalogName: colors.resolved.groupByCatalogName
+				groupByCatalogName: colors.resolved.groupByCatalogName,
+				groupByFolders: colors.resolved.groupByFolders,
+				splitByKeyPath: colors.resolved.splitByKeyPath
 			),
-			images: ResourceFormatConfig.Catalog(
+			images: ResourceFormatConfig.AssetCatalog(
 				common: makeCommon(images.resolved),
-				groupByCatalogName: images.resolved.groupByCatalogName
+				groupByCatalogName: images.resolved.groupByCatalogName,
+				groupByFolders: images.resolved.groupByFolders,
+				splitByKeyPath: images.resolved.splitByKeyPath
 			),
 			fonts: makeCommon(fonts.resolved),
 			nibs: makeCommon(nibs.resolved),
@@ -53,6 +57,18 @@ extension Manifest.FormatConfig {
 			accessLevel: root.accessLevel,
 			numbers: root.numbers,
 			acronyms: root.acronyms
+		)
+	}
+
+	private func makeCommon(
+		_ catalog: Manifest.FormatConfig.AssetCatalog
+	) -> ResourceFormatConfig.Common {
+		makeCommon(
+			indentor: catalog.indentor,
+			indentSize: catalog.indentSize,
+			accessLevel: catalog.accessLevel,
+			numbers: catalog.numbers,
+			acronyms: catalog.acronyms
 		)
 	}
 

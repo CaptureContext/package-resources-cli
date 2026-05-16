@@ -71,6 +71,26 @@ extension Manifest {
 		set { format.xcStrings.update { $0.splitByKeyPath = newValue } }
 	}
 
+	public var colorsGroupByFolders: Bool {
+		get { format.colors.resolved.groupByFolders }
+		set { format.colors.update { $0.groupByFolders = newValue } }
+	}
+
+	public var imagesGroupByFolders: Bool {
+		get { format.images.resolved.groupByFolders }
+		set { format.images.update { $0.groupByFolders = newValue } }
+	}
+
+	public var colorsSplitByKeyPath: Bool {
+		get { format.colors.resolved.splitByKeyPath }
+		set { format.colors.update { $0.splitByKeyPath = newValue } }
+	}
+
+	public var imagesSplitByKeyPath: Bool {
+		get { format.images.resolved.splitByKeyPath }
+		set { format.images.update { $0.splitByKeyPath = newValue } }
+	}
+
 	public var ignoreColors: Bool {
 		get { format.colors.resolved.ignore }
 		set { format.colors.update { $0.ignore = newValue } }
