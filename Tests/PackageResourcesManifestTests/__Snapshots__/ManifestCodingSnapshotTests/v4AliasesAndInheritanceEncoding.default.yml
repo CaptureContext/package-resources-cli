@@ -1,0 +1,19 @@
+version: '4.0'
+indentor: whitespace
+indent-size: default
+access-level: default
+group-by-catalog: false
+numbers:
+  separator: default
+  next-token-mode: default
+  allowed-delimeters: default
+  ending-number-boundary-options: default
+  single-letter-boundary-options: default
+acronyms:
+  processing-policy: default
+  values: default
+colors:
+  ignore: true
+images: default
+xcstrings:
+  split-by-key-path: false

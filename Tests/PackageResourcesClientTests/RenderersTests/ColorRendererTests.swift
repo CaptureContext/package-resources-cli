@@ -30,7 +30,7 @@ struct ColorRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
+			$0.resourceFormatConfig = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
 		} operation: {
 			try PackageResources.Color.Source.render([
 				.init(name: "AccentColor")
@@ -45,6 +45,33 @@ struct ColorRendererTests {
 		      bundle: .module
 		    )
 		  }
+		}
+		"""
+
+		expectNoDifference(expected, output)
+	}
+
+	@Test
+	func groupsColorsByXCAssetFolders() throws {
+		let output = try PackageResources.Color.Source.render([
+			.init(
+				name: "AccentColor",
+				path: ["Brand", "Primary"]
+			)
+		])
+
+		let expected = """
+		extension _ColorResource {
+			internal enum brand {
+				internal enum primary {
+					internal static var accentColor: Self {
+						.init(
+							name: "AccentColor",
+							bundle: .module
+						)
+					}
+				}
+			}
 		}
 		"""
 

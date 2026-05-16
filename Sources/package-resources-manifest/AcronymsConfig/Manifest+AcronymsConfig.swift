@@ -1,7 +1,7 @@
 import Casification
 
 extension Manifest {
-	public struct AcronymsConfig: Codable, Sendable {
+	public struct AcronymsConfig: Codable, Equatable, Sendable {
 		public static var current: Self { .init() }
 		public static let `default`: Self = .init(
 			processingPolicy: .default,

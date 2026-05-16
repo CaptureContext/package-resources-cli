@@ -2,16 +2,16 @@ import Yams
 import Foundation
 
 extension Manifest {
-	enum Format {
+	public enum Format {
 		case yaml
 		case json
 	}
 
-	static func load(at path: String) throws -> Self {
+	public static func load(at path: String) throws -> Self {
 		try loadWithFormat(at: path).config
 	}
 
-	static func loadWithFormat(at path: String) throws -> (config: Self, format: Format) {
+	public static func loadWithFormat(at path: String) throws -> (config: Self, format: Format) {
 		guard FileManager.default.fileExists(atPath: path)
 		else { throw _Error("File missing at \(path)") }
 
@@ -43,7 +43,7 @@ extension Manifest {
 		}
 	}
 
-	static func debugLoad(at path: String) throws -> Self {
+	public static func debugLoad(at path: String) throws -> Self {
 		guard FileManager.default.fileExists(atPath: path)
 		else { throw _Error("File missing at \(path)") }
 

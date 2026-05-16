@@ -1,0 +1,16 @@
+version: '3.0'
+indentor: whitespace
+indent-size: 4
+access-level: public
+group-xcstrings-by-catalog-name: false
+resource-types:
+- images
+numbers:
+  separator: default
+  next-token-mode: default
+  allowed-delimeters: default
+  ending-number-boundary-options: default
+  single-letter-boundary-options: default
+acronyms:
+  processing-policy: default
+  values: default

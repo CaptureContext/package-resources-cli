@@ -1,0 +1,72 @@
+version: '4.0'
+indentor: ' '
+indent-size: 2
+access-level: default
+group-by-catalog: false
+numbers:
+  separator: _
+  next-token-mode: inherit
+  allowed-delimeters: ''
+  ending-number-boundary-options: disable-separators
+  single-letter-boundary-options:
+  - disable-separators
+  - disable-token-processing
+acronyms:
+  processing-policy: always-match-case
+  values:
+  - ID
+  - IDFA
+  - Id
+  - Idfa
+  - JSON
+  - Json
+  - NPM
+  - NS
+  - Npm
+  - SF
+  - SK
+  - SPM
+  - Spm
+  - UI
+  - ULID
+  - URI
+  - URL
+  - USID
+  - UUID
+  - UX
+  - Ulid
+  - Uri
+  - Url
+  - Usid
+  - Uuid
+  - VOID
+  - Void
+  - XML
+  - Xml
+  - YAML
+  - Yaml
+  - id
+  - idfa
+  - json
+  - npm
+  - ns
+  - sf
+  - sk
+  - spm
+  - ui
+  - ulid
+  - uri
+  - url
+  - usid
+  - uuid
+  - ux
+  - void
+  - xml
+  - yaml
+colors:
+  ignore: true
+images:
+  indentor: "\t"
+  group-by-catalog: true
+xcstrings:
+  split-by-key-path: false

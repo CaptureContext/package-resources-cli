@@ -41,7 +41,7 @@ struct FontRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(
+			$0.resourceFormatConfig = .standard(
 				indentor: " ",
 				indentSize: 2,
 				accessLevel: .public

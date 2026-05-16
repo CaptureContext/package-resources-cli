@@ -30,7 +30,7 @@ struct ImageRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
+			$0.resourceFormatConfig = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
 		} operation: {
 			try PackageResources.Image.Source.render([
 				.init(name: "image-example")
@@ -45,6 +45,33 @@ struct ImageRendererTests {
 		      bundle: .module
 		    )
 		  }
+		}
+		"""
+
+		expectNoDifference(expected, output)
+	}
+
+	@Test
+	func groupsImagesByXCAssetFolders() throws {
+		let output = try PackageResources.Image.Source.render([
+			.init(
+				name: "settings-icon",
+				path: ["Toolbar", "Primary"]
+			)
+		])
+
+		let expected = """
+		extension _ImageResource {
+			internal enum toolbar {
+				internal enum primary {
+					internal static var settingsIcon: Self {
+						.init(
+							name: "settings-icon",
+							bundle: .module
+						)
+					}
+				}
+			}
 		}
 		"""
 

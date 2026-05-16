@@ -1,5 +1,6 @@
 import ArgumentParser
 import Foundation
+@_spi(Internals) import PackageResourcesManifest
 import PackageResourcesFS
 import Yams
 
@@ -53,13 +54,45 @@ extension App.ConfigCommand {
 		@Flag(
 			name: .customLong("group-xcstrings-by-catalog-name"),
 			inversion: .prefixedNo,
-			help: "Groups xcstrings accessors under a catalog-name enum"
+			help: "Compatibility override for xcstrings.group-by-catalog"
 		)
 		public var groupXCStringsByCatalogName: Bool?
 
+		@Flag(
+			name: .customLong("group-by-catalog"),
+			inversion: .prefixedNo,
+			help: "Groups catalog-backed resources by catalog folders"
+		)
+		public var groupByCatalogName: Bool?
+
+		@Flag(
+			name: .customLong("xcstrings-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted xcstrings keys into nested enums"
+		)
+		public var xcStringsSplitByKeyPath: Bool?
+
+		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
+		public var ignoreColors: Bool?
+
+		@Flag(name: .customLong("ignore-images"), inversion: .prefixedNo)
+		public var ignoreImages: Bool?
+
+		@Flag(name: .customLong("ignore-fonts"), inversion: .prefixedNo)
+		public var ignoreFonts: Bool?
+
+		@Flag(name: .customLong("ignore-nibs"), inversion: .prefixedNo)
+		public var ignoreNibs: Bool?
+
+		@Flag(name: .customLong("ignore-storyboards"), inversion: .prefixedNo)
+		public var ignoreStoryboards: Bool?
+
+		@Flag(name: .customLong("ignore-xcstrings"), inversion: .prefixedNo)
+		public var ignoreXCStrings: Bool?
+
 		@Option(
 			name: .customLong("resource-types"),
-			help: "Resource types to generate"
+			help: "Legacy resource selection for v1-v3 manifests. Superseded by ignore flags in v4."
 		)
 		public var resourceTypes: [Manifest.ResourceType] = [.__not_set__]
 
@@ -154,6 +187,40 @@ extension App.ConfigCommand {
 		var removeGroupXCStringsByCatalogName: Bool = false
 
 		@Flag(
+			name: .customLong("remove-group-by-catalog"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes group-by-catalog from the config file"
+		)
+		var removeGroupByCatalogName: Bool = false
+
+		@Flag(
+			name: .customLong("remove-xcstrings-split-by-key-path"),
+			inversion: .prefixedNo,
+			exclusivity: .exclusive,
+			help: "Removes xcstrings.split-by-key-path from the config file"
+		)
+		var removeXCStringsSplitByKeyPath: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-colors"), inversion: .prefixedNo)
+		var removeIgnoreColors: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-images"), inversion: .prefixedNo)
+		var removeIgnoreImages: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-fonts"), inversion: .prefixedNo)
+		var removeIgnoreFonts: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-nibs"), inversion: .prefixedNo)
+		var removeIgnoreNibs: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-storyboards"), inversion: .prefixedNo)
+		var removeIgnoreStoryboards: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-xcstrings"), inversion: .prefixedNo)
+		var removeIgnoreXCStrings: Bool = false
+
+		@Flag(
 			name: .customLong("remove-resource-types"),
 			inversion: .prefixedNo,
 			exclusivity: .exclusive,
@@ -229,13 +296,23 @@ extension App.ConfigCommand {
 					.ifLet(indentSize, override: \.indentSize)
 					.ifLet(accessLevel, override: \.accessLevel)
 					.ifLet(
+						groupByCatalogName,
+						override: \.groupByCatalogName
+					)
+					.ifLet(
 						groupXCStringsByCatalogName,
 						override: \.groupXCStringsByCatalogName
 					)
 					.ifLet(
-						resourceTypesOverride,
-						override: \.resourceTypes
+						xcStringsSplitByKeyPath,
+						override: \.xcStringsSplitByKeyPath
 					)
+					.ifLet(ignoreColors, override: \.ignoreColors)
+					.ifLet(ignoreImages, override: \.ignoreImages)
+					.ifLet(ignoreFonts, override: \.ignoreFonts)
+					.ifLet(ignoreNibs, override: \.ignoreNibs)
+					.ifLet(ignoreStoryboards, override: \.ignoreStoryboards)
+					.ifLet(ignoreXCStrings, override: \.ignoreXCStrings)
 					.ifLet(
 						numbersSeparator,
 						override: \.numbers.separator
@@ -264,7 +341,26 @@ extension App.ConfigCommand {
 						acronymsValues,
 						override: \.acronyms.values
 					)
+
+				if config.version.major < 4 {
+					config.ifLet(resourceTypesOverride, set: \.resourceTypes)
+				} else if resourceTypesOverride != nil {
+					print(
+						ANSI("⚠️ --resource-types is ignored for manifest v4; use --ignore-* flags instead.")
+							.foreground(.yellow)
+							.bold()
+					)
+				}
 			}
+
+			if removeGroupByCatalogName { config.groupByCatalogName = Manifest.FormatConfig.Root.default.groupByCatalogName }
+			if removeXCStringsSplitByKeyPath { config.xcStringsSplitByKeyPath = true }
+			if removeIgnoreColors { config.ignoreColors = false }
+			if removeIgnoreImages { config.ignoreImages = false }
+			if removeIgnoreFonts { config.ignoreFonts = false }
+			if removeIgnoreNibs { config.ignoreNibs = false }
+			if removeIgnoreStoryboards { config.ignoreStoryboards = false }
+			if removeIgnoreXCStrings { config.ignoreXCStrings = false }
 
 			let ignoredKeys: Set<[RawCodingKey]> = reduce([]) { ignoredKeys in
 				if removeOutput { ignoredKeys.insert(["output"]) }
@@ -272,6 +368,14 @@ extension App.ConfigCommand {
 				if removeIndentSize { ignoredKeys.insert(["indent-size"]) }
 				if removeAccessLevel { ignoredKeys.insert(["access-level"]) }
 				if removeGroupXCStringsByCatalogName { ignoredKeys.insert(["group-xcstrings-by-catalog-name"]) }
+				if removeGroupByCatalogName { ignoredKeys.insert(["group-by-catalog"]) }
+				if removeXCStringsSplitByKeyPath { ignoredKeys.insert(["xcstrings", "split-by-key-path"]) }
+				if removeIgnoreColors { ignoredKeys.insert(["colors", "ignore"]) }
+				if removeIgnoreImages { ignoredKeys.insert(["images", "ignore"]) }
+				if removeIgnoreFonts { ignoredKeys.insert(["fonts", "ignore"]) }
+				if removeIgnoreNibs { ignoredKeys.insert(["nibs", "ignore"]) }
+				if removeIgnoreStoryboards { ignoredKeys.insert(["storyboards", "ignore"]) }
+				if removeIgnoreXCStrings { ignoredKeys.insert(["xcstrings", "ignore"]) }
 				if removeResourceTypes { ignoredKeys.insert(["resource-types"]) }
 				if removeNumbersSeparator { ignoredKeys.insert(["numbers", "separator"]) }
 				if removeNumbersAllowedDelimeters { ignoredKeys.insert(["numbers", "allowed-delimeters"]) }

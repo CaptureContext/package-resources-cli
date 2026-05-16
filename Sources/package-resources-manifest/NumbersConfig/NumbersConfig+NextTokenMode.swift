@@ -5,14 +5,14 @@ import ArgumentParser
 extension Manifest.NumbersConfig {
 	/// CamelCase mode for a token after a number
 	@CasePathable
-	public enum NextTokenMode: RawRepresentable, Codable, Sendable, LosslessStringConvertible {
+	public enum NextTokenMode: RawRepresentable, Codable, Equatable, Sendable, LosslessStringConvertible {
 		public typealias RawValue = String.Casification.Configuration.CamelCase.Numbers.NextTokenMode
 
 		public static var `default`: Self { .alias(.default) }
 		public static var current: Self { .alias(.current) }
 
 		@CasePathable
-		public enum Alias: String, CaseIterable, Sendable {
+		public enum Alias: String, CaseIterable, Equatable, Sendable {
 			/// Default value. Equivalent to `inherit`
 			case `default`
 
@@ -152,4 +152,3 @@ extension Manifest.NumbersConfig.NextTokenMode: ExpressibleByArgument {
 		]
 	}
 }
-

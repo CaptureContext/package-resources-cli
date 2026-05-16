@@ -2,27 +2,27 @@
 
 import Foundation
 
-enum RawCodingKey: CodingKey, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, Hashable {
+public enum RawCodingKey: CodingKey, ExpressibleByStringLiteral, ExpressibleByIntegerLiteral, Hashable {
 	case key(String)
 	case index(Int)
 
-	init(stringLiteral value: String) {
+	public init(stringLiteral value: String) {
 		self.init(stringValue: value)
 	}
 
-	init(stringValue: String) {
+	public init(stringValue: String) {
 		self = .key(stringValue)
 	}
 
-	init(integerLiteral value: Int) {
+	public init(integerLiteral value: Int) {
 		self.init(intValue: value)
 	}
 
-	init(intValue: Int) {
+	public init(intValue: Int) {
 		self = .index(intValue)
 	}
 
-	var stringValue: String {
+	public var stringValue: String {
 		switch self {
 		case let .key(value):
 			return value
@@ -31,7 +31,7 @@ enum RawCodingKey: CodingKey, ExpressibleByStringLiteral, ExpressibleByIntegerLi
 		}
 	}
 
-	var intValue: Int? {
+	public var intValue: Int? {
 		switch self {
 		case let .index(value):
 			return value

@@ -5,14 +5,14 @@ import ArgumentParser
 extension Manifest.AcronymsConfig {
 	/// CamelCase mode for a token after a number
 	@CasePathable
-	public enum ProcessingPolicy: RawRepresentable, Codable, Sendable, LosslessStringConvertible {
+	public enum ProcessingPolicy: RawRepresentable, Codable, Equatable, Sendable, LosslessStringConvertible {
 		public typealias RawValue = String.Casification.Configuration.CamelCase.Acronyms.ProcessingPolicy
 
 		public static var `default`: Self { .alias(.default) }
 		public static var current: Self { .alias(.current) }
 
 		@CasePathable
-		public enum Alias: String, CaseIterable, Sendable {
+		public enum Alias: String, CaseIterable, Equatable, Sendable {
 			/// Default value. Equivalent to `alwaysMatchCase`
 			case `default`
 
@@ -186,4 +186,3 @@ extension Manifest.AcronymsConfig.ProcessingPolicy: ExpressibleByArgument {
 		]
 	}
 }
-

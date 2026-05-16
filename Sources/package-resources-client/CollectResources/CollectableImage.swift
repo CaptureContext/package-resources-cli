@@ -7,7 +7,10 @@ extension PackageResources.Image: _CollectableResourceType {
 			else { return [] }
 			
 			return [
-				.init(name: location.nameExcludingExtension)
+				.init(
+					name: location.nameExcludingExtension,
+					path: xcAssetFolderComponents(for: location)
+				)
 			]
 		}
 	}

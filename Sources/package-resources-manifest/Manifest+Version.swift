@@ -7,7 +7,7 @@ extension Manifest {
 	/// in a more stable way
 	public struct Version: Codable, Sendable, RawRepresentable, LosslessStringConvertible {
 		@TaskLocal
-		static var current: Self = .init(major: 3, minor: 0)
+		static var current: Self = .init(major: 4, minor: 0)
 
 		public let major: Int
 		public let minor: Int
@@ -82,13 +82,15 @@ extension Manifest.Version: ExpressibleByArgument {
 	}
 
 	public static var allValueStrings: [String] {
-		["1", "2"]
+		["1", "2", "3", "4"]
 	}
 
 	public static var allValueDescriptions: [String : String] {
 		[
 			"1.0": "Manifest format version 1.0. Supports basic indentation and acronym overrides",
-			"2.0": "Manifest format version 2.0. Supports advanced numeric and acronym overrides. Compatibility with v1 is limited."
+			"2.0": "Manifest format version 2.0. Supports advanced numeric and acronym overrides. Compatibility with v1 is limited.",
+			"3.0": "Manifest format version 3.0. Supports legacy resource-types selection.",
+			"4.0": "Manifest format version 4.0. Supports per-resource format configuration."
 		]
 	}
 }

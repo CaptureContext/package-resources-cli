@@ -30,7 +30,7 @@ struct StoryboardRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
+			$0.resourceFormatConfig = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
 		} operation: {
 			try PackageResources.Storyboard.Source.render([
 				.init(name: "Main")

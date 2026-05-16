@@ -21,6 +21,10 @@ let package = Package(
 			targets: ["PackageResourcesClient"]
 		),
 		.library(
+			name: "PackageResourcesManifest",
+			targets: ["PackageResourcesManifest"]
+		),
+		.library(
 			name: "_ExportedPackageResources",
 			targets: ["_ExportedPackageResources"]
 		),
@@ -101,6 +105,7 @@ let package = Package(
 			name: "package-resources-cli",
 			dependencies: [
 				.target(name: "PackageResourcesClient"),
+				.target(name: "PackageResourcesManifest"),
 				.product(
 					name: "ArgumentParser",
 					package: "swift-argument-parser"
@@ -115,6 +120,25 @@ let package = Package(
 				),
 			],
 			path: "Sources/package-resources-cli"
+		),
+		.target(
+			name: "PackageResourcesManifest",
+			dependencies: [
+				.target(name: "PackageResourcesClient"),
+				.product(
+					name: "ArgumentParser",
+					package: "swift-argument-parser"
+				),
+				.product(
+					name: "Yams",
+					package: "yams"
+				),
+				.product(
+					name: "CasePaths",
+					package: "swift-case-paths"
+				),
+			],
+			path: "Sources/package-resources-manifest"
 		),
 		.target(
 			name: "PackageResourcesClient",
@@ -178,6 +202,27 @@ let package = Package(
 			],
 			exclude: [
 				"__Fixtures__",
+				"__Snapshots__",
+			]
+		),
+		.testTarget(
+			name: "PackageResourcesManifestTests",
+			dependencies: [
+				.target(name: "PackageResourcesManifest"),
+				.product(
+					name: "SnapshotTestingCustomDump",
+					package: "swift-snapshot-testing"
+				),
+				.product(
+					name: "SnapshotTesting",
+					package: "swift-snapshot-testing"
+				),
+				.product(
+					name: "Yams",
+					package: "yams"
+				),
+			],
+			exclude: [
 				"__Snapshots__",
 			]
 		),

@@ -3,7 +3,7 @@ import Casification
 import CasePaths
 
 extension Manifest {
-	public struct NumbersConfig: Codable, Sendable {
+	public struct NumbersConfig: Codable, Equatable, Sendable {
 		public static var current: Self { .init() }
 		public static let `default`: Self = .init(
 			separator: .default,

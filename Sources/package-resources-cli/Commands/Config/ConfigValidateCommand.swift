@@ -1,5 +1,6 @@
 import ArgumentParser
 import Foundation
+import PackageResourcesManifest
 import PackageResourcesFS
 import Yams
 

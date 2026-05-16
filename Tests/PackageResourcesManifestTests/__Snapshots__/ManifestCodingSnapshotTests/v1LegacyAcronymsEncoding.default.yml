@@ -1,0 +1,19 @@
+version: '1.0'
+indentor: ' '
+tab-size: 3
+access-level: internal
+group-xcstrings-by-catalog-name: true
+resource-types:
+- default
+numbers:
+  separator: _
+  next-token-mode: inherit
+  allowed-delimeters: ''
+  ending-number-boundary-options: disable-separators
+  single-letter-boundary-options:
+  - disable-separators
+  - disable-token-processing
+acronyms-processing-policy: preserve
+acronyms:
+- ID
+- URL

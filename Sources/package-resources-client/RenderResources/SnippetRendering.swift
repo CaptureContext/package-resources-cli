@@ -11,11 +11,11 @@ internal typealias SwiftFunctionParameterClause = Snippets.FunctionParameterClau
 internal func renderPackageResourceSnippet(
 	_ snippet: some Snippet<String>
 ) -> String {
-	@Dependency(\.formatClient)
-	var formatClient
+	@Dependency(\.resourceFormatConfig)
+	var resourceFormatConfig
 
 	return snippet
-		.indentor(formatClient.constants.indentor.makeSnippet())
+		.indentor(resourceFormatConfig.current.indentor.makeSnippet())
 		.render()
 }
 
@@ -31,10 +31,10 @@ internal func packageResourceIdentifierValue(_ rawValue: String) -> String {
 
 extension Optional<Snippets.AccessLevel<String>> {
 	public static var current: Self {
-		@Dependency(\.formatClient.constants.accessLevel)
-		var accessLevel
+		@Dependency(\.resourceFormatConfig)
+		var resourceFormatConfig
 
-		return accessLevel?.snippetAccessLevel
+		return resourceFormatConfig.current.accessLevel?.snippetAccessLevel
 	}
 }
 

@@ -145,7 +145,7 @@ struct XCStringRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
+			$0.resourceFormatConfig = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
 		} operation: {
 			try PackageResources.LocalizedString.Source.render([
 				.init(
@@ -188,7 +188,7 @@ struct XCStringRendererTests {
 	@Test
 	func skipsCatalogEnumWhenCatalogGroupingIsDisabled() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(groupXCStringsByCatalogName: false)
+			$0.resourceFormatConfig = .standard(groupByCatalogName: false)
 		} operation: {
 			try PackageResources.LocalizedString.Source.render([
 				.init(
@@ -262,5 +262,63 @@ struct XCStringRendererTests {
 				Issue.record("Expected XCStringResourceValidationError, got \(error).")
 			}
 		}
+	}
+
+	@Test
+	func rendersFlatAccessorsAndSkipsConflictValidationWhenKeyPathSplittingIsDisabled() throws {
+		let output = try withDependencies {
+			var config = ResourceFormatConfig.standard(groupByCatalogName: false)
+			config.xcStrings.splitByKeyPath = false
+			$0.resourceFormatConfig = config
+		} operation: {
+			try PackageResources.LocalizedString.Source.render([
+				.init(
+					resource: .init(
+						key: "some.key",
+						comment: nil,
+						arguments: [],
+						sourceLocalization: "Some key"
+					)
+				),
+				.init(
+					resource: .init(
+						key: "some.key.label",
+						comment: nil,
+						arguments: [],
+						sourceLocalization: "Some key label"
+					)
+				)
+			])
+		}
+
+		let expected = """
+		extension _XCStringResource {
+			/// "Some key"
+			///
+			/// > <no_comment>
+			internal static var someKey: _XCStringResource {
+				return .init(
+					key: "some.key",
+					arguments: [],
+					table: nil,
+					bundle: .module
+				)
+			}
+
+			/// "Some key label"
+			///
+			/// > <no_comment>
+			internal static var someKeyLabel: _XCStringResource {
+				return .init(
+					key: "some.key.label",
+					arguments: [],
+					table: nil,
+					bundle: .module
+				)
+			}
+		}
+		"""
+
+		expectNoDifference(expected, output)
 	}
 }

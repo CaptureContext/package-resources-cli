@@ -1,8 +1,8 @@
 import ArgumentParser
 import Foundation
-import Casification
 import Dependencies
 import PackageResourcesClient
+import PackageResourcesManifest
 import Yams
 
 extension App {
@@ -51,13 +51,45 @@ extension App {
 		@Flag(
 			name: .customLong("group-xcstrings-by-catalog-name"),
 			inversion: .prefixedNo,
-			help: "Groups xcstrings accessors under a catalog-name enum"
+			help: "Compatibility override for xcstrings.group-by-catalog"
 		)
 		public var groupXCStringsByCatalogName: Bool?
 
+		@Flag(
+			name: .customLong("group-by-catalog"),
+			inversion: .prefixedNo,
+			help: "Groups catalog-backed resources by catalog folders"
+		)
+		public var groupByCatalogName: Bool?
+
+		@Flag(
+			name: .customLong("xcstrings-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted xcstrings keys into nested enums"
+		)
+		public var xcStringsSplitByKeyPath: Bool?
+
+		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
+		public var ignoreColors: Bool?
+
+		@Flag(name: .customLong("ignore-images"), inversion: .prefixedNo)
+		public var ignoreImages: Bool?
+
+		@Flag(name: .customLong("ignore-fonts"), inversion: .prefixedNo)
+		public var ignoreFonts: Bool?
+
+		@Flag(name: .customLong("ignore-nibs"), inversion: .prefixedNo)
+		public var ignoreNibs: Bool?
+
+		@Flag(name: .customLong("ignore-storyboards"), inversion: .prefixedNo)
+		public var ignoreStoryboards: Bool?
+
+		@Flag(name: .customLong("ignore-xcstrings"), inversion: .prefixedNo)
+		public var ignoreXCStrings: Bool?
+
 		@Option(
 			name: .customLong("resource-types"),
-			help: "Resource types to generate"
+			help: "Legacy resource selection for v1-v3 manifests. Superseded by ignore flags in v4."
 		)
 		public var resourceTypes: [Manifest.ResourceType] = [.__not_set__]
 
@@ -104,20 +136,30 @@ extension App {
 		public var acronymsValues: [String] = ["current"]
 
 		public func run() async throws {
-			let config = (try? self.config.flatMap(Manifest.load(at:)))
+			var config = (try? self.config.flatMap(Manifest.load(at:)))
 				.or(Manifest())
 				.ifLet(output, override: \.output)
 				.ifLet(indentor, override: \.indentor)
 				.ifLet(indentSize, override: \.indentSize)
 				.ifLet(accessLevel, override: \.accessLevel)
 				.ifLet(
+					groupByCatalogName,
+					override: \.groupByCatalogName
+				)
+				.ifLet(
 					groupXCStringsByCatalogName,
 					override: \.groupXCStringsByCatalogName
 				)
 				.ifLet(
-					resourceTypesOverride,
-					override: \.resourceTypes
+					xcStringsSplitByKeyPath,
+					override: \.xcStringsSplitByKeyPath
 				)
+				.ifLet(ignoreColors, override: \.ignoreColors)
+				.ifLet(ignoreImages, override: \.ignoreImages)
+				.ifLet(ignoreFonts, override: \.ignoreFonts)
+				.ifLet(ignoreNibs, override: \.ignoreNibs)
+				.ifLet(ignoreStoryboards, override: \.ignoreStoryboards)
+				.ifLet(ignoreXCStrings, override: \.ignoreXCStrings)
 				.ifLet(
 					numbersSeparator,
 					override: \.numbers.separator
@@ -147,40 +189,36 @@ extension App {
 					override: \.acronyms.values
 				)
 
-			let outputPath = output ?? config.output ?? input.appending("/Resources.generated.swift")
-
-			try await withCasification({
-				$0.camelCase.acronyms.processingPolicy = config.acronyms.processingPolicy.rawValue
-				$0.camelCase.numbers.separator = config.numbers.separator.rawValue
-				$0.camelCase.numbers.nextTokenMode = config.numbers.nextTokenMode.rawValue
-				$0.common.numbers.allowedDelimeters = config.numbers.allowedDelimeters.rawValue
-				$0.common.numbers.boundaryOptions = config.numbers.aliasedNumericBoundaryOptions
-				$0.acronyms = config.acronyms.resolvedValues
-			}) {
-				try await withDependencies {
-					$0.formatClient = .standard(
-						indentor: config.indentor.rawValue,
-						indentSize: config.indentSize.rawValue,
-						accessLevel: config.accessLevel.rawValue,
-						groupXCStringsByCatalogName: config.groupXCStringsByCatalogName
-					)
-				} operation: {
-					@Dependency(\.packageResourcesClient)
-					var client
-
-					try await client.processResources(
-						for: config.resourceTypes.enabledResourceTypes,
-						atPath: input,
-						into: outputPath
-					)
-				}
-
+			if config.version.major < 4 {
+				config.ifLet(resourceTypesOverride, set: \.resourceTypes)
+			} else if resourceTypesOverride != nil {
 				print(
-					ANSI("✅ Successfully generated package resources")
-						.foreground(.green)
+					ANSI("⚠️ --resource-types is ignored for manifest v4; use --ignore-* flags instead.")
+						.foreground(.yellow)
 						.bold()
 				)
 			}
+
+			let outputPath = output ?? config.output ?? input.appending("/Resources.generated.swift")
+
+			try await withDependencies {
+				$0.resourceFormatConfig = config.format.resourceFormatConfig
+			} operation: {
+				@Dependency(\.packageResourcesClient)
+				var client
+
+				try await client.processResources(
+					for: config.enabledResourceTypes,
+					atPath: input,
+					into: outputPath
+				)
+			}
+
+			print(
+				ANSI("✅ Successfully generated package resources")
+					.foreground(.green)
+					.bold()
+			)
 		}
 
 		private var resourceTypesOverride: Manifest.ResourceTypes? {

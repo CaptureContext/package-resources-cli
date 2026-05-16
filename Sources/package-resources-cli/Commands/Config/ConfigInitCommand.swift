@@ -1,5 +1,6 @@
 import ArgumentParser
 import Foundation
+@_spi(Internals) import PackageResourcesManifest
 import PackageResourcesFS
 import Yams
 

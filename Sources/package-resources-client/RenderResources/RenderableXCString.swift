@@ -9,12 +9,14 @@ extension PackageResources.LocalizedString.Source: _RenderableResourceType {
 	public static func render(_ resources: [Self]) throws -> String {
 		guard !resources.isEmpty else { return "" }
 
-		@Dependency(\.formatClient.constants.groupXCStringsByCatalogName)
-		var groupXCStringsByCatalogName
+		@Dependency(\.resourceFormatConfig)
+		var resourceFormatConfig
+		let format = resourceFormatConfig.resolved(for: .xcStrings)
 
 		let snippet = try Snippets.LocalizedStringsExtension(
 			for: resources,
-			groupXCStringsByCatalogName: groupXCStringsByCatalogName
+			groupByCatalogName: format.groupByCatalogName,
+			splitByKeyPath: format.splitByKeyPath
 		)
 
 		return renderPackageResourceSnippet(snippet)
@@ -58,14 +60,17 @@ private struct XCStringNode {
 
 	mutating func insert(
 		_ resource: PackageResources.LocalizedString.Source,
-		path: ArraySlice<String>
+		path: ArraySlice<String>,
+		splitByKeyPath: Bool,
+		validateConflicts: Bool
 	) throws {
 		guard let pathComponent = path.first else {
-			if let child = children.first(
-				where: { child in
-					packageResourceIdentifierValue(child.key) == accessorIdentifier(for: resource)
-				}
-			) {
+			if validateConflicts, let child = children.first(where: { child in
+				packageResourceIdentifierValue(child.key) == accessorIdentifier(
+					for: resource,
+					splitByKeyPath: splitByKeyPath
+				)
+			}) {
 				throw XCStringResourceValidationError.conflictingKeyPaths([
 					.init(
 						accessorKey: resource.resource.key,
@@ -78,11 +83,12 @@ private struct XCStringNode {
 			return
 		}
 
-		if let accessor = accessors.first(
-			where: { accessor in
-				accessorIdentifier(for: accessor) == packageResourceIdentifierValue(pathComponent)
-			}
-		) {
+		if validateConflicts, let accessor = accessors.first(where: { accessor in
+			accessorIdentifier(
+				for: accessor,
+				splitByKeyPath: splitByKeyPath
+			) == packageResourceIdentifierValue(pathComponent)
+		}) {
 			throw XCStringResourceValidationError.conflictingKeyPaths([
 				.init(
 					accessorKey: accessor.resource.key,
@@ -92,7 +98,12 @@ private struct XCStringNode {
 		}
 
 		try children[pathComponent, default: .init()]
-			.insert(resource, path: path.dropFirst())
+			.insert(
+				resource,
+				path: path.dropFirst(),
+				splitByKeyPath: splitByKeyPath,
+				validateConflicts: validateConflicts
+			)
 	}
 
 	var firstResource: PackageResources.LocalizedString.Source? {
@@ -106,53 +117,74 @@ private struct XCStringNode {
 }
 
 private func accessorIdentifier(
-	for source: PackageResources.LocalizedString.Source
+	for source: PackageResources.LocalizedString.Source,
+	splitByKeyPath: Bool
 ) -> String {
-	packageResourceIdentifierValue(
-		source.resource.key.components(separatedBy: ".").last
-		?? source.resource.key
+	let key = splitByKeyPath
+		? source.resource.key.components(separatedBy: ".").last
+		: source.resource.key
+
+	return packageResourceIdentifierValue(
+		key ?? source.resource.key
 	)
 }
 
 extension Snippets {
 	fileprivate struct LocalizedStringsExtension: Snippet {
 		let root: XCStringNode
+		let splitByKeyPath: Bool
 
 		init(
 			for resources: [PackageResources.LocalizedString.Source],
-			groupXCStringsByCatalogName: Bool
+			groupByCatalogName: Bool,
+			splitByKeyPath: Bool
 		) throws {
 			var root = XCStringNode()
 
 			for resource in resources {
 				let keyPath = resource.resource.key.components(separatedBy: ".")
 				let path: [String]
-				if groupXCStringsByCatalogName, let table = resource.table {
+				if splitByKeyPath, groupByCatalogName, let table = resource.table {
 					path = [table] + Array(keyPath.dropLast())
-				} else {
+				} else if splitByKeyPath {
 					path = Array(keyPath.dropLast())
+				} else if groupByCatalogName, let table = resource.table {
+					path = [table]
+				} else {
+					path = []
 				}
 
-				try root.insert(resource, path: path[...])
+				try root.insert(
+					resource,
+					path: path[...],
+					splitByKeyPath: splitByKeyPath,
+					validateConflicts: splitByKeyPath
+				)
 			}
 
 			self.root = root
+			self.splitByKeyPath = splitByKeyPath
 		}
 
 		var content: some Snippet<String> {
 			ExtensionDecl(
 				extendedType: .init(snippetLiteral: PackageResources.LocalizedString.typeName)
 			) {
-				XCStringNodeContents(root)
+				XCStringNodeContents(root, splitByKeyPath: splitByKeyPath)
 			}
 		}
 	}
 
 	private struct XCStringNodeContents: Snippet {
 		let node: XCStringNode
+		let splitByKeyPath: Bool
 
-		init(_ node: XCStringNode) {
+		init(
+			_ node: XCStringNode,
+			splitByKeyPath: Bool
+		) {
 			self.node = node
+			self.splitByKeyPath = splitByKeyPath
 		}
 
 		var content: some Snippet<String> {
@@ -160,13 +192,17 @@ extension Snippets {
 				node.children
 					.sorted { $0.key < $1.key }
 					.map { name, child in
-						XCStringNodeEnum(name: name, node: child)
+						XCStringNodeEnum(
+							name: name,
+							node: child,
+							splitByKeyPath: splitByKeyPath
+						)
 					}
 
 				node.accessors
 					.sorted { $0.resource.key < $1.resource.key }
 					.map { source in
-						XCStringAccessorDecl(source)
+						XCStringAccessorDecl(source, splitByKeyPath: splitByKeyPath)
 					}
 			}
 		}
@@ -175,22 +211,28 @@ extension Snippets {
 	private struct XCStringNodeEnum: Snippet {
 		let name: String
 		let node: XCStringNode
+		let splitByKeyPath: Bool
 
 		var content: some Snippet<String> {
 			EnumDecl(
 				accessLevel: .current,
 				identifier: packageResourceIdentifier(name)
 			) {
-				XCStringNodeContents(node)
+				XCStringNodeContents(node, splitByKeyPath: splitByKeyPath)
 			}
 		}
 	}
 
 	private struct XCStringAccessorDecl: Snippet {
 		let source: PackageResources.LocalizedString.Source
+		let splitByKeyPath: Bool
 
-		init(_ source: PackageResources.LocalizedString.Source) {
+		init(
+			_ source: PackageResources.LocalizedString.Source,
+			splitByKeyPath: Bool
+		) {
 			self.source = source
+			self.splitByKeyPath = splitByKeyPath
 		}
 
 		var resource: XCStringResource {
@@ -198,9 +240,11 @@ extension Snippets {
 		}
 
 		var identifier: IdentifierLiteral<String> {
-			packageResourceIdentifier(
-				resource.key.components(separatedBy: ".").last
-				?? resource.key
+			.init(
+				snippetLiteral: accessorIdentifier(
+					for: source,
+					splitByKeyPath: splitByKeyPath
+				)
 			)
 		}
 

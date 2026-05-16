@@ -19,7 +19,7 @@ public protocol PackageResourcesClient: Sendable {
 	) async throws
 }
 
-public struct EnabledResourceTypes: OptionSet {
+public struct EnabledResourceTypes: Equatable, OptionSet, Sendable {
 	public var rawValue: UInt32
 
 	public init(rawValue: UInt32) {
@@ -49,7 +49,7 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 	) async throws {
 		let outputFile = try File(path: outputFilePath, create: true)
 
-		@Dependency(\.formatClient.disclaimerProvider)
+		@Dependency(\.generatedResourcesDisclaimerProvider)
 		var disclaimer
 
 		let processed = try await processResourcesThrowing(
@@ -80,8 +80,13 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 		await withTaskGroup(of: (Int, String?).self) { group in
 			for (index, processor) in processors.enumerated() {
 				group.addTask {
+					@Dependency(\.resourceFormatConfig)
+					var resourceFormatConfig
+
 					let result = withErrorReporting {
-						try processor(path)
+						try resourceFormatConfig.withFormat(for: processor.kind) {
+							try processor.run(path)
+						}
 					}
 					return (index, result)
 				}
@@ -105,7 +110,15 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 		try await withThrowingTaskGroup(of: (Int, String).self) { group in
 			for (index, processor) in processors.enumerated() {
 				group.addTask {
-					(index, try processor(path))
+					@Dependency(\.resourceFormatConfig)
+					var resourceFormatConfig
+
+					return try (
+						index,
+						resourceFormatConfig.withFormat(for: processor.kind) {
+							try processor.run(path)
+						}
+					)
 				}
 			}
 
@@ -119,49 +132,49 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 
 	private func processors(
 		for resourceTypes: EnabledResourceTypes
-	) -> [SendableSyncThrowingFunc<String, String, Error>] {
-		var processors: [SendableSyncThrowingFunc<String, String, Error>] = []
+	) -> [ResourceProcessor] {
+		var processors: [ResourceProcessor] = []
 
 		if resourceTypes.contains(.colors) {
 			@Dependency(KeyPath.processResources(of: PackageResources.Color.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .colors, run: processor))
 		}
 
 		if resourceTypes.contains(.images) {
 			@Dependency(KeyPath.processResources(of: PackageResources.Image.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .images, run: processor))
 		}
 
 		if resourceTypes.contains(.storyboards) {
 			@Dependency(KeyPath.processResources(of: PackageResources.Storyboard.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .storyboards, run: processor))
 		}
 
 		if resourceTypes.contains(.nibs) {
 			@Dependency(KeyPath.processResources(of: PackageResources.Nib.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .nibs, run: processor))
 		}
 
 		if resourceTypes.contains(.fonts) {
 			@Dependency(KeyPath.processResources(of: PackageResources.Font.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .fonts, run: processor))
 		}
 
 		if resourceTypes.contains(.xcStrings) {
 			@Dependency(KeyPath.processResources(of: PackageResources.LocalizedString.self))
 			var processor
 
-			processors.append(processor)
+			processors.append(.init(kind: .xcStrings, run: processor))
 		}
 
 		return processors
@@ -185,6 +198,11 @@ internal struct PackageResourcesClientImpl: PackageResourcesClient {
 			.skipEmpty()
 		) + "\n"
 	}
+}
+
+private struct ResourceProcessor: Sendable {
+	var kind: ResourceFormatConfig.ResourceKind
+	var run: SendableSyncThrowingFunc<String, String, Error>
 }
 
 extension DependencyValues {

@@ -39,7 +39,7 @@ struct SCNSceneRendererTests {
 	@Test
 	func respectsFormattingOverrides() throws {
 		let output = try withDependencies {
-			$0.formatClient = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
+			$0.resourceFormatConfig = .standard(indentor: " ", indentSize: 2, accessLevel: .public)
 		} operation: {
 			try PackageResources.SCNScene.Source.render([
 				.init(name: "DefaultScene", catalog: "SCNCatalog")
