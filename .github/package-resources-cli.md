@@ -95,7 +95,20 @@ Overwrites configuration file entries
 package-resources-cli config edit [--format=<format>] [--output=<output>]
   [--indentor=<indentor>] [--indent-size=<indent-size>]
   [--access-level=<access-level>] [--group-xcstrings-by-catalog-name]
-  [--no-group-xcstrings-by-catalog-name] [--resource-types=<resource-types>...]
+  [--no-group-xcstrings-by-catalog-name] [--group-by-catalog]
+  [--no-group-by-catalog] [--xcstrings-split-by-key-path]
+  [--no-xcstrings-split-by-key-path] [--colors-group-by-folders]
+  [--no-colors-group-by-folders] [--images-group-by-folders]
+  [--no-images-group-by-folders] [--scn-scenes-group-by-folders]
+  [--no-scn-scenes-group-by-folders] [--colors-split-by-key-path]
+  [--no-colors-split-by-key-path] [--images-split-by-key-path]
+  [--no-images-split-by-key-path] [--scn-scenes-split-by-key-path]
+  [--no-scn-scenes-split-by-key-path] [--ignore-colors] [--no-ignore-colors]
+  [--ignore-images] [--no-ignore-images] [--ignore-fonts] [--no-ignore-fonts]
+  [--ignore-nibs] [--no-ignore-nibs] [--ignore-scn-scenes]
+  [--no-ignore-scn-scenes] [--ignore-storyboards] [--no-ignore-storyboards]
+  [--ignore-xcstrings] [--no-ignore-xcstrings]
+  [--resource-types=<resource-types>...]
   [--numbers-separator=<numbers-separator>]
   [--numbers-next-token-mode=<numbers-next-token-mode>]
   [--numbers-allowed-delimeters=<numbers-allowed-delimeters>]
@@ -107,7 +120,21 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
   [--remove-indentor] [--no-remove-indentor] [--remove-indent-size]
   [--no-remove-indent-size] [--remove-access-level] [--no-remove-access-level]
   [--remove-group-xcstrings-by-catalog-name]
-  [--no-remove-group-xcstrings-by-catalog-name] [--remove-resource-types]
+  [--no-remove-group-xcstrings-by-catalog-name] [--remove-group-by-catalog]
+  [--no-remove-group-by-catalog] [--remove-xcstrings-split-by-key-path]
+  [--no-remove-xcstrings-split-by-key-path] [--remove-colors-group-by-folders]
+  [--no-remove-colors-group-by-folders] [--remove-images-group-by-folders]
+  [--no-remove-images-group-by-folders] [--remove-scn-scenes-group-by-folders]
+  [--no-remove-scn-scenes-group-by-folders] [--remove-colors-split-by-key-path]
+  [--no-remove-colors-split-by-key-path] [--remove-images-split-by-key-path]
+  [--no-remove-images-split-by-key-path] [--remove-scn-scenes-split-by-key-path]
+  [--no-remove-scn-scenes-split-by-key-path] [--remove-ignore-colors]
+  [--no-remove-ignore-colors] [--remove-ignore-images]
+  [--no-remove-ignore-images] [--remove-ignore-fonts] [--no-remove-ignore-fonts]
+  [--remove-ignore-nibs] [--no-remove-ignore-nibs] [--remove-ignore-scn-scenes]
+  [--no-remove-ignore-scn-scenes] [--remove-ignore-storyboards]
+  [--no-remove-ignore-storyboards] [--remove-ignore-xcstrings]
+  [--no-remove-ignore-xcstrings] [--remove-resource-types]
   [--no-remove-resource-types] [--remove-numbers-separator]
   [--no-remove-numbers-separator] [--remove-numbers-next-token-mode]
   [--no-remove-numbers-next-token-mode] [--remove-numbers-allowed-delimeters]
@@ -147,17 +174,139 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 
 **--group-xcstrings-by-catalog-name:**
 
-*Groups xcstrings accessors under a catalog-name enum*
+*Compatibility override for xcstrings.group-by-catalog*
 
 
 **--no-group-xcstrings-by-catalog-name:**
 
-*Groups xcstrings accessors under a catalog-name enum*
+*Compatibility override for xcstrings.group-by-catalog*
+
+
+**--group-by-catalog:**
+
+*Groups catalog-backed resources by catalog folders*
+
+
+**--no-group-by-catalog:**
+
+*Groups catalog-backed resources by catalog folders*
+
+
+**--xcstrings-split-by-key-path:**
+
+*Splits dotted xcstrings keys into nested enums*
+
+
+**--no-xcstrings-split-by-key-path:**
+
+*Splits dotted xcstrings keys into nested enums*
+
+
+**--colors-group-by-folders:**
+
+*Groups colors by folders inside an xcassets catalog*
+
+
+**--no-colors-group-by-folders:**
+
+*Groups colors by folders inside an xcassets catalog*
+
+
+**--images-group-by-folders:**
+
+*Groups images by folders inside an xcassets catalog*
+
+
+**--no-images-group-by-folders:**
+
+*Groups images by folders inside an xcassets catalog*
+
+
+**--scn-scenes-group-by-folders:**
+
+*Groups scenes by folders inside an scnassets catalog*
+
+
+**--no-scn-scenes-group-by-folders:**
+
+*Groups scenes by folders inside an scnassets catalog*
+
+
+**--colors-split-by-key-path:**
+
+*Splits dotted color asset names and path components into nested enums*
+
+
+**--no-colors-split-by-key-path:**
+
+*Splits dotted color asset names and path components into nested enums*
+
+
+**--images-split-by-key-path:**
+
+*Splits dotted image asset names and path components into nested enums*
+
+
+**--no-images-split-by-key-path:**
+
+*Splits dotted image asset names and path components into nested enums*
+
+
+**--scn-scenes-split-by-key-path:**
+
+*Splits dotted scene names and path components into nested enums*
+
+
+**--no-scn-scenes-split-by-key-path:**
+
+*Splits dotted scene names and path components into nested enums*
+
+
+**--ignore-colors:**
+
+
+**--no-ignore-colors:**
+
+
+**--ignore-images:**
+
+
+**--no-ignore-images:**
+
+
+**--ignore-fonts:**
+
+
+**--no-ignore-fonts:**
+
+
+**--ignore-nibs:**
+
+
+**--no-ignore-nibs:**
+
+
+**--ignore-scn-scenes:**
+
+
+**--no-ignore-scn-scenes:**
+
+
+**--ignore-storyboards:**
+
+
+**--no-ignore-storyboards:**
+
+
+**--ignore-xcstrings:**
+
+
+**--no-ignore-xcstrings:**
 
 
 **--resource-types=\<resource-types\>:**
 
-*Resource types to generate*
+*Legacy resource selection for v1-v3 manifests. Superseded by ignore flags in v4.*
 
 
 **--numbers-separator=\<numbers-separator\>:**
@@ -253,6 +402,104 @@ package-resources-cli config edit [--format=<format>] [--output=<output>]
 **--no-remove-group-xcstrings-by-catalog-name:**
 
 *Removes group-xcstrings-by-catalog-name from the config file*
+
+
+**--remove-group-by-catalog:**
+
+*Removes group-by-catalog from the config file*
+
+
+**--no-remove-group-by-catalog:**
+
+*Removes group-by-catalog from the config file*
+
+
+**--remove-xcstrings-split-by-key-path:**
+
+*Removes xcstrings.split-by-key-path from the config file*
+
+
+**--no-remove-xcstrings-split-by-key-path:**
+
+*Removes xcstrings.split-by-key-path from the config file*
+
+
+**--remove-colors-group-by-folders:**
+
+
+**--no-remove-colors-group-by-folders:**
+
+
+**--remove-images-group-by-folders:**
+
+
+**--no-remove-images-group-by-folders:**
+
+
+**--remove-scn-scenes-group-by-folders:**
+
+
+**--no-remove-scn-scenes-group-by-folders:**
+
+
+**--remove-colors-split-by-key-path:**
+
+
+**--no-remove-colors-split-by-key-path:**
+
+
+**--remove-images-split-by-key-path:**
+
+
+**--no-remove-images-split-by-key-path:**
+
+
+**--remove-scn-scenes-split-by-key-path:**
+
+
+**--no-remove-scn-scenes-split-by-key-path:**
+
+
+**--remove-ignore-colors:**
+
+
+**--no-remove-ignore-colors:**
+
+
+**--remove-ignore-images:**
+
+
+**--no-remove-ignore-images:**
+
+
+**--remove-ignore-fonts:**
+
+
+**--no-remove-ignore-fonts:**
+
+
+**--remove-ignore-nibs:**
+
+
+**--no-remove-ignore-nibs:**
+
+
+**--remove-ignore-scn-scenes:**
+
+
+**--no-remove-ignore-scn-scenes:**
+
+
+**--remove-ignore-storyboards:**
+
+
+**--no-remove-ignore-storyboards:**
+
+
+**--remove-ignore-xcstrings:**
+
+
+**--no-remove-ignore-xcstrings:**
 
 
 **--remove-resource-types:**
@@ -377,7 +624,20 @@ Generates boilerplate for package resources
 package-resources-cli generate [--input=<input>] [--config=<config>]
   [--output=<output>] [--indentor=<indentor>] [--indent-size=<indent-size>]
   [--access-level=<access-level>] [--group-xcstrings-by-catalog-name]
-  [--no-group-xcstrings-by-catalog-name] [--resource-types=<resource-types>...]
+  [--no-group-xcstrings-by-catalog-name] [--group-by-catalog]
+  [--no-group-by-catalog] [--xcstrings-split-by-key-path]
+  [--no-xcstrings-split-by-key-path] [--colors-group-by-folders]
+  [--no-colors-group-by-folders] [--images-group-by-folders]
+  [--no-images-group-by-folders] [--scn-scenes-group-by-folders]
+  [--no-scn-scenes-group-by-folders] [--colors-split-by-key-path]
+  [--no-colors-split-by-key-path] [--images-split-by-key-path]
+  [--no-images-split-by-key-path] [--scn-scenes-split-by-key-path]
+  [--no-scn-scenes-split-by-key-path] [--ignore-colors] [--no-ignore-colors]
+  [--ignore-images] [--no-ignore-images] [--ignore-fonts] [--no-ignore-fonts]
+  [--ignore-nibs] [--no-ignore-nibs] [--ignore-scn-scenes]
+  [--no-ignore-scn-scenes] [--ignore-storyboards] [--no-ignore-storyboards]
+  [--ignore-xcstrings] [--no-ignore-xcstrings]
+  [--resource-types=<resource-types>...]
   [--numbers-separator=<numbers-separator>]
   [--numbers-next-token-mode=<numbers-next-token-mode>]
   [--numbers-allowed-delimeters=<numbers-allowed-delimeters>]
@@ -419,17 +679,139 @@ package-resources-cli generate [--input=<input>] [--config=<config>]
 
 **--group-xcstrings-by-catalog-name:**
 
-*Groups xcstrings accessors under a catalog-name enum*
+*Compatibility override for xcstrings.group-by-catalog*
 
 
 **--no-group-xcstrings-by-catalog-name:**
 
-*Groups xcstrings accessors under a catalog-name enum*
+*Compatibility override for xcstrings.group-by-catalog*
+
+
+**--group-by-catalog:**
+
+*Groups catalog-backed resources by catalog folders*
+
+
+**--no-group-by-catalog:**
+
+*Groups catalog-backed resources by catalog folders*
+
+
+**--xcstrings-split-by-key-path:**
+
+*Splits dotted xcstrings keys into nested enums*
+
+
+**--no-xcstrings-split-by-key-path:**
+
+*Splits dotted xcstrings keys into nested enums*
+
+
+**--colors-group-by-folders:**
+
+*Groups colors by folders inside an xcassets catalog*
+
+
+**--no-colors-group-by-folders:**
+
+*Groups colors by folders inside an xcassets catalog*
+
+
+**--images-group-by-folders:**
+
+*Groups images by folders inside an xcassets catalog*
+
+
+**--no-images-group-by-folders:**
+
+*Groups images by folders inside an xcassets catalog*
+
+
+**--scn-scenes-group-by-folders:**
+
+*Groups scenes by folders inside an scnassets catalog*
+
+
+**--no-scn-scenes-group-by-folders:**
+
+*Groups scenes by folders inside an scnassets catalog*
+
+
+**--colors-split-by-key-path:**
+
+*Splits dotted color asset names and path components into nested enums*
+
+
+**--no-colors-split-by-key-path:**
+
+*Splits dotted color asset names and path components into nested enums*
+
+
+**--images-split-by-key-path:**
+
+*Splits dotted image asset names and path components into nested enums*
+
+
+**--no-images-split-by-key-path:**
+
+*Splits dotted image asset names and path components into nested enums*
+
+
+**--scn-scenes-split-by-key-path:**
+
+*Splits dotted scene names and path components into nested enums*
+
+
+**--no-scn-scenes-split-by-key-path:**
+
+*Splits dotted scene names and path components into nested enums*
+
+
+**--ignore-colors:**
+
+
+**--no-ignore-colors:**
+
+
+**--ignore-images:**
+
+
+**--no-ignore-images:**
+
+
+**--ignore-fonts:**
+
+
+**--no-ignore-fonts:**
+
+
+**--ignore-nibs:**
+
+
+**--no-ignore-nibs:**
+
+
+**--ignore-scn-scenes:**
+
+
+**--no-ignore-scn-scenes:**
+
+
+**--ignore-storyboards:**
+
+
+**--no-ignore-storyboards:**
+
+
+**--ignore-xcstrings:**
+
+
+**--no-ignore-xcstrings:**
 
 
 **--resource-types=\<resource-types\>:**
 
-*Resource types to generate*
+*Legacy resource selection for v1-v3 manifests. Superseded by ignore flags in v4.*
 
 
 **--numbers-separator=\<numbers-separator\>:**

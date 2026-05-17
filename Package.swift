@@ -54,7 +54,7 @@ let package = Package(
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
 			.upToNextMinor(from: "0.0.2"),
-			traits: ["NominalTypes", "Operators"]
+			traits: ["NominalTypes"]
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",

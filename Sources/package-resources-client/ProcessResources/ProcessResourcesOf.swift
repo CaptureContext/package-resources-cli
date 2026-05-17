@@ -12,7 +12,9 @@ extension DependencyValues {
 			@Dependency(KeyPath.renderResources(of: Resource.Source.self))
 			var renderer
 
-			return collector >>> renderer
+			return .init { path in
+				return try renderer(collector(path))
+			}
 		}
 
 		static var liveValue: SendableSyncThrowingFunc<String, String, Error> {

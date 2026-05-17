@@ -125,13 +125,12 @@ Supported resource types:
 Package plugin uses `.packageresources` file at the root of the package with as it's configuration file
 
 ```yml
+version: "4.0"
 output: "<path-to-output-file>"
 indentor: "\t"
 indent-size: 1
 access-level: internal
-group-xcstrings-by-catalog-name: true
-resource-types:
-- all
+group-by-catalog: true
 numbers:
   separator: "_"
   allowed-delimeters: []
@@ -141,6 +140,21 @@ numbers:
   single-letter-boundary-options:
   - disable-separators
   - disable-token-processing
+colors:
+  group-by-folders: true
+  split-by-key-path: true
+images: default
+fonts:
+  ignore: false
+nibs:
+  ignore: true
+scn-scenes:
+  group-by-folders: true
+  split-by-key-path: true
+storyboards:
+  ignore: true
+xcstrings:
+  split-by-key-path: true
 acronyms:
   processing-policy: default
   values:
@@ -154,14 +168,22 @@ acronyms:
 >
 > _Use **package-specific configs** for your defaults and **target-specific configs** for separate targets, this way it's possible to expose shared resources from your design-system target and allow for local resources in feature targets._ 
 
+In v4 all resource types are enabled by default. Disable a type with `ignore: true` in its section instead of using `resource-types`.
+
+Top-level format keys are shared defaults. Resource sections inherit omitted values from the root config unless the section is set to the `default` alias, which uses the built-in defaults.
+
 | Argument                                 | Description                                                  |
 | ---------------------------------------- | ------------------------------------------------------------ |
+| `version`                                | Manifest format version. Current version is `4.0`.           |
 | `output`                                 | Path to output file. <br />Default is dynamically calculated as `input` + `/Resources.generated.swift` |
 | `indentor`                               | Indentation symbol. <br />Default is `\t`                    |
 | `indent-size`                            | Amount of indentors per indent level. <br />`default` is `1`<br />`default` for `space`/`whitespace`/`" "`  indentors is `2` |
 | `access-level`                           | Access level for generated declarations (`private`, `internal`, `package`, `public`, or `none`). <br />Default is `internal` |
-| `group-xcstrings-by-catalog-name`        | Whether generated localized string accessors are nested under a catalog-name enum. <br />Default is `true` |
-| `resource-types`                         | Resource types to generate (`colors`, `fonts`, `images`, `nibs`, `storyboards`, `xc-strings`). Aliases: `none`, `all`, `default`, `interface-builder`. <br />Default is `all` |
+| `group-by-catalog`                       | Whether catalog-backed resources are nested under a catalog-name enum. Applies to colors, images, SCN scenes, and xcstrings unless overridden. <br />Default is `true` |
+| `<resource>.ignore`                      | Disables a resource type when `true`. Resource sections are `colors`, `images`, `fonts`, `nibs`, `scn-scenes`, `storyboards`, and `xcstrings`. <br />Default is `false` |
+| `<resource>.group-by-catalog`            | Overrides catalog grouping for one resource section. Supported by `colors`, `images`, `scn-scenes`, and `xcstrings`. |
+| `<resource>.group-by-folders`            | Groups folders inside asset catalogs into nested enums. Supported by `colors`, `images`, and `scn-scenes`. <br />Default is `true` |
+| `<resource>.split-by-key-path`           | Splits dotted names/keys into nested enums. Supported by `colors`, `images`, `scn-scenes`, and `xcstrings`. <br />Default is `true` |
 | `numbers.separator`                      | Separator for numeric values.<br />`default` is `"_"`        |
 | `numbers.allowed-delimeters`             | Extends allowed characters for numbers, specifying `["."]` might be helpful for enabling `FloatingPoint` numbers, however it's only allowed delimiter, so with this setting `"1.2.3_value"` will be tokenized as `["1.2.3", "_", "value"]`<br />`default` is `[]` |
 | `numbers.next-token-mode`                | Camel case mode for a token after a number.<br />`default` is `inherit` (equivalent to `automatic`) |
@@ -169,6 +191,8 @@ acronyms:
 | `numbers.single-letter-boundary-options` | Options for numeric boundaries around single-letter tokens (`disable-separators`, `disable-token-processing`, `none`, `current`, `default`). |
 | `acronyms.processing-policy`             | See [CamelCaseConfig.Acronyms.ProcessingPolicy](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/CamelCase/CamelCaseConfig.swift).<br />`default` is `always-match-case`. |
 | `acronyms.values`                        | Overrides all default acronyms.<br />`default` can be found [here](https://github.com/CaptureContext/swift-casification/blob/main/Sources/Casification/Configuration/Common/Acronyms/AcronymsConfig.swift). |
+
+`resource-types` and `group-xcstrings-by-catalog-name` are still decoded for v1-v3 manifests. In v4, use resource `ignore` flags and `xcstrings.group-by-catalog`.
 
 ### Command plugin
 
@@ -184,8 +208,15 @@ swift package resources generate \
   --indentor "\t" \
   --indent-size 1 \
   --access-level internal \
-  --no-group-xcstrings-by-catalog-name \
-  --resource-types all \
+  --group-by-catalog \
+  --no-ignore-colors \
+  --no-ignore-images \
+  --ignore-nibs \
+  --ignore-storyboards \
+  --colors-group-by-folders \
+  --images-group-by-folders \
+  --scn-scenes-group-by-folders \
+  --xcstrings-split-by-key-path \
   --numbers-separator "_" \
   --numbers-allowed-delimeters "__package_resources_unspecified" \
   --numbers-next-token-mode inherit \
