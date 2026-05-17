@@ -4,7 +4,7 @@ import PackageResourcesCore
 extension _ColorResource {
   public enum nestedFolder {
     public enum nested {
-      public static var color: Self {
+      public static var color: _ColorResource {
         .init(
           name: "Nested.Color",
           bundle: .module
@@ -23,7 +23,7 @@ extension _ColorResource {
 
 extension _ImageResource {
   public enum nestedFolder {
-    public static var nestedImage: Self {
+    public static var nestedImage: _ImageResource {
       .init(
         name: "NestedImage",
         bundle: .module

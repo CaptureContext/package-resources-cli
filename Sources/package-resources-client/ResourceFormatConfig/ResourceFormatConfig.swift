@@ -132,7 +132,7 @@ public struct ResourceFormatConfig: Sendable {
 	public var images: AssetCatalog
 	public var fonts: Common
 	public var nibs: Common
-	public var scnScenes: Common
+	public var scnScenes: AssetCatalog
 	public var storyboards: Common
 	public var xcStrings: XCStrings
 	public var defaultFormat: Resolved
@@ -142,7 +142,7 @@ public struct ResourceFormatConfig: Sendable {
 		images: AssetCatalog = .init(),
 		fonts: Common = .init(),
 		nibs: Common = .init(),
-		scnScenes: Common = .init(),
+		scnScenes: AssetCatalog = .init(),
 		storyboards: Common = .init(),
 		xcStrings: XCStrings = .init(),
 		defaultFormat: Resolved = .init()
@@ -184,7 +184,12 @@ public struct ResourceFormatConfig: Sendable {
 		case .some(.nibs):
 			Resolved(common: nibs)
 		case .some(.scnScenes):
-			Resolved(common: scnScenes)
+			Resolved(
+				common: scnScenes.common,
+				groupByCatalogName: scnScenes.groupByCatalogName,
+				groupByFolders: scnScenes.groupByFolders,
+				splitByKeyPath: scnScenes.splitByKeyPath
+			)
 		case .some(.storyboards):
 			Resolved(common: storyboards)
 		case .some(.xcStrings):
@@ -239,7 +244,7 @@ extension ResourceFormatConfig {
 			images: assetCatalog,
 			fonts: common,
 			nibs: common,
-			scnScenes: common,
+			scnScenes: assetCatalog,
 			storyboards: common,
 			xcStrings: .init(
 				catalog: catalog,

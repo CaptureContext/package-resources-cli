@@ -64,7 +64,7 @@ struct ColorRendererTests {
 		extension _ColorResource {
 			internal enum brand {
 				internal enum primary {
-					internal static var accentColor: Self {
+					internal static var accentColor: _ColorResource {
 						.init(
 							name: "AccentColor",
 							bundle: .module
@@ -76,5 +76,29 @@ struct ColorRendererTests {
 		"""
 
 		expectNoDifference(expected, output)
+	}
+
+	@Test
+	func rejectsConflictingAccessorAndNestedKeyPaths() throws {
+		let resources = [
+			PackageResources.Color.Source(name: "some.key"),
+			.init(name: "some.key.label")
+		]
+
+		for resources in [resources, resources.reversed()] {
+			do {
+				_ = try PackageResources.Color.Source.render(Array(resources))
+				Issue.record("Expected conflicting color resource namespaces to throw.")
+			} catch let error as ColorResourceValidationError {
+				expectNoDifference(
+					.conflictingNamespaces([
+						.init(accessorName: "some.key", namespaceName: "some.key.label")
+					]),
+					error
+				)
+			} catch {
+				Issue.record("Expected ColorResourceValidationError, got \(error).")
+			}
+		}
 	}
 }

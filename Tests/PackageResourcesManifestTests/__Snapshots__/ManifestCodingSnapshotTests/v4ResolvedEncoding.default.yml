@@ -70,5 +70,9 @@ colors:
 images:
   indentor: "\t"
   group-by-catalog: true
+scn-scenes:
+  ignore: true
+  group-by-folders: false
+  split-by-key-path: false
 xcstrings:
   split-by-key-path: false

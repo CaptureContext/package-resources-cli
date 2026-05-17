@@ -30,11 +30,49 @@ internal func xcAssetFolderComponents(
 internal func xcAssetCatalogName(
 	for location: any _Location
 ) -> String? {
+	resourceCatalogName(for: location, extension: "xcassets")
+}
+
+internal func scnAssetFolderComponents(
+	for location: any _Location
+) -> [String] {
+	resourceCatalogFolderComponents(for: location, extension: "scnassets")
+}
+
+internal func scnAssetCatalogName(
+	for location: any _Location
+) -> String? {
+	resourceCatalogName(for: location, extension: "scnassets")
+}
+
+private func resourceCatalogFolderComponents(
+	for location: any _Location,
+	extension catalogExtension: String
+) -> [String] {
+	var components: [String] = []
 	var parent = location.parent
 
 	while let folder = parent {
-		if folder.extension == "xcassets" {
-			return folder.name.removingSuffix(".xcassets")
+		if folder.extension == catalogExtension {
+			return components
+		}
+
+		components.insert(folder.name, at: 0)
+		parent = folder.parent
+	}
+
+	return []
+}
+
+private func resourceCatalogName(
+	for location: any _Location,
+	extension catalogExtension: String
+) -> String? {
+	var parent = location.parent
+
+	while let folder = parent {
+		if folder.extension == catalogExtension {
+			return folder.name.removingSuffix(".\(catalogExtension)")
 		}
 
 		parent = folder.parent

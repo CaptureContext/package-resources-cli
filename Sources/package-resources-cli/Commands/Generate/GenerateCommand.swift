@@ -84,6 +84,13 @@ extension App {
 		public var imagesGroupByFolders: Bool?
 
 		@Flag(
+			name: .customLong("scn-scenes-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups scenes by folders inside an scnassets catalog"
+		)
+		public var scnScenesGroupByFolders: Bool?
+
+		@Flag(
 			name: .customLong("colors-split-by-key-path"),
 			inversion: .prefixedNo,
 			help: "Splits dotted color asset names and path components into nested enums"
@@ -97,6 +104,13 @@ extension App {
 		)
 		public var imagesSplitByKeyPath: Bool?
 
+		@Flag(
+			name: .customLong("scn-scenes-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted scene names and path components into nested enums"
+		)
+		public var scnScenesSplitByKeyPath: Bool?
+
 		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
 		public var ignoreColors: Bool?
 
@@ -108,6 +122,9 @@ extension App {
 
 		@Flag(name: .customLong("ignore-nibs"), inversion: .prefixedNo)
 		public var ignoreNibs: Bool?
+
+		@Flag(name: .customLong("ignore-scn-scenes"), inversion: .prefixedNo)
+		public var ignoreSCNScenes: Bool?
 
 		@Flag(name: .customLong("ignore-storyboards"), inversion: .prefixedNo)
 		public var ignoreStoryboards: Bool?
@@ -191,6 +208,10 @@ extension App {
 					override: \.imagesGroupByFolders
 				)
 				.ifLet(
+					scnScenesGroupByFolders,
+					override: \.scnScenesGroupByFolders
+				)
+				.ifLet(
 					colorsSplitByKeyPath,
 					override: \.colorsSplitByKeyPath
 				)
@@ -198,10 +219,15 @@ extension App {
 					imagesSplitByKeyPath,
 					override: \.imagesSplitByKeyPath
 				)
+				.ifLet(
+					scnScenesSplitByKeyPath,
+					override: \.scnScenesSplitByKeyPath
+				)
 				.ifLet(ignoreColors, override: \.ignoreColors)
 				.ifLet(ignoreImages, override: \.ignoreImages)
 				.ifLet(ignoreFonts, override: \.ignoreFonts)
 				.ifLet(ignoreNibs, override: \.ignoreNibs)
+				.ifLet(ignoreSCNScenes, override: \.ignoreSCNScenes)
 				.ifLet(ignoreStoryboards, override: \.ignoreStoryboards)
 				.ifLet(ignoreXCStrings, override: \.ignoreXCStrings)
 				.ifLet(

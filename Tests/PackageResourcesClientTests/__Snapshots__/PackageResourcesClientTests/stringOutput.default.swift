@@ -5,7 +5,7 @@ extension _ColorResource {
 	internal enum media {
 		internal enum nestedFolder {
 			internal enum nested {
-				internal static var color: Self {
+				internal static var color: _ColorResource {
 					.init(
 						name: "Nested.Color",
 						bundle: .module
@@ -14,7 +14,7 @@ extension _ColorResource {
 			}
 		}
 
-		internal static var colorExample: Self {
+		internal static var colorExample: _ColorResource {
 			.init(
 				name: "ColorExample",
 				bundle: .module
@@ -26,7 +26,7 @@ extension _ColorResource {
 extension _ImageResource {
 	internal enum media {
 		internal enum nestedFolder {
-			internal static var nestedImage: Self {
+			internal static var nestedImage: _ImageResource {
 				.init(
 					name: "NestedImage",
 					bundle: .module
@@ -34,7 +34,7 @@ extension _ImageResource {
 			}
 		}
 
-		internal static var imageExample: Self {
+		internal static var imageExample: _ImageResource {
 			.init(
 				name: "ImageExample",
 				bundle: .module
@@ -53,12 +53,14 @@ extension _StoryboardResource {
 }
 
 extension _SCNSceneResource {
-	internal static var defaultScene: Self {
-		.init(
-			name: "DefaultScene",
-			catalog: "SCNCatalog",
-			bundle: .module
-		)
+	internal enum scncatalog {
+		internal static var defaultScene: _SCNSceneResource {
+			.init(
+				name: "DefaultScene",
+				catalog: "SCNCatalog",
+				bundle: .module
+			)
+		}
 	}
 }
 

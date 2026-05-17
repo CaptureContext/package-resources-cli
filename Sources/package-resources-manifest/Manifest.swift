@@ -81,6 +81,11 @@ extension Manifest {
 		set { format.images.update { $0.groupByFolders = newValue } }
 	}
 
+	public var scnScenesGroupByFolders: Bool {
+		get { format.scnScenes.resolved.groupByFolders }
+		set { format.scnScenes.update { $0.groupByFolders = newValue } }
+	}
+
 	public var colorsSplitByKeyPath: Bool {
 		get { format.colors.resolved.splitByKeyPath }
 		set { format.colors.update { $0.splitByKeyPath = newValue } }
@@ -89,6 +94,11 @@ extension Manifest {
 	public var imagesSplitByKeyPath: Bool {
 		get { format.images.resolved.splitByKeyPath }
 		set { format.images.update { $0.splitByKeyPath = newValue } }
+	}
+
+	public var scnScenesSplitByKeyPath: Bool {
+		get { format.scnScenes.resolved.splitByKeyPath }
+		set { format.scnScenes.update { $0.splitByKeyPath = newValue } }
 	}
 
 	public var ignoreColors: Bool {
@@ -109,6 +119,11 @@ extension Manifest {
 	public var ignoreNibs: Bool {
 		get { format.nibs.resolved.ignore }
 		set { format.nibs.update { $0.ignore = newValue } }
+	}
+
+	public var ignoreSCNScenes: Bool {
+		get { format.scnScenes.resolved.ignore }
+		set { format.scnScenes.update { $0.ignore = newValue } }
 	}
 
 	public var ignoreStoryboards: Bool {

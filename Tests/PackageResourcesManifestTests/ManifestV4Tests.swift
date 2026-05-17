@@ -25,6 +25,10 @@ struct ManifestV4Tests {
 			  ignore: true
 			  group-by-folders: false
 			  split-by-key-path: false
+			scn-scenes:
+			  ignore: true
+			  group-by-folders: false
+			  split-by-key-path: false
 			xcstrings:
 			  split-by-key-path: false
 			"""
@@ -38,6 +42,10 @@ struct ManifestV4Tests {
 		expectNoDifference(false, manifest.format.colors.resolved.splitByKeyPath)
 		expectNoDifference(false, manifest.enabledResourceTypes.contains(.colors))
 		expectNoDifference(true, manifest.enabledResourceTypes.contains(.images))
+		expectNoDifference(true, manifest.format.scnScenes.resolved.ignore)
+		expectNoDifference(false, manifest.format.scnScenes.resolved.groupByFolders)
+		expectNoDifference(false, manifest.format.scnScenes.resolved.splitByKeyPath)
+		expectNoDifference(false, manifest.enabledResourceTypes.contains(.scnScenes))
 		expectNoDifference("default", manifest.format.images.resolved.indentor.description)
 		expectNoDifference(true, manifest.format.images.resolved.groupByCatalogName)
 		expectNoDifference(true, manifest.format.images.resolved.groupByFolders)
@@ -64,6 +72,7 @@ struct ManifestV4Tests {
 
 		expectNoDifference(false, manifest.enabledResourceTypes.contains(.images))
 		expectNoDifference(true, manifest.enabledResourceTypes.contains(.colors))
+		expectNoDifference(true, manifest.enabledResourceTypes.contains(.scnScenes))
 		expectNoDifference(true, manifest.enabledResourceTypes.contains(.xcStrings))
 	}
 
@@ -79,6 +88,9 @@ struct ManifestV4Tests {
 			images:
 			  group-by-folders: false
 			  split-by-key-path: false
+			scn-scenes:
+			  group-by-folders: false
+			  split-by-key-path: false
 			"""
 		)
 
@@ -86,12 +98,16 @@ struct ManifestV4Tests {
 		expectNoDifference(false, manifest.format.colors.resolved.splitByKeyPath)
 		expectNoDifference(false, manifest.format.images.resolved.groupByFolders)
 		expectNoDifference(false, manifest.format.images.resolved.splitByKeyPath)
+		expectNoDifference(false, manifest.format.scnScenes.resolved.groupByFolders)
+		expectNoDifference(false, manifest.format.scnScenes.resolved.splitByKeyPath)
 
 		let runtimeConfig = manifest.format.resourceFormatConfig
 		expectNoDifference(false, runtimeConfig.resolved(for: .colors).groupByFolders)
 		expectNoDifference(false, runtimeConfig.resolved(for: .colors).splitByKeyPath)
 		expectNoDifference(false, runtimeConfig.resolved(for: .images).groupByFolders)
 		expectNoDifference(false, runtimeConfig.resolved(for: .images).splitByKeyPath)
+		expectNoDifference(false, runtimeConfig.resolved(for: .scnScenes).groupByFolders)
+		expectNoDifference(false, runtimeConfig.resolved(for: .scnScenes).splitByKeyPath)
 	}
 
 	@Test
@@ -171,5 +187,7 @@ struct ManifestV4Tests {
 		expectNoDifference("\t", format.resourceFormatConfig.resolved(for: .images).indentor)
 		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .images).groupByFolders)
 		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .images).splitByKeyPath)
+		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .scnScenes).groupByFolders)
+		expectNoDifference(true, format.resourceFormatConfig.resolved(for: .scnScenes).splitByKeyPath)
 	}
 }

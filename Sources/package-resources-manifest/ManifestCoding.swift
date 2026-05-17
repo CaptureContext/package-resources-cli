@@ -61,6 +61,12 @@ extension Manifest: Encodable {
 					}
 				}
 
+				try key(["scn-scenes"]) {
+					if format.scnScenes.shouldEncode(relativeTo: format.root) {
+						try container.encode(format.scnScenes, forKey: $0.last!)
+					}
+				}
+
 				try key(["storyboards"]) {
 					if format.storyboards.shouldEncode(relativeTo: format.root) {
 						try container.encode(format.storyboards, forKey: $0.last!)
@@ -212,6 +218,7 @@ private func decodeV4(
 			images: container.decodeIfPresent("images"),
 			fonts: container.decodeIfPresent("fonts"),
 			nibs: container.decodeIfPresent("nibs"),
+			scnScenes: container.decodeIfPresent("scn-scenes"),
 			storyboards: container.decodeIfPresent("storyboards"),
 			xcStrings: container.decodeIfPresent("xcstrings")
 		)

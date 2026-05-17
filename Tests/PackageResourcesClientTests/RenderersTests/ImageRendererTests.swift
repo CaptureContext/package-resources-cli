@@ -64,7 +64,7 @@ struct ImageRendererTests {
 		extension _ImageResource {
 			internal enum toolbar {
 				internal enum primary {
-					internal static var settingsIcon: Self {
+					internal static var settingsIcon: _ImageResource {
 						.init(
 							name: "settings-icon",
 							bundle: .module
@@ -76,5 +76,32 @@ struct ImageRendererTests {
 		"""
 
 		expectNoDifference(expected, output)
+	}
+
+	@Test
+	func rejectsConflictingAccessorAndFolderNamespace() throws {
+		let resources = [
+			PackageResources.Image.Source(name: "Toolbar"),
+			.init(
+				name: "settings-icon",
+				path: ["Toolbar"]
+			)
+		]
+
+		for resources in [resources, resources.reversed()] {
+			do {
+				_ = try PackageResources.Image.Source.render(Array(resources))
+				Issue.record("Expected conflicting image resource namespaces to throw.")
+			} catch let error as ImageResourceValidationError {
+				expectNoDifference(
+					.conflictingNamespaces([
+						.init(accessorName: "Toolbar", namespaceName: "settings-icon")
+					]),
+					error
+				)
+			} catch {
+				Issue.record("Expected ImageResourceValidationError, got \(error).")
+			}
+		}
 	}
 }

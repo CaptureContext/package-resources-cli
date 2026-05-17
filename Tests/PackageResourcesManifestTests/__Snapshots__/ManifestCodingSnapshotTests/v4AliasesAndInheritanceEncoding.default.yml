@@ -17,5 +17,9 @@ colors:
   group-by-folders: false
   split-by-key-path: false
 images: default
+scn-scenes:
+  ignore: true
+  group-by-folders: false
+  split-by-key-path: false
 xcstrings:
   split-by-key-path: false

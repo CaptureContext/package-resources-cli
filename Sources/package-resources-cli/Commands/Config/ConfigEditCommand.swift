@@ -87,6 +87,13 @@ extension App.ConfigCommand {
 		public var imagesGroupByFolders: Bool?
 
 		@Flag(
+			name: .customLong("scn-scenes-group-by-folders"),
+			inversion: .prefixedNo,
+			help: "Groups scenes by folders inside an scnassets catalog"
+		)
+		public var scnScenesGroupByFolders: Bool?
+
+		@Flag(
 			name: .customLong("colors-split-by-key-path"),
 			inversion: .prefixedNo,
 			help: "Splits dotted color asset names and path components into nested enums"
@@ -100,6 +107,13 @@ extension App.ConfigCommand {
 		)
 		public var imagesSplitByKeyPath: Bool?
 
+		@Flag(
+			name: .customLong("scn-scenes-split-by-key-path"),
+			inversion: .prefixedNo,
+			help: "Splits dotted scene names and path components into nested enums"
+		)
+		public var scnScenesSplitByKeyPath: Bool?
+
 		@Flag(name: .customLong("ignore-colors"), inversion: .prefixedNo)
 		public var ignoreColors: Bool?
 
@@ -111,6 +125,9 @@ extension App.ConfigCommand {
 
 		@Flag(name: .customLong("ignore-nibs"), inversion: .prefixedNo)
 		public var ignoreNibs: Bool?
+
+		@Flag(name: .customLong("ignore-scn-scenes"), inversion: .prefixedNo)
+		public var ignoreSCNScenes: Bool?
 
 		@Flag(name: .customLong("ignore-storyboards"), inversion: .prefixedNo)
 		public var ignoreStoryboards: Bool?
@@ -236,11 +253,17 @@ extension App.ConfigCommand {
 		@Flag(name: .customLong("remove-images-group-by-folders"), inversion: .prefixedNo)
 		var removeImagesGroupByFolders: Bool = false
 
+		@Flag(name: .customLong("remove-scn-scenes-group-by-folders"), inversion: .prefixedNo)
+		var removeSCNScenesGroupByFolders: Bool = false
+
 		@Flag(name: .customLong("remove-colors-split-by-key-path"), inversion: .prefixedNo)
 		var removeColorsSplitByKeyPath: Bool = false
 
 		@Flag(name: .customLong("remove-images-split-by-key-path"), inversion: .prefixedNo)
 		var removeImagesSplitByKeyPath: Bool = false
+
+		@Flag(name: .customLong("remove-scn-scenes-split-by-key-path"), inversion: .prefixedNo)
+		var removeSCNScenesSplitByKeyPath: Bool = false
 
 		@Flag(name: .customLong("remove-ignore-colors"), inversion: .prefixedNo)
 		var removeIgnoreColors: Bool = false
@@ -253,6 +276,9 @@ extension App.ConfigCommand {
 
 		@Flag(name: .customLong("remove-ignore-nibs"), inversion: .prefixedNo)
 		var removeIgnoreNibs: Bool = false
+
+		@Flag(name: .customLong("remove-ignore-scn-scenes"), inversion: .prefixedNo)
+		var removeIgnoreSCNScenes: Bool = false
 
 		@Flag(name: .customLong("remove-ignore-storyboards"), inversion: .prefixedNo)
 		var removeIgnoreStoryboards: Bool = false
@@ -356,6 +382,10 @@ extension App.ConfigCommand {
 						override: \.imagesGroupByFolders
 					)
 					.ifLet(
+						scnScenesGroupByFolders,
+						override: \.scnScenesGroupByFolders
+					)
+					.ifLet(
 						colorsSplitByKeyPath,
 						override: \.colorsSplitByKeyPath
 					)
@@ -363,10 +393,15 @@ extension App.ConfigCommand {
 						imagesSplitByKeyPath,
 						override: \.imagesSplitByKeyPath
 					)
+					.ifLet(
+						scnScenesSplitByKeyPath,
+						override: \.scnScenesSplitByKeyPath
+					)
 					.ifLet(ignoreColors, override: \.ignoreColors)
 					.ifLet(ignoreImages, override: \.ignoreImages)
 					.ifLet(ignoreFonts, override: \.ignoreFonts)
 					.ifLet(ignoreNibs, override: \.ignoreNibs)
+					.ifLet(ignoreSCNScenes, override: \.ignoreSCNScenes)
 					.ifLet(ignoreStoryboards, override: \.ignoreStoryboards)
 					.ifLet(ignoreXCStrings, override: \.ignoreXCStrings)
 					.ifLet(
@@ -413,12 +448,15 @@ extension App.ConfigCommand {
 			if removeXCStringsSplitByKeyPath { config.xcStringsSplitByKeyPath = true }
 			if removeColorsGroupByFolders { config.colorsGroupByFolders = true }
 			if removeImagesGroupByFolders { config.imagesGroupByFolders = true }
+			if removeSCNScenesGroupByFolders { config.scnScenesGroupByFolders = true }
 			if removeColorsSplitByKeyPath { config.colorsSplitByKeyPath = true }
 			if removeImagesSplitByKeyPath { config.imagesSplitByKeyPath = true }
+			if removeSCNScenesSplitByKeyPath { config.scnScenesSplitByKeyPath = true }
 			if removeIgnoreColors { config.ignoreColors = false }
 			if removeIgnoreImages { config.ignoreImages = false }
 			if removeIgnoreFonts { config.ignoreFonts = false }
 			if removeIgnoreNibs { config.ignoreNibs = false }
+			if removeIgnoreSCNScenes { config.ignoreSCNScenes = false }
 			if removeIgnoreStoryboards { config.ignoreStoryboards = false }
 			if removeIgnoreXCStrings { config.ignoreXCStrings = false }
 
@@ -432,12 +470,15 @@ extension App.ConfigCommand {
 				if removeXCStringsSplitByKeyPath { ignoredKeys.insert(["xcstrings", "split-by-key-path"]) }
 				if removeColorsGroupByFolders { ignoredKeys.insert(["colors", "group-by-folders"]) }
 				if removeImagesGroupByFolders { ignoredKeys.insert(["images", "group-by-folders"]) }
+				if removeSCNScenesGroupByFolders { ignoredKeys.insert(["scn-scenes", "group-by-folders"]) }
 				if removeColorsSplitByKeyPath { ignoredKeys.insert(["colors", "split-by-key-path"]) }
 				if removeImagesSplitByKeyPath { ignoredKeys.insert(["images", "split-by-key-path"]) }
+				if removeSCNScenesSplitByKeyPath { ignoredKeys.insert(["scn-scenes", "split-by-key-path"]) }
 				if removeIgnoreColors { ignoredKeys.insert(["colors", "ignore"]) }
 				if removeIgnoreImages { ignoredKeys.insert(["images", "ignore"]) }
 				if removeIgnoreFonts { ignoredKeys.insert(["fonts", "ignore"]) }
 				if removeIgnoreNibs { ignoredKeys.insert(["nibs", "ignore"]) }
+				if removeIgnoreSCNScenes { ignoredKeys.insert(["scn-scenes", "ignore"]) }
 				if removeIgnoreStoryboards { ignoredKeys.insert(["storyboards", "ignore"]) }
 				if removeIgnoreXCStrings { ignoredKeys.insert(["xcstrings", "ignore"]) }
 				if removeResourceTypes { ignoredKeys.insert(["resource-types"]) }

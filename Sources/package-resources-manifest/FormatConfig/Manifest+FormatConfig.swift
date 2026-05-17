@@ -10,6 +10,7 @@ extension Manifest {
 		public var images: AssetCatalogResource
 		public var fonts: CommonResource
 		public var nibs: CommonResource
+		public var scnScenes: AssetCatalogResource
 		public var storyboards: CommonResource
 		public var xcStrings: XCStringsResource
 
@@ -19,6 +20,7 @@ extension Manifest {
 			images: AssetCatalogResource? = nil,
 			fonts: CommonResource? = nil,
 			nibs: CommonResource? = nil,
+			scnScenes: AssetCatalogResource? = nil,
 			storyboards: CommonResource? = nil,
 			xcStrings: XCStringsResource? = nil
 		) {
@@ -27,6 +29,7 @@ extension Manifest {
 			self.images = Self.$root.withValue(root) { images ?? .inherited() }
 			self.fonts = Self.$root.withValue(root) { fonts ?? .inherited() }
 			self.nibs = Self.$root.withValue(root) { nibs ?? .inherited() }
+			self.scnScenes = Self.$root.withValue(root) { scnScenes ?? .inherited() }
 			self.storyboards = Self.$root.withValue(root) { storyboards ?? .inherited() }
 			self.xcStrings = Self.$root.withValue(root) { xcStrings ?? .inherited() }
 		}
@@ -37,6 +40,7 @@ extension Manifest {
 			if !images.resolved.ignore { output.insert(.images) }
 			if !fonts.resolved.ignore { output.insert(.fonts) }
 			if !nibs.resolved.ignore { output.insert(.nibs) }
+			if !scnScenes.resolved.ignore { output.insert(.scnScenes) }
 			if !storyboards.resolved.ignore { output.insert(.storyboards) }
 			if !xcStrings.resolved.ignore { output.insert(.xcStrings) }
 			return output
@@ -50,6 +54,7 @@ extension Manifest {
 			images.inheritValues(movingFrom: oldRoot, to: root)
 			fonts.inheritValues(movingFrom: oldRoot, to: root)
 			nibs.inheritValues(movingFrom: oldRoot, to: root)
+			scnScenes.inheritValues(movingFrom: oldRoot, to: root)
 			storyboards.inheritValues(movingFrom: oldRoot, to: root)
 			xcStrings.inheritValues(movingFrom: oldRoot, to: root)
 		}

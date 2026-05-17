@@ -1,4 +1,5 @@
 import Dependencies
+import Foundation
 import PackageResourcesCore
 import Snippets
 import SwiftSnippets
@@ -11,12 +12,43 @@ extension PackageResources.Image.Source: _RenderableResourceType {
 		var resourceFormatConfig
 		let format = resourceFormatConfig.resolved(for: .images)
 
-		return renderPackageResourceSnippet(
-			Snippets.ImagesExtension(
-				for: resources,
-				format: format
-			)
+		let snippet = try Snippets.ImagesExtension(
+			for: resources,
+			format: format
 		)
+
+		return renderPackageResourceSnippet(snippet)
+	}
+}
+
+struct ImageResourceNamespaceConflict: Equatable, Sendable {
+	var accessorName: String
+	var namespaceName: String
+}
+
+enum ImageResourceValidationError: CustomStringConvertible, Equatable, LocalizedError {
+	case conflictingNamespaces([ImageResourceNamespaceConflict])
+
+	var description: String {
+		errorDescription ?? "Image resource validation error."
+	}
+
+	var errorDescription: String? {
+		switch self {
+		case let .conflictingNamespaces(conflicts):
+			let conflictDescriptions = conflicts
+				.map { conflict in
+					"""
+					"\(conflict.accessorName)" conflicts with "\(conflict.namespaceName)"
+					"""
+				}
+				.joined(separator: ", ")
+
+			return """
+			Image resource namespace conflict: \(conflictDescriptions). \
+			The accessor would be generated where the nested resource path needs an enum namespace.
+			"""
+		}
 	}
 }
 
@@ -26,27 +58,92 @@ private struct ImageNode {
 
 	mutating func insert(
 		_ resource: PackageResources.Image.Source,
-		path: ArraySlice<String>
-	) {
+		path: ArraySlice<String>,
+		format: ResourceFormatConfig.Resolved
+	) throws {
 		guard let pathComponent = path.first else {
+			if let child = children.first(where: { child in
+				packageResourceIdentifierValue(child.key) == imageAccessorIdentifier(
+					for: resource,
+					format: format
+				)
+			}) {
+				throw ImageResourceValidationError.conflictingNamespaces([
+					.init(
+						accessorName: resource.name,
+						namespaceName: child.value.firstResource?.name ?? child.key
+					)
+				])
+			}
+
 			resources.append(resource)
 			return
 		}
 
-		children[pathComponent, default: .init()]
-			.insert(resource, path: path.dropFirst())
+		if let existingResource = resources.first(where: { resource in
+			imageAccessorIdentifier(
+				for: resource,
+				format: format
+			) == packageResourceIdentifierValue(pathComponent)
+		}) {
+			throw ImageResourceValidationError.conflictingNamespaces([
+				.init(
+					accessorName: existingResource.name,
+					namespaceName: resource.name
+				)
+			])
+		}
+
+		try children[pathComponent, default: .init()]
+			.insert(
+				resource,
+				path: path.dropFirst(),
+				format: format
+			)
 	}
+
+	var firstResource: PackageResources.Image.Source? {
+		resources.first
+			?? children
+				.sorted { $0.key < $1.key }
+				.lazy
+				.compactMap(\.value.firstResource)
+				.first
+	}
+}
+
+private func imageAccessorIdentifier(
+	for source: PackageResources.Image.Source,
+	format: ResourceFormatConfig.Resolved
+) -> String {
+	let key = format.splitByKeyPath
+		? source.name.keyPathComponents.last
+		: source.name
+
+	return packageResourceIdentifierValue(key ?? source.name)
 }
 
 extension Snippets {
 	fileprivate struct ImagesExtension: Snippet {
+		let root: ImageNode
 		let resources: [PackageResources.Image.Source]
 		let format: ResourceFormatConfig.Resolved
 
 		init(
 			for resources: [PackageResources.Image.Source],
 			format: ResourceFormatConfig.Resolved
-		) {
+		) throws {
+			var root = ImageNode()
+
+			for resource in resources {
+				try root.insert(
+					resource,
+					path: Self.path(for: resource, format: format)[...],
+					format: format
+				)
+			}
+
+			self.root = root
 			self.resources = resources
 			self.format = format
 		}
@@ -55,18 +152,14 @@ extension Snippets {
 			PackageResources.Image.typeName
 		}
 
-		var root: ImageNode {
-			var root = ImageNode()
-			for resource in resources {
-				root.insert(resource, path: path(for: resource)[...])
-			}
-			return root
-		}
-
 		var content: some Snippet<String> {
 			ExtensionDecl(extendedType: .init(snippetLiteral: typeName)) {
 				if shouldGroup {
-					ImageNodeContents(root)
+					ImageNodeContents(
+						root,
+						resourceTypeName: typeName,
+						usesExplicitResourceType: false
+					)
 				} else {
 					ImageComputedPropertiesList(for: resources)
 				}
@@ -79,7 +172,10 @@ extension Snippets {
 				|| format.splitByKeyPath
 		}
 
-		private func path(for resource: PackageResources.Image.Source) -> [String] {
+		private static func path(
+			for resource: PackageResources.Image.Source,
+			format: ResourceFormatConfig.Resolved
+		) -> [String] {
 			var path: [String] = []
 			if format.groupByCatalogName, let catalog = resource.catalog {
 				path.append(catalog)
@@ -100,9 +196,17 @@ extension Snippets {
 
 	private struct ImageNodeContents: Snippet {
 		let node: ImageNode
+		let resourceTypeName: String
+		let usesExplicitResourceType: Bool
 
-		init(_ node: ImageNode) {
+		init(
+			_ node: ImageNode,
+			resourceTypeName: String,
+			usesExplicitResourceType: Bool
+		) {
 			self.node = node
+			self.resourceTypeName = resourceTypeName
+			self.usesExplicitResourceType = usesExplicitResourceType
 		}
 
 		var content: some Snippet<String> {
@@ -110,10 +214,19 @@ extension Snippets {
 				node.children
 					.sorted { $0.key < $1.key }
 					.map { name, child in
-						ImageNodeEnum(name: name, node: child)
+						ImageNodeEnum(
+							name: name,
+							node: child,
+							resourceTypeName: resourceTypeName
+						)
 					}
 
-				node.resources.map { ImageComputedProperty(for: $0) }
+				node.resources.map {
+					ImageComputedProperty(
+						for: $0,
+						resourceTypeName: usesExplicitResourceType ? resourceTypeName : "Self"
+					)
+				}
 			}
 		}
 	}
@@ -121,13 +234,18 @@ extension Snippets {
 	private struct ImageNodeEnum: Snippet {
 		let name: String
 		let node: ImageNode
+		let resourceTypeName: String
 
 		var content: some Snippet<String> {
 			EnumDecl(
 				accessLevel: .current,
 				identifier: packageResourceIdentifier(name)
 			) {
-				ImageNodeContents(node)
+				ImageNodeContents(
+					node,
+					resourceTypeName: resourceTypeName,
+					usesExplicitResourceType: true
+				)
 			}
 		}
 	}
@@ -141,16 +259,21 @@ extension Snippets {
 
 		var content: some Snippet<String> {
 			Join(.const(.newlines(2))) {
-				resources.map { ImageComputedProperty(for: $0) }
+				resources.map { ImageComputedProperty(for: $0, resourceTypeName: "Self") }
 			}
 		}
 	}
 
 	private struct ImageComputedProperty: Snippet {
 		let resource: PackageResources.Image.Source
+		let resourceTypeName: String
 
-		init(for resource: PackageResources.Image.Source) {
+		init(
+			for resource: PackageResources.Image.Source,
+			resourceTypeName: String
+		) {
 			self.resource = resource
+			self.resourceTypeName = resourceTypeName
 		}
 
 		var content: some Snippet<String> {
@@ -158,7 +281,7 @@ extension Snippets {
 				accessLevel: .current,
 				isStatic: true,
 				identifier: packageResourceIdentifier(identifierName),
-				type: TypeExpr(snippetLiteral: "Self"),
+				type: TypeExpr(snippetLiteral: resourceTypeName),
 				getter: PropertyGetterDecl {
 					CallExpr(
 						callee: ".init",

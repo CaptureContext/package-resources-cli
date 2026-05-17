@@ -321,4 +321,49 @@ struct XCStringRendererTests {
 
 		expectNoDifference(expected, output)
 	}
+
+	@Test
+	func rejectsConflictingAccessorAndCatalogNamespaceWhenKeyPathSplittingIsDisabled() throws {
+		let resources = [
+			PackageResources.LocalizedString.Source(
+				resource: .init(
+					key: "Localizable",
+					comment: nil,
+					arguments: [],
+					sourceLocalization: "Localizable"
+				)
+			),
+			.init(
+				resource: .init(
+					key: "auth.title",
+					comment: nil,
+					arguments: [],
+					sourceLocalization: "Title"
+				),
+				table: "Localizable"
+			)
+		]
+
+		for resources in [resources, resources.reversed()] {
+			do {
+				_ = try withDependencies {
+					var config = ResourceFormatConfig.standard()
+					config.xcStrings.splitByKeyPath = false
+					$0.resourceFormatConfig = config
+				} operation: {
+					try PackageResources.LocalizedString.Source.render(Array(resources))
+				}
+				Issue.record("Expected conflicting string resource namespaces to throw.")
+			} catch let error as XCStringResourceValidationError {
+				expectNoDifference(
+					.conflictingKeyPaths([
+						.init(accessorKey: "Localizable", nestedKey: "auth.title")
+					]),
+					error
+				)
+			} catch {
+				Issue.record("Expected XCStringResourceValidationError, got \(error).")
+			}
+		}
+	}
 }

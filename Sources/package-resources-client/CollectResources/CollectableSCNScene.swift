@@ -6,16 +6,11 @@ extension PackageResources.SCNScene: _CollectableResourceType {
 			guard ["scn"].contains(location.extension)
 			else { return [] }
 
-			let parent = location.parent
-
-			let catalog = ["scnassets"].contains(parent?.extension)
-			? parent?.nameExcludingExtension
-			: nil
-
 			return [
 				.init(
-					name: location.nameExcludingExtension,
-					catalog: catalog
+					name: resourceSetName(for: location),
+					path: scnAssetFolderComponents(for: location),
+					catalog: scnAssetCatalogName(for: location)
 				)
 			]
 		}

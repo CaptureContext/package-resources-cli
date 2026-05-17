@@ -20,6 +20,12 @@ extension Manifest.FormatConfig {
 			),
 			fonts: makeCommon(fonts.resolved),
 			nibs: makeCommon(nibs.resolved),
+			scnScenes: ResourceFormatConfig.AssetCatalog(
+				common: makeCommon(scnScenes.resolved),
+				groupByCatalogName: scnScenes.resolved.groupByCatalogName,
+				groupByFolders: scnScenes.resolved.groupByFolders,
+				splitByKeyPath: scnScenes.resolved.splitByKeyPath
+			),
 			storyboards: makeCommon(storyboards.resolved),
 			xcStrings: ResourceFormatConfig.XCStrings(
 				catalog: ResourceFormatConfig.Catalog(

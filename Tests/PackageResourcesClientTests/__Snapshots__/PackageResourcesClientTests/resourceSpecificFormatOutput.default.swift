@@ -3,14 +3,14 @@ import PackageResourcesCore
 
 extension _ColorResource {
   public enum media {
-    public static var colorExample: Self {
+    public static var colorExample: _ColorResource {
       .init(
         name: "ColorExample",
         bundle: .module
       )
     }
 
-    public static var nestedColor: Self {
+    public static var nestedColor: _ColorResource {
       .init(
         name: "Nested.Color",
         bundle: .module
@@ -21,14 +21,14 @@ extension _ColorResource {
 
 extension _ImageResource {
     package enum media {
-        package static var imageExample: Self {
+        package static var imageExample: _ImageResource {
             .init(
                 name: "ImageExample",
                 bundle: .module
             )
         }
 
-        package static var nestedImage: Self {
+        package static var nestedImage: _ImageResource {
             .init(
                 name: "NestedImage",
                 bundle: .module
@@ -47,12 +47,14 @@ extension _StoryboardResource {
 }
 
 extension _SCNSceneResource {
-	internal static var defaultScene: Self {
-		.init(
-			name: "DefaultScene",
-			catalog: "SCNCatalog",
-			bundle: .module
-		)
+	internal enum scncatalog {
+		internal static var defaultScene: _SCNSceneResource {
+			.init(
+				name: "DefaultScene",
+				catalog: "SCNCatalog",
+				bundle: .module
+			)
+		}
 	}
 }
 

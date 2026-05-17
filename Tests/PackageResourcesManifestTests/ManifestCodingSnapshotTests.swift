@@ -85,6 +85,10 @@ struct ManifestCodingSnapshotTests {
 		  ignore: true
 		  group-by-folders: false
 		  split-by-key-path: false
+		scn-scenes:
+		  ignore: true
+		  group-by-folders: false
+		  split-by-key-path: false
 		xcstrings:
 		  split-by-key-path: false
 		"""

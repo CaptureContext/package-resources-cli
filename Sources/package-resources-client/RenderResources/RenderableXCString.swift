@@ -158,7 +158,7 @@ extension Snippets {
 					resource,
 					path: path[...],
 					splitByKeyPath: splitByKeyPath,
-					validateConflicts: splitByKeyPath
+					validateConflicts: splitByKeyPath || groupByCatalogName
 				)
 			}
 

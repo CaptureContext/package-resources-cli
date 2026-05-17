@@ -8,6 +8,7 @@ extension Manifest {
 		case fonts
 		case images
 		case nibs
+		case scnScenes = "scn-scenes"
 		case storyboards
 		case xcStrings = "xc-strings"
 		case interfaceBuilder = "interface-builder"
@@ -39,6 +40,8 @@ extension Manifest {
 				.images
 			case .nibs:
 				.nibs
+			case .scnScenes:
+				.scnScenes
 			case .storyboards:
 				.storyboards
 			case .xcStrings:
