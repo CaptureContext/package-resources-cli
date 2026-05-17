@@ -27,11 +27,15 @@ jobs:
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v6
+    - name: Clean
+      shell: bash
+      run: |
+        rm -rf ~/.derivedData
     - name: Test
       uses: capturecontext/swift-package-action/build@3.0-beta.13
       with:
         xcode: ${{ matrix.xcode }}
-        cache-derived-data: false
+        cache-derived-data: true
         action: xcodebuild-test
         platform: ${{ matrix.platform }}
         scheme: package-resources-cli-Package
