@@ -31,7 +31,7 @@ jobs:
       uses: capturecontext/swift-package-action/build@3.0-beta.13
       with:
         xcode: ${{ matrix.xcode }}
-        cache-derived-data: true
+        cache-derived-data: false
         action: xcodebuild-test
         platform: ${{ matrix.platform }}
         scheme: package-resources-cli-Package
