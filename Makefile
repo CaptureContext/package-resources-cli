@@ -51,7 +51,9 @@ build_clean:
 	swift build -c release --disable-sandbox --build-path '.build'
 
 output ?= .agents/interfaces
+platform ?= host
+swift_sdk ?=
 
 .PHONY: swiftinterface
 swiftinterface:
-	@./scripts/generate-swiftinterfaces.sh --package-path . --output "$(output)"
+	@./scripts/generate-swiftinterfaces.sh --package-path . --output "$(output)" --platform "$(platform)" $(if $(swift_sdk),--swift-sdk "$(swift_sdk)")
