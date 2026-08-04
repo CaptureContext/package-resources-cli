@@ -1,0 +1,1315 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.4 (swiftlang-6.4.0.25.4 clang-2100.3.25.1)
+// swift-module-flags: -target arm64-apple-macos13.0 -enable-objc-interop -language-mode 6 -O -enable-experimental-feature DebugDescriptionMacro -module-name PackageResourcesManifest -package-name package_resources_cli
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+import ArgumentParser
+import CasePaths
+import Casification
+import Foundation
+import IssueReporting
+import PackageResourcesClient
+import Swift
+import Yams
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+  public enum ProcessingPolicy : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    public typealias RawValue = Swift::String.Casification::Casification.Casification::Configuration.Casification::CamelCase.Casification::Acronyms.Casification::ProcessingPolicy
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Equatable, Swift::Sendable {
+      case `default`
+      case current
+      case preserve
+      case alwaysMatchCase
+      case alwaysCapitalize
+      case conditionalCapitalization
+      public init(_ mode: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::RawValue)
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var current: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var preserve: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var alwaysMatchCase: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var alwaysCapitalize: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var conditionalCapitalization: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias)
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init(rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::RawValue)
+    public var rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::RawValue {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy, PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest {
+  public struct AcronymsConfig : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+      get
+    }
+    @_hasInitialValue public static let `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig
+    public var processingPolicy: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy
+    public var values: [Swift::String]
+    public var resolvedValues: Swift::Set<Swift::Substring> {
+      get
+    }
+    public init(processingPolicy: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy = .current, values: [Swift::String] = ["current"])
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig) -> Swift::Bool
+  }
+}
+extension PackageResourcesManifest::Manifest {
+  public struct FormatConfig : Swift::Equatable, Swift::Sendable {
+    @_hasInitialValue public static let $root: _Concurrency::TaskLocal<PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root>
+    public static var root: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root {
+      get
+    }
+    public var root: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root
+    public var colors: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource
+    public var images: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource
+    public var fonts: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource
+    public var nibs: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource
+    public var scnScenes: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource
+    public var storyboards: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource
+    public var xcStrings: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource
+    public init(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root = .default, colors: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource? = nil, images: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource? = nil, fonts: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource? = nil, nibs: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource? = nil, scnScenes: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource? = nil, storyboards: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource? = nil, xcStrings: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource? = nil)
+    public var enabledResourceTypes: PackageResourcesClient::EnabledResourceTypes {
+      get
+    }
+    public mutating func updateRoot(_ update: (inout PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root) -> Swift::Void)
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig) -> Swift::Bool
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig {
+  public enum Alias : Swift::String, Swift::Codable, Swift::Sendable {
+    case `default`
+    @inlinable public init?(rawValue: Swift::String)
+    public typealias RawValue = Swift::String
+    public var rawValue: Swift::String {
+      @inlinable get
+    }
+  }
+  public struct Root : Swift::Equatable, Swift::Sendable {
+    @_hasInitialValue public static let `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root
+    public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor
+    public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize
+    public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig
+    public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig
+    public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig
+    public var groupByCatalogName: Swift::Bool
+    public init(indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor = .default, indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize = .default, accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig = .default, numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig = .default, acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig = .default, groupByCatalogName: Swift::Bool = true)
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Root) -> Swift::Bool
+  }
+  public struct Common : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public var ignore: Swift::Bool
+    public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor
+    public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize
+    public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig
+    public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig
+    public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig
+    public init(ignore: Swift::Bool = false, indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor = Manifest.FormatConfig.root.indentor, indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize = Manifest.FormatConfig.root.indentSize, accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig = Manifest.FormatConfig.root.accessLevel, numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig = Manifest.FormatConfig.root.numbers, acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig = Manifest.FormatConfig.root.acronyms)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common) -> Swift::Bool
+  }
+  public struct AssetCatalog : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public var common: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common
+    public var groupByCatalogName: Swift::Bool
+    public var groupByFolders: Swift::Bool
+    public var splitByKeyPath: Swift::Bool
+    public var ignore: Swift::Bool {
+      get
+      set
+    }
+    public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+      set
+    }
+    public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize {
+      get
+      set
+    }
+    public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig {
+      get
+      set
+    }
+    public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+      get
+      set
+    }
+    public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+      get
+      set
+    }
+    public init(ignore: Swift::Bool = false, indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor = Manifest.FormatConfig.root.indentor, indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize = Manifest.FormatConfig.root.indentSize, accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig = Manifest.FormatConfig.root.accessLevel, numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig = Manifest.FormatConfig.root.numbers, acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig = Manifest.FormatConfig.root.acronyms, groupByCatalogName: Swift::Bool = Manifest.FormatConfig.root.groupByCatalogName, groupByFolders: Swift::Bool = true, splitByKeyPath: Swift::Bool = true)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalog, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalog) -> Swift::Bool
+  }
+  public struct Catalog : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public var common: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common
+    public var groupByCatalogName: Swift::Bool
+    public var ignore: Swift::Bool {
+      get
+      set
+    }
+    public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+      set
+    }
+    public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize {
+      get
+      set
+    }
+    public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig {
+      get
+      set
+    }
+    public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+      get
+      set
+    }
+    public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+      get
+      set
+    }
+    public init(ignore: Swift::Bool = false, indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor = Manifest.FormatConfig.root.indentor, indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize = Manifest.FormatConfig.root.indentSize, accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig = Manifest.FormatConfig.root.accessLevel, numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig = Manifest.FormatConfig.root.numbers, acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig = Manifest.FormatConfig.root.acronyms, groupByCatalogName: Swift::Bool = Manifest.FormatConfig.root.groupByCatalogName)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog) -> Swift::Bool
+  }
+  public struct XCStrings : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public var catalog: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog
+    public var splitByKeyPath: Swift::Bool
+    public var ignore: Swift::Bool {
+      get
+      set
+    }
+    public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+      set
+    }
+    public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize {
+      get
+      set
+    }
+    public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig {
+      get
+      set
+    }
+    public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+      get
+      set
+    }
+    public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+      get
+      set
+    }
+    public var groupByCatalogName: Swift::Bool {
+      get
+      set
+    }
+    public init(ignore: Swift::Bool = false, indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor = Manifest.FormatConfig.root.indentor, indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize = Manifest.FormatConfig.root.indentSize, accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig = Manifest.FormatConfig.root.accessLevel, numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig = Manifest.FormatConfig.root.numbers, acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig = Manifest.FormatConfig.root.acronyms, groupByCatalogName: Swift::Bool = Manifest.FormatConfig.root.groupByCatalogName, splitByKeyPath: Swift::Bool = true)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStrings, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStrings) -> Swift::Bool
+  }
+  public enum CommonResource : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias)
+    case value(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common)
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource {
+      get
+    }
+    public static func inherited() -> PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource
+    public var resolved: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public mutating func update(_ update: (inout PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Common) -> Swift::Void)
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CommonResource) -> Swift::Bool
+  }
+  public enum AssetCatalogResource : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias)
+    case value(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalog)
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource {
+      get
+    }
+    public static func inherited() -> PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource
+    public var resolved: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalog {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public mutating func update(_ update: (inout PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalog) -> Swift::Void)
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::AssetCatalogResource) -> Swift::Bool
+  }
+  public enum CatalogResource : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias)
+    case value(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog)
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CatalogResource {
+      get
+    }
+    public static func inherited() -> PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CatalogResource
+    public var resolved: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public mutating func update(_ update: (inout PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Catalog) -> Swift::Void)
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CatalogResource, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::CatalogResource) -> Swift::Bool
+  }
+  public enum XCStringsResource : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias)
+    case value(PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStrings)
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource {
+      get
+    }
+    public static func inherited() -> PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource
+    public var resolved: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStrings {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public mutating func update(_ update: (inout PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStrings) -> Swift::Void)
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::XCStringsResource) -> Swift::Bool
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig {
+  public var resourceFormatConfig: PackageResourcesClient::ResourceFormatConfig {
+    get
+  }
+}
+public enum RawCodingKey : Swift::CodingKey, Swift::ExpressibleByStringLiteral, Swift::ExpressibleByIntegerLiteral, Swift::Hashable {
+  case key(Swift::String)
+  case index(Swift::Int)
+  public init(stringLiteral value: Swift::String)
+  public init(stringValue: Swift::String)
+  public init(integerLiteral value: Swift::Int)
+  public init(intValue: Swift::Int)
+  public var stringValue: Swift::String {
+    get
+  }
+  public var intValue: Swift::Int? {
+    get
+  }
+  public typealias ExtendedGraphemeClusterLiteralType = Swift::String
+  public typealias IntegerLiteralType = Swift::Int
+  public typealias StringLiteralType = Swift::String
+  public typealias UnicodeScalarLiteralType = Swift::String
+  @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::RawCodingKey, _ b: PackageResourcesManifest::RawCodingKey) -> Swift::Bool
+  public func hash(into hasher: inout Swift::Hasher)
+  public var hashValue: Swift::Int {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest {
+  public enum IndentSize : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Sendable {
+      case `default`
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias)
+    case value(Swift::Int)
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init(rawValue: Swift::Int)
+    public var rawValue: Swift::Int {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize, PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias> {
+        get
+      }
+      public var value: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize, Swift::Int> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    public typealias RawValue = Swift::Int
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest {
+  public enum Indentor : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    @_hasInitialValue public static let $current: _Concurrency::TaskLocal<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor>
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+    }
+    public static var tab: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+    }
+    public static var whitespace: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+    }
+    public static var empty: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Sendable {
+      case `default`
+      case tab, tabs
+      case whitespace, whitespaces, space, spaces
+      case empty, none
+      public init?(_ value: Swift::String)
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var tab: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var tabs: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var whitespace: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var whitespaces: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var space: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var spaces: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var empty: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var none: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias)
+    case value(Swift::String)
+    public init(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init(rawValue: Swift::String)
+    public var rawValue: Swift::String {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor, PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias> {
+        get
+      }
+      public var value: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor, Swift::String> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    public typealias RawValue = Swift::String
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor : ArgumentParser::ExpressibleByArgument {
+  public init(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest {
+  public enum AccessLevelConfig : Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    case none
+    case `default`
+    case value(PackageResourcesClient::AccessLevel)
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public var rawValue: PackageResourcesClient::AccessLevel? {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig> {
+        get
+      }
+      public var none: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig, Swift::Void> {
+        get
+      }
+      public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig, Swift::Void> {
+        get
+      }
+      public var value: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig, PackageResourcesClient::AccessLevel> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig) -> Swift::Bool
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest {
+  public enum ResourceType : Swift::String, Swift::CaseIterable, Swift::Codable, Swift::Sendable, Swift::LosslessStringConvertible {
+    case all
+    case colors
+    case fonts
+    case images
+    case nibs
+    case scnScenes
+    case storyboards
+    case xcStrings
+    case interfaceBuilder
+    case none
+    case `default`
+    case __not_set__
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public var enabledResourceTypes: PackageResourcesClient::EnabledResourceTypes {
+      get
+    }
+    @inlinable public init?(rawValue: Swift::String)
+    public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType]
+    public typealias RawValue = Swift::String
+    nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType] {
+      get
+    }
+    public var rawValue: Swift::String {
+      @inlinable get
+    }
+  }
+  public struct ResourceTypes : Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::RawRepresentable {
+    public typealias RawValue = [PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType]
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceTypes {
+      get
+    }
+    public var rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceTypes.PackageResourcesManifest::RawValue
+    public var enabledResourceTypes: PackageResourcesClient::EnabledResourceTypes {
+      get
+    }
+    public init(rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceTypes.PackageResourcesManifest::RawValue)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest {
+  public struct Version : Swift::Codable, Swift::Sendable, Swift::RawRepresentable, Swift::LosslessStringConvertible {
+    public let major: Swift::Int
+    public let minor: Swift::Int
+    public var rawValue: Swift::String {
+      get
+    }
+    public var description: Swift::String {
+      get
+    }
+    public init?(_ versionString: Swift::String)
+    public init?(rawValue: Swift::String)
+    public init(major: Swift::Int, minor: Swift::Int = 0)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public typealias RawValue = Swift::String
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Version : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+public struct Manifest {
+  @_hasInitialValue public static let $encodeAliases: _Concurrency::TaskLocal<Swift::Bool>
+  public var version: PackageResourcesManifest::Manifest.PackageResourcesManifest::Version
+  @_hasInitialValue public var output: Swift::String?
+  public var format: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig
+  public var resourceTypes: PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceTypes
+  public init(version: PackageResourcesManifest::Manifest.PackageResourcesManifest::Version = .init(major: 4), output: Swift::String? = nil, format: PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig = .init(), resourceTypes: PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceTypes = .default)
+}
+extension PackageResourcesManifest::Manifest {
+  public var enabledResourceTypes: PackageResourcesClient::EnabledResourceTypes {
+    get
+  }
+  public var indentor: PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor {
+    get
+    set
+  }
+  public var indentSize: PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize {
+    get
+    set
+  }
+  public var accessLevel: PackageResourcesManifest::Manifest.PackageResourcesManifest::AccessLevelConfig {
+    get
+    set
+  }
+  public var numbers: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+    get
+    set
+  }
+  public var acronyms: PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig {
+    get
+    set
+  }
+  public var groupByCatalogName: Swift::Bool {
+    get
+    set
+  }
+  public var groupXCStringsByCatalogName: Swift::Bool {
+    get
+    set
+  }
+  public var xcStringsSplitByKeyPath: Swift::Bool {
+    get
+    set
+  }
+  public var colorsGroupByFolders: Swift::Bool {
+    get
+    set
+  }
+  public var imagesGroupByFolders: Swift::Bool {
+    get
+    set
+  }
+  public var scnScenesGroupByFolders: Swift::Bool {
+    get
+    set
+  }
+  public var colorsSplitByKeyPath: Swift::Bool {
+    get
+    set
+  }
+  public var imagesSplitByKeyPath: Swift::Bool {
+    get
+    set
+  }
+  public var scnScenesSplitByKeyPath: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreColors: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreImages: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreFonts: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreNibs: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreSCNScenes: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreStoryboards: Swift::Bool {
+    get
+    set
+  }
+  public var ignoreXCStrings: Swift::Bool {
+    get
+    set
+  }
+}
+extension PackageResourcesManifest::Manifest {
+  public mutating func ifLet<T>(_ value: T?, set keyPath: Swift::WritableKeyPath<PackageResourcesManifest::Manifest, T>)
+  public func ifLet<T>(_ value: T?, override keyPath: Swift::WritableKeyPath<PackageResourcesManifest::Manifest, T>) -> PackageResourcesManifest::Manifest
+}
+extension PackageResourcesManifest::Manifest : Swift::Encodable {
+  @_hasInitialValue public static let $ignoredKeys: _Concurrency::TaskLocal<Swift::Set<[PackageResourcesManifest::RawCodingKey]>>
+  public func encode(to encoder: any Swift::Encoder) throws
+}
+extension PackageResourcesManifest::Manifest : Swift::Decodable {
+  public init(from decoder: any Swift::Decoder) throws
+}
+extension PackageResourcesManifest::Manifest {
+  public enum Format {
+    case yaml
+    case json
+    @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::Format, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::Format) -> Swift::Bool
+    public func hash(into hasher: inout Swift::Hasher)
+    public var hashValue: Swift::Int {
+      get
+    }
+  }
+  public static func load(at path: Swift::String) throws -> PackageResourcesManifest::Manifest
+  public static func loadWithFormat(at path: Swift::String) throws -> (config: PackageResourcesManifest::Manifest, format: PackageResourcesManifest::Manifest.PackageResourcesManifest::Format)
+  public static func debugLoad(at path: Swift::String) throws -> PackageResourcesManifest::Manifest
+}
+extension PackageResourcesManifest::Manifest {
+  public struct NumbersConfig : Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+      get
+    }
+    @_hasInitialValue public static let `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig
+    public var separator: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator
+    public var nextTokenMode: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode
+    public var allowedDelimeters: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters
+    public var endingNumberBoundaryOptions: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions
+    public var singleLetterBoundaryOptions: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions
+    public init(separator: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator = .current, nextTokenMode: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode = .current, allowedDelimeters: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters = .current, endingNumberBoundaryOptions: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions = .current, singleLetterBoundaryOptions: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions = .current)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public var aliasedEndingNumberNumericBoundaryOptions: Swift::String.Casification::Casification.Casification::Configuration.Casification::NumericBoundaryOptions {
+      get
+    }
+    public var aliasedSingleLetterNumericBoundaryOptions: Swift::String.Casification::Casification.Casification::Configuration.Casification::NumericBoundaryOptions {
+      get
+    }
+    public var aliasedNumericBoundaryOptions: Swift::Set<Swift::String.Casification::Casification.Casification::Configuration.Casification::Common.Casification::Numbers.Casification::BoundaryOption> {
+      get
+    }
+    @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig, _ b: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig) -> Swift::Bool
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+  public enum AllowedDelimters : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters {
+      get
+    }
+    public static var none: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Sendable {
+      case `default`
+      case current
+      case none
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var current: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var none: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias)
+    case value(Swift::Set<Swift::Character>)
+    public init(_ description: Swift::String)
+    public var description: Swift::String? {
+      get
+    }
+    public init(rawValue: Swift::Set<Swift::Character>)
+    public var rawValue: Swift::Set<Swift::Character> {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters, PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias> {
+        get
+      }
+      public var value: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters, Swift::Set<Swift::Character>> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    public typealias RawValue = Swift::Set<Swift::Character>
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+  public enum BoundaryOption : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption {
+      get
+    }
+    public static var none: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption {
+      get
+    }
+    public static var disableSeparators: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption {
+      get
+    }
+    public static var disableTokenProcessing: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Sendable {
+      case `default`
+      case current
+      case none
+      case disableSeparators
+      case disableTokenProcessing
+      public func aliasedValue(for id: Swift::String) -> Swift::String.Casification::Casification.Casification::Configuration.Casification::NumericBoundaryOptions
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var current: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var none: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var disableSeparators: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var disableTokenProcessing: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias)
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init?(rawValue: Swift::String)
+    public var rawValue: Swift::String {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption, PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    public typealias RawValue = Swift::String
+  }
+  public struct BoundaryOptions : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public typealias RawValue = [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption]
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions {
+      get
+    }
+    public static var none: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions {
+      get
+    }
+    public var rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions.PackageResourcesManifest::RawValue
+    public init(rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOptions.PackageResourcesManifest::RawValue)
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+  public enum NextTokenMode : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable, Swift::LosslessStringConvertible {
+    public typealias RawValue = Swift::String.Casification::Casification.Casification::Configuration.Casification::CamelCase.Casification::Numbers.Casification::NextTokenMode
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Equatable, Swift::Sendable {
+      case `default`
+      case current
+      case inherit
+      case auto
+      case automatic
+      case camel
+      case pascal
+      public init(_ mode: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::RawValue)
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var current: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var inherit: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var auto: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var automatic: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var camel: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var pascal: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias)
+    public init?(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init(rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::RawValue)
+    public var rawValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::RawValue {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode, PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig {
+  public enum Separator : Swift::RawRepresentable, Swift::Codable, Swift::Equatable, Swift::Sendable {
+    public static var `default`: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator {
+      get
+    }
+    public static var current: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator {
+      get
+    }
+    public enum Alias : Swift::String, Swift::CaseIterable, Swift::Sendable {
+      case `default`
+      case current
+      case none
+      public var aliasedValue: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::RawValue {
+        get
+      }
+      @inlinable public init?(rawValue: Swift::String)
+      public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+        public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias> {
+          get
+        }
+        public var `default`: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var current: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public var none: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias, Swift::Void> {
+          get
+        }
+        public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias>]>
+        public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias>]>.Swift::Element
+        public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias>]>
+        public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias
+      }
+      public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias.PackageResourcesManifest::AllCasePaths {
+        get
+      }
+      public typealias AllCases = [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias]
+      public typealias RawValue = Swift::String
+      nonisolated public static var allCases: [PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias] {
+        get
+      }
+      public var rawValue: Swift::String {
+        @inlinable get
+      }
+    }
+    case alias(PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias)
+    case value(Swift::Substring)
+    public init(_ description: Swift::String)
+    public var description: Swift::String {
+      get
+    }
+    public init(rawValue: Swift::Substring)
+    public var rawValue: Swift::Substring {
+      get
+    }
+    public init(from decoder: any Swift::Decoder) throws
+    public func encode(to encoder: any Swift::Encoder) throws
+    public struct AllCasePaths : CasePathsCore::CasePathReflectable, Swift::Sendable, Swift::Sequence {
+      public subscript(root: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator) -> CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator> {
+        get
+      }
+      public var alias: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator, PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias> {
+        get
+      }
+      public var value: CasePathsCore::AnyCasePath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator, Swift::Substring> {
+        get
+      }
+      public func makeIterator() -> Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator>]>
+      public typealias Element = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator>]>.Swift::Element
+      public typealias Iterator = Swift::IndexingIterator<[CasePathsCore::PartialCaseKeyPath<PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator>]>
+      public typealias Root = PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator
+    }
+    public static var allCasePaths: PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::AllCasePaths {
+      get
+    }
+    public typealias RawValue = Swift::Substring
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator : ArgumentParser::ExpressibleByArgument {
+  public init?(argument: Swift::String)
+  public var defaultValueDescription: Swift::String {
+    get
+  }
+  public static var allValueStrings: [Swift::String] {
+    get
+  }
+  public static var allValueDescriptions: [Swift::String : Swift::String] {
+    get
+  }
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias : CasePathsCore::CasePathable, CasePathsCore::CasePathIterable {
+}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::AcronymsConfig.PackageResourcesManifest::ProcessingPolicy.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::FormatConfig.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::IndentSize.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Indentor.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::ResourceType : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Format : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::Format : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::AllowedDelimters.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::BoundaryOption.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::NextTokenMode.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias : Swift::Equatable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias : Swift::Hashable {}
+extension PackageResourcesManifest::Manifest.PackageResourcesManifest::NumbersConfig.PackageResourcesManifest::Separator.PackageResourcesManifest::Alias : Swift::RawRepresentable {}
