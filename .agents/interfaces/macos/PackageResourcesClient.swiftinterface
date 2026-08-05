@@ -1,0 +1,363 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-macosx13.0 -enable-objc-interop -swift-version 6 -O -module-name PackageResourcesClient -package-name package_resources_cli
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
+import Casification
+import Dependencies
+import Foundation
+import FunctionComposition
+import IssueReporting
+import KeyPathsExtensions
+import PackageResourcesCore
+import PackageResourcesFS
+import Snippets
+import Swift
+import SwiftSnippets
+import XCStringsCatalog
+import _Concurrency
+import _StringProcessing
+import _SwiftConcurrencyShims
+public protocol _CollectableResourceType : Swift.Sendable {
+  associatedtype Source : PackageResourcesClient._RenderableResourceType, Swift.Hashable
+  static func collect(atPath path: Swift.String) throws -> [Self.Source]
+}
+extension Dependencies.DependencyValues {
+  public struct ResourceCollectorKey<Resource> : Swift.Hashable where Resource : Swift.Sendable {
+    @_hasInitialValue internal let id: Swift.ObjectIdentifier
+    public static func type(_ type: Resource.Type) -> Dependencies.DependencyValues.ResourceCollectorKey<Resource>
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: Dependencies.DependencyValues.ResourceCollectorKey<Resource>, _ b: Dependencies.DependencyValues.ResourceCollectorKey<Resource>) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public subscript<Resource>(collectResourcesOf resourceType: Dependencies.DependencyValues.ResourceCollectorKey<Resource>) -> NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, [Resource.Source], any Swift.Error> where Resource : PackageResourcesClient._CollectableResourceType {
+    get
+    set
+  }
+}
+extension Swift.KeyPath where Root == Dependencies.DependencyValues {
+  public static func collectResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, [Resource.Source], any Swift.Error>, Resource : PackageResourcesClient._CollectableResourceType
+}
+extension Swift.WritableKeyPath where Root == Dependencies.DependencyValues {
+  public static func collectResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableWritableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, [Resource.Source], any Swift.Error>, Resource : PackageResourcesClient._CollectableResourceType
+}
+extension PackageResourcesCore._ColorResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._ColorResource.Source]
+}
+extension PackageResourcesCore._FontResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._FontResource.Source]
+}
+extension PackageResourcesCore._ImageResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._ImageResource.Source]
+}
+extension PackageResourcesCore._NibResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._NibResource.Source]
+}
+extension PackageResourcesCore._SCNSceneResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._SCNSceneResource.Source]
+}
+extension PackageResourcesCore._StoryboardResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._StoryboardResource.Source]
+}
+extension PackageResourcesCore._XCStringResource : PackageResourcesClient._CollectableResourceType {
+  public static func collect(atPath path: Swift.String) throws -> [PackageResourcesCore._XCStringResource.Source]
+}
+public enum AccessLevel : Swift.String, Swift.Equatable, Swift.Sendable {
+  case `private`
+  case `internal`
+  case package
+  case `public`
+  @inlinable public init?(rawValue: Swift.String)
+  public typealias RawValue = Swift.String
+  public var rawValue: Swift.String {
+    @inlinable get
+  }
+}
+public protocol PackageResourcesClient : Swift.Sendable {
+  func processResources(for resourceTypes: PackageResourcesClient.EnabledResourceTypes, atPath path: Swift.String) async -> Swift.String
+  func processResources(for resourceTypes: PackageResourcesClient.EnabledResourceTypes, atPath path: Swift.String, into outputFilePath: Swift.String) async throws
+}
+public struct EnabledResourceTypes : Swift.Equatable, Swift.OptionSet, Swift.Sendable {
+  public var rawValue: Swift.UInt32
+  public init(rawValue: Swift.UInt32)
+  public static var colors: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var fonts: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var images: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var nibs: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var storyboards: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var xcStrings: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var scnScenes: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var interfaceBuilder: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public static var all: PackageResourcesClient.EnabledResourceTypes {
+    get
+  }
+  public typealias ArrayLiteralElement = PackageResourcesClient.EnabledResourceTypes
+  public typealias Element = PackageResourcesClient.EnabledResourceTypes
+  public typealias RawValue = Swift.UInt32
+}
+extension Dependencies.DependencyValues {
+  public var packageResourcesClient: any PackageResourcesClient.PackageResourcesClient {
+    get
+    set
+  }
+}
+extension Dependencies.DependencyValues {
+  public struct ResourceProcessorKey<Resource> : Swift.Hashable where Resource : Swift.Sendable {
+    @_hasInitialValue internal let id: Swift.ObjectIdentifier
+    public static func type(_ type: Resource.Type) -> Dependencies.DependencyValues.ResourceProcessorKey<Resource>
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: Dependencies.DependencyValues.ResourceProcessorKey<Resource>, _ b: Dependencies.DependencyValues.ResourceProcessorKey<Resource>) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public subscript<Resource>(processResourcesOf resourceType: Dependencies.DependencyValues.ResourceProcessorKey<Resource>) -> NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, Swift.String, any Swift.Error> where Resource : PackageResourcesClient._CollectableResourceType {
+    get
+    set
+  }
+}
+extension Swift.KeyPath where Root == Dependencies.DependencyValues {
+  public static func processResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, Swift.String, any Swift.Error>, Resource : PackageResourcesClient._CollectableResourceType
+}
+extension Swift.WritableKeyPath where Root == Dependencies.DependencyValues {
+  public static func processResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableWritableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<Swift.String, Swift.String, any Swift.Error>, Resource : PackageResourcesClient._CollectableResourceType
+}
+public protocol _RenderableResourceType : Swift.Sendable {
+  static func render(_ resources: [Self]) throws -> Swift.String
+}
+extension Dependencies.DependencyValues {
+  public struct ResourceRendererKey<Resource> : Swift.Hashable where Resource : Swift.Sendable {
+    @_hasInitialValue internal let id: Swift.ObjectIdentifier
+    public static func type(_ type: Resource.Type) -> Dependencies.DependencyValues.ResourceRendererKey<Resource>
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: Dependencies.DependencyValues.ResourceRendererKey<Resource>, _ b: Dependencies.DependencyValues.ResourceRendererKey<Resource>) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  public subscript<Resource>(renderResourcesOf resourceType: Dependencies.DependencyValues.ResourceRendererKey<Resource>) -> NominalFunctionTypes.SendableSyncThrowingFunc<[Resource], Swift.String, any Swift.Error> where Resource : PackageResourcesClient._RenderableResourceType {
+    get
+    set
+  }
+}
+extension Swift.KeyPath where Root == Dependencies.DependencyValues {
+  public static func renderResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<[Resource], Swift.String, any Swift.Error>, Resource : PackageResourcesClient._RenderableResourceType
+}
+extension Swift.WritableKeyPath where Root == Dependencies.DependencyValues {
+  public static func renderResources<Resource>(of resourceType: Resource.Type) -> KeyPathsExtensions._SendableWritableKeyPath<Root, Value> where Value == NominalFunctionTypes.SendableSyncThrowingFunc<[Resource], Swift.String, any Swift.Error>, Resource : PackageResourcesClient._RenderableResourceType
+}
+extension PackageResourcesCore._ColorResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._ColorResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._FontResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._FontResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._ImageResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._ImageResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._NibResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._NibResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._SCNSceneResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._SCNSceneResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._StoryboardResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._StoryboardResource.Source]) throws -> Swift.String
+}
+extension PackageResourcesCore._XCStringResource.Source : PackageResourcesClient._RenderableResourceType {
+  public static func render(_ resources: [PackageResourcesCore._XCStringResource.Source]) throws -> Swift.String
+}
+extension Swift.Optional where Wrapped == Snippets.Snippets.AccessLevel<Swift.String> {
+  public static var current: Swift.Optional<Snippets.Snippets.AccessLevel<Swift.String>> {
+    get
+  }
+}
+extension Dependencies.DependencyValues {
+  public var resourceFormatConfig: PackageResourcesClient.ResourceFormatConfig {
+    get
+    set
+  }
+  public var generatedResourcesDisclaimerProvider: NominalFunctionTypes.SendableSyncFunc<Swift.String, Swift.String?> {
+    get
+    set
+  }
+}
+public struct ResourceFormatConfig : Swift.Sendable {
+  public enum ResourceKind : Swift.Hashable, Swift.Sendable {
+    case colors
+    case images
+    case fonts
+    case nibs
+    case scnScenes
+    case storyboards
+    case xcStrings
+    @_semantics("derived_enum_equals") @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesClient.ResourceFormatConfig.ResourceKind, _ b: PackageResourcesClient.ResourceFormatConfig.ResourceKind) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+  @_hasInitialValue public static let $currentResourceKind: _Concurrency.TaskLocal<PackageResourcesClient.ResourceFormatConfig.ResourceKind?>
+  public static var currentResourceKind: PackageResourcesClient.ResourceFormatConfig.ResourceKind? {
+    get
+  }
+  public struct Common : Swift.Sendable {
+    public var indentor: Swift.String
+    @_hasInitialValue public var accessLevel: PackageResourcesClient.AccessLevel?
+    public var updateCasification: @Sendable (inout Swift.String.Casification.Configuration) -> Swift.Void
+    public init(indentor: Swift.String = "\t", accessLevel: PackageResourcesClient.AccessLevel? = .internal, updateCasification: @escaping @Sendable (inout Swift.String.Casification.Configuration) -> Swift.Void = { _ in })
+  }
+  public struct Catalog : Swift.Sendable {
+    public var common: PackageResourcesClient.ResourceFormatConfig.Common
+    public var groupByCatalogName: Swift.Bool
+    public init(common: PackageResourcesClient.ResourceFormatConfig.Common = .init(), groupByCatalogName: Swift.Bool = true)
+  }
+  public struct AssetCatalog : Swift.Sendable {
+    public var common: PackageResourcesClient.ResourceFormatConfig.Common
+    public var groupByCatalogName: Swift.Bool
+    public var groupByFolders: Swift.Bool
+    public var splitByKeyPath: Swift.Bool
+    public init(common: PackageResourcesClient.ResourceFormatConfig.Common = .init(), groupByCatalogName: Swift.Bool = true, groupByFolders: Swift.Bool = true, splitByKeyPath: Swift.Bool = true)
+  }
+  public struct XCStrings : Swift.Sendable {
+    public var catalog: PackageResourcesClient.ResourceFormatConfig.Catalog
+    public var splitByKeyPath: Swift.Bool
+    public init(catalog: PackageResourcesClient.ResourceFormatConfig.Catalog = .init(), splitByKeyPath: Swift.Bool = true)
+  }
+  public struct Resolved : Swift.Sendable {
+    public var common: PackageResourcesClient.ResourceFormatConfig.Common
+    public var groupByCatalogName: Swift.Bool
+    public var groupByFolders: Swift.Bool
+    public var splitByKeyPath: Swift.Bool
+    public var indentor: Swift.String {
+      get
+    }
+    public var accessLevel: PackageResourcesClient.AccessLevel? {
+      get
+    }
+    public var updateCasification: @Sendable (inout Swift.String.Casification.Configuration) -> Swift.Void {
+      get
+    }
+    public init(common: PackageResourcesClient.ResourceFormatConfig.Common = .init(), groupByCatalogName: Swift.Bool = true, groupByFolders: Swift.Bool = true, splitByKeyPath: Swift.Bool = true)
+  }
+  public var colors: PackageResourcesClient.ResourceFormatConfig.AssetCatalog
+  public var images: PackageResourcesClient.ResourceFormatConfig.AssetCatalog
+  public var fonts: PackageResourcesClient.ResourceFormatConfig.Common
+  public var nibs: PackageResourcesClient.ResourceFormatConfig.Common
+  public var scnScenes: PackageResourcesClient.ResourceFormatConfig.AssetCatalog
+  public var storyboards: PackageResourcesClient.ResourceFormatConfig.Common
+  public var xcStrings: PackageResourcesClient.ResourceFormatConfig.XCStrings
+  public var defaultFormat: PackageResourcesClient.ResourceFormatConfig.Resolved
+  public init(colors: PackageResourcesClient.ResourceFormatConfig.AssetCatalog = .init(), images: PackageResourcesClient.ResourceFormatConfig.AssetCatalog = .init(), fonts: PackageResourcesClient.ResourceFormatConfig.Common = .init(), nibs: PackageResourcesClient.ResourceFormatConfig.Common = .init(), scnScenes: PackageResourcesClient.ResourceFormatConfig.AssetCatalog = .init(), storyboards: PackageResourcesClient.ResourceFormatConfig.Common = .init(), xcStrings: PackageResourcesClient.ResourceFormatConfig.XCStrings = .init(), defaultFormat: PackageResourcesClient.ResourceFormatConfig.Resolved = .init())
+  public var current: PackageResourcesClient.ResourceFormatConfig.Resolved {
+    get
+  }
+  public func resolved(for resourceKind: PackageResourcesClient.ResourceFormatConfig.ResourceKind?) -> PackageResourcesClient.ResourceFormatConfig.Resolved
+  public func withFormat<T>(for resourceKind: PackageResourcesClient.ResourceFormatConfig.ResourceKind, operation: () throws -> T) rethrows -> T
+}
+extension PackageResourcesClient.ResourceFormatConfig {
+  public static func standard(indentor: Swift.String = "\t", indentSize: Swift.Int = 1, accessLevel: PackageResourcesClient.AccessLevel? = .internal, groupByCatalogName: Swift.Bool = true, groupByFolders: Swift.Bool = true, splitByKeyPath: Swift.Bool = true) -> PackageResourcesClient.ResourceFormatConfig
+}
+extension PackageResourcesCore._ColorResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public var path: [Swift.String]
+    @_hasInitialValue public var catalog: Swift.String?
+    public init(name: Swift.String, path: [Swift.String] = [], catalog: Swift.String? = nil)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._ColorResource.Source, _ b: PackageResourcesCore._ColorResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._FontResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public init(name: Swift.String)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._FontResource.Source, _ b: PackageResourcesCore._FontResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._ImageResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public var path: [Swift.String]
+    @_hasInitialValue public var catalog: Swift.String?
+    public init(name: Swift.String, path: [Swift.String] = [], catalog: Swift.String? = nil)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._ImageResource.Source, _ b: PackageResourcesCore._ImageResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._NibResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public init(name: Swift.String)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._NibResource.Source, _ b: PackageResourcesCore._NibResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._SCNSceneResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public var path: [Swift.String]
+    @_hasInitialValue public var catalog: Swift.String?
+    public init(name: Swift.String, path: [Swift.String] = [], catalog: Swift.String? = nil)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._SCNSceneResource.Source, _ b: PackageResourcesCore._SCNSceneResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._StoryboardResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var name: Swift.String
+    public init(name: Swift.String)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._StoryboardResource.Source, _ b: PackageResourcesCore._StoryboardResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesCore._XCStringResource {
+  public struct Source : Swift.Hashable, Swift.Sendable {
+    public var resource: _XCStringResource.XCStringResource
+    @_hasInitialValue public var table: Swift.String?
+    public init(resource: _XCStringResource.XCStringResource, table: Swift.String? = nil)
+    @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_struct_equals(_ a: PackageResourcesCore._XCStringResource.Source, _ b: PackageResourcesCore._XCStringResource.Source) -> Swift.Bool
+    public func hash(into hasher: inout Swift.Hasher)
+    public var hashValue: Swift.Int {
+      get
+    }
+  }
+}
+extension PackageResourcesClient.AccessLevel : Swift.Hashable {}
+extension PackageResourcesClient.AccessLevel : Swift.RawRepresentable {}
