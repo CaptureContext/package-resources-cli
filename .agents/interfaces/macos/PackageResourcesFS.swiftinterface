@@ -1,7 +1,7 @@
 // swift-interface-format-version: 1.0
-// swift-compiler-version: Apple Swift version 6.4 (swiftlang-6.4.0.25.4 clang-2100.3.25.1)
-// swift-module-flags: -target arm64-apple-macos13.0 -enable-objc-interop -language-mode 6 -O -enable-experimental-feature DebugDescriptionMacro -module-name PackageResourcesFS -package-name package_resources_cli
-// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.4
+// swift-compiler-version: Apple Swift version 6.3.3 (swiftlang-6.3.3.1.3 clang-2100.1.1.101)
+// swift-module-flags: -target arm64-apple-macosx13.0 -enable-objc-interop -swift-version 6 -O -module-name PackageResourcesFS -package-name package_resources_cli
+// swift-module-flags-ignorable:  -formal-cxx-interoperability-mode=off -interface-compiler-version 6.3.3
 import AppKit
 import Foundation
 import Swift
@@ -11,287 +11,287 @@ import _SwiftConcurrencyShims
 public enum LocationKind {
   case file
   case folder
-  @_semantics("derived_enum_equals") @_implements(Swift::Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesFS::LocationKind, _ b: PackageResourcesFS::LocationKind) -> Swift::Bool
-  public func hash(into hasher: inout Swift::Hasher)
-  public var hashValue: Swift::Int {
+  @_semantics("derived_enum_equals") @_implements(Swift.Equatable, ==(_:_:)) public static func __derived_enum_equals(_ a: PackageResourcesFS.LocationKind, _ b: PackageResourcesFS.LocationKind) -> Swift.Bool
+  public func hash(into hasher: inout Swift.Hasher)
+  public var hashValue: Swift.Int {
     get
   }
 }
-public protocol Location : Swift::CustomStringConvertible, Swift::Equatable {
-  static var kind: PackageResourcesFS::LocationKind { get }
-  var storage: PackageResourcesFS::Storage<Self> { get }
-  init(storage: PackageResourcesFS::Storage<Self>)
+public protocol Location : Swift.CustomStringConvertible, Swift.Equatable {
+  static var kind: PackageResourcesFS.LocationKind { get }
+  var storage: PackageResourcesFS.Storage<Self> { get }
+  init(storage: PackageResourcesFS.Storage<Self>)
 }
-extension PackageResourcesFS::Location {
-  public static func == (lhs: Self, rhs: Self) -> Swift::Bool
-  public var description: Swift::String {
+extension PackageResourcesFS.Location {
+  public static func == (lhs: Self, rhs: Self) -> Swift.Bool
+  public var description: Swift.String {
     get
   }
-  public var path: Swift::String {
+  public var path: Swift.String {
     get
   }
-  public var url: Foundation::URL {
+  public var url: Foundation.URL {
     get
   }
-  public var name: Swift::String {
+  public var name: Swift.String {
     get
   }
-  public var nameExcludingExtension: Swift::String {
+  public var nameExcludingExtension: Swift.String {
     get
   }
-  public var `extension`: Swift::String? {
+  public var `extension`: Swift.String? {
     get
   }
-  public var parent: PackageResourcesFS::Folder? {
+  public var parent: PackageResourcesFS.Folder? {
     get
   }
-  public var creationDate: Foundation::Date? {
+  public var creationDate: Foundation.Date? {
     get
   }
-  public var modificationDate: Foundation::Date? {
+  public var modificationDate: Foundation.Date? {
     get
   }
-  public init(uncheckedPath: Swift::String)
-  public func validatePath() throws(PackageResourcesFS::LocationError)
-  public init(path: Swift::String) throws(PackageResourcesFS::LocationError)
-  public init(path: Swift::String, create: Swift::Bool) throws(PackageResourcesFS::SomeFilesError)
-  public func path(relativeTo folder: PackageResourcesFS::Folder) -> Swift::String
-  public func rename(to newName: Swift::String, keepExtension: Swift::Bool = true) throws(PackageResourcesFS::LocationError) -> Self
+  public init(uncheckedPath: Swift.String)
+  public func validatePath() throws(PackageResourcesFS.LocationError)
+  public init(path: Swift.String) throws(PackageResourcesFS.LocationError)
+  public init(path: Swift.String, create: Swift.Bool) throws(PackageResourcesFS.SomeFilesError)
+  public func path(relativeTo folder: PackageResourcesFS.Folder) -> Swift.String
+  public func rename(to newName: Swift.String, keepExtension: Swift.Bool = true) throws(PackageResourcesFS.LocationError) -> Self
   @discardableResult
-  public func move(to newParent: PackageResourcesFS::Folder) throws(PackageResourcesFS::LocationError) -> Self
+  public func move(to newParent: PackageResourcesFS.Folder) throws(PackageResourcesFS.LocationError) -> Self
   @discardableResult
-  public func copy(to folder: PackageResourcesFS::Folder) throws(PackageResourcesFS::LocationError) -> Self
-  public func delete() throws(PackageResourcesFS::LocationError)
-  public func managedBy(_ manager: Foundation::FileManager) throws(PackageResourcesFS::SomeFilesError) -> Self
+  public func copy(to folder: PackageResourcesFS.Folder) throws(PackageResourcesFS.LocationError) -> Self
+  public func delete() throws(PackageResourcesFS.LocationError)
+  public func managedBy(_ manager: Foundation.FileManager) throws(PackageResourcesFS.SomeFilesError) -> Self
 }
-final public class Storage<LocationType> where LocationType : PackageResourcesFS::Location {
-  @_hasStorage final public var path: Swift::String {
+final public class Storage<LocationType> where LocationType : PackageResourcesFS.Location {
+  @_hasStorage final public var path: Swift.String {
     get
   }
-  final private let fileManager: Foundation::FileManager
-  public init(uncheckedPath: Swift::String, fileManager: Foundation::FileManager)
-  convenience public init(path: Swift::String, fileManager: Foundation::FileManager, create: Swift::Bool = false) throws(PackageResourcesFS::SomeFilesError)
-  final public func createIfNeeded() throws(PackageResourcesFS::WriteError)
-  final public func validatePath() throws(PackageResourcesFS::LocationError)
+  final private let fileManager: Foundation.FileManager
+  public init(uncheckedPath: Swift.String, fileManager: Foundation.FileManager)
+  convenience public init(path: Swift.String, fileManager: Foundation.FileManager, create: Swift.Bool = false) throws(PackageResourcesFS.SomeFilesError)
+  final public func createIfNeeded() throws(PackageResourcesFS.WriteError)
+  final public func validatePath() throws(PackageResourcesFS.LocationError)
   @objc deinit
 }
-extension PackageResourcesFS::Storage {
-  final public var attributes: [Foundation::FileAttributeKey : Any] {
+extension PackageResourcesFS.Storage {
+  final public var attributes: [Foundation.FileAttributeKey : Any] {
     get
   }
-  final public func makeParentPath(for path: Swift::String) -> Swift::String?
+  final public func makeParentPath(for path: Swift.String) -> Swift.String?
   @discardableResult
-  final public func move(to newPath: Swift::String, errorReasonProvider: (any Swift::Error) -> PackageResourcesFS::LocationErrorReason) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::Storage<LocationType>
+  final public func move(to newPath: Swift.String, errorReasonProvider: (any Swift.Error) -> PackageResourcesFS.LocationErrorReason) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.Storage<LocationType>
   @discardableResult
-  final public func copy(to newPath: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::Storage<LocationType>
-  final public func delete() throws(PackageResourcesFS::LocationError)
+  final public func copy(to newPath: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.Storage<LocationType>
+  final public func delete() throws(PackageResourcesFS.LocationError)
 }
-extension PackageResourcesFS::Storage where LocationType == PackageResourcesFS::Folder {
-  final public func makeChildSequence<T>() -> PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence<T> where T : PackageResourcesFS::Location
-  final public func subfolder(at folderPath: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::Folder
-  final public func file(at filePath: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::File
-  final public func createSubfolder(at folderPath: Swift::String) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::Folder
-  final public func createFile(at filePath: Swift::String, contents: Foundation::Data?) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::File
+extension PackageResourcesFS.Storage where LocationType == PackageResourcesFS.Folder {
+  final public func makeChildSequence<T>() -> PackageResourcesFS.Folder.ChildSequence<T> where T : PackageResourcesFS.Location
+  final public func subfolder(at folderPath: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.Folder
+  final public func file(at filePath: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.File
+  final public func createSubfolder(at folderPath: Swift.String) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.Folder
+  final public func createFile(at filePath: Swift.String, contents: Foundation.Data?) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.File
 }
-public struct File : PackageResourcesFS::Location {
-  public let storage: PackageResourcesFS::Storage<PackageResourcesFS::File>
-  public init(storage: PackageResourcesFS::Storage<PackageResourcesFS::File>)
+public struct File : PackageResourcesFS.Location {
+  public let storage: PackageResourcesFS.Storage<PackageResourcesFS.File>
+  public init(storage: PackageResourcesFS.Storage<PackageResourcesFS.File>)
 }
-extension PackageResourcesFS::File {
-  public static var kind: PackageResourcesFS::LocationKind {
+extension PackageResourcesFS.File {
+  public static var kind: PackageResourcesFS.LocationKind {
     get
   }
-  public func write(_ data: Foundation::Data) throws(PackageResourcesFS::WriteError)
-  public func write(_ string: Swift::String, encoding: Swift::String.Foundation::Encoding = .utf8) throws(PackageResourcesFS::WriteError)
-  public func append(_ data: Foundation::Data) throws(PackageResourcesFS::WriteError)
-  public func append(_ string: Swift::String, encoding: Swift::String.Foundation::Encoding = .utf8) throws(PackageResourcesFS::WriteError)
-  public func read() throws(PackageResourcesFS::ReadError) -> Foundation::Data
-  public func readAsString(encodedAs encoding: Swift::String.Foundation::Encoding = .utf8) throws(PackageResourcesFS::ReadError) -> Swift::String
-  public func readAsInt() throws(PackageResourcesFS::ReadError) -> Swift::Int
+  public func write(_ data: Foundation.Data) throws(PackageResourcesFS.WriteError)
+  public func write(_ string: Swift.String, encoding: Swift.String.Encoding = .utf8) throws(PackageResourcesFS.WriteError)
+  public func append(_ data: Foundation.Data) throws(PackageResourcesFS.WriteError)
+  public func append(_ string: Swift.String, encoding: Swift.String.Encoding = .utf8) throws(PackageResourcesFS.WriteError)
+  public func read() throws(PackageResourcesFS.ReadError) -> Foundation.Data
+  public func readAsString(encodedAs encoding: Swift.String.Encoding = .utf8) throws(PackageResourcesFS.ReadError) -> Swift.String
+  public func readAsInt() throws(PackageResourcesFS.ReadError) -> Swift.Int
 }
-extension PackageResourcesFS::File {
+extension PackageResourcesFS.File {
   public func open()
 }
-public struct Folder : PackageResourcesFS::Location {
-  public let storage: PackageResourcesFS::Storage<PackageResourcesFS::Folder>
-  public init(storage: PackageResourcesFS::Storage<PackageResourcesFS::Folder>)
+public struct Folder : PackageResourcesFS.Location {
+  public let storage: PackageResourcesFS.Storage<PackageResourcesFS.Folder>
+  public init(storage: PackageResourcesFS.Storage<PackageResourcesFS.Folder>)
 }
-extension PackageResourcesFS::Folder {
-  public struct ChildSequence<Child> : Swift::Sequence where Child : PackageResourcesFS::Location {
-    fileprivate let folder: PackageResourcesFS::Folder
-    fileprivate let fileManager: Foundation::FileManager
-    fileprivate var isRecursive: Swift::Bool
-    fileprivate var includeHidden: Swift::Bool
-    public func makeIterator() -> PackageResourcesFS::Folder.PackageResourcesFS::ChildIterator<Child>
+extension PackageResourcesFS.Folder {
+  public struct ChildSequence<Child> : Swift.Sequence where Child : PackageResourcesFS.Location {
+    fileprivate let folder: PackageResourcesFS.Folder
+    fileprivate let fileManager: Foundation.FileManager
+    fileprivate var isRecursive: Swift.Bool
+    fileprivate var includeHidden: Swift.Bool
+    public func makeIterator() -> PackageResourcesFS.Folder.ChildIterator<Child>
     public typealias Element = Child
-    public typealias Iterator = PackageResourcesFS::Folder.PackageResourcesFS::ChildIterator<Child>
+    public typealias Iterator = PackageResourcesFS.Folder.ChildIterator<Child>
   }
-  public struct ChildIterator<Child> : Swift::IteratorProtocol where Child : PackageResourcesFS::Location {
-    private let folder: PackageResourcesFS::Folder
-    private let fileManager: Foundation::FileManager
-    private let isRecursive: Swift::Bool
-    private let includeHidden: Swift::Bool
-    private let reverseTopLevelTraversal: Swift::Bool
-    @_hasInitialValue private var $__lazy_storage_$_itemNames: [Swift::String]?
-    @_hasInitialValue private var index: Swift::Int
-    @_hasInitialValue private var nestedIterators: [PackageResourcesFS::Folder.PackageResourcesFS::ChildIterator<Child>]
+  public struct ChildIterator<Child> : Swift.IteratorProtocol where Child : PackageResourcesFS.Location {
+    private let folder: PackageResourcesFS.Folder
+    private let fileManager: Foundation.FileManager
+    private let isRecursive: Swift.Bool
+    private let includeHidden: Swift.Bool
+    private let reverseTopLevelTraversal: Swift.Bool
+    @_hasInitialValue private var $__lazy_storage_$_itemNames: [Swift.String]?
+    @_hasInitialValue private var index: Swift.Int
+    @_hasInitialValue private var nestedIterators: [PackageResourcesFS.Folder.ChildIterator<Child>]
     public mutating func next() -> Child?
     public typealias Element = Child
   }
 }
-extension PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence : Swift::CustomStringConvertible {
-  public var description: Swift::String {
+extension PackageResourcesFS.Folder.ChildSequence : Swift.CustomStringConvertible {
+  public var description: Swift.String {
     get
   }
 }
-extension PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence {
-  public var recursive: PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence<Child> {
+extension PackageResourcesFS.Folder.ChildSequence {
+  public var recursive: PackageResourcesFS.Folder.ChildSequence<Child> {
     get
   }
-  public var includingHidden: PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence<Child> {
+  public var includingHidden: PackageResourcesFS.Folder.ChildSequence<Child> {
     get
   }
-  public func count() -> Swift::Int
-  public func names() -> [Swift::String]
+  public func count() -> Swift.Int
+  public func names() -> [Swift.String]
   public func last() -> Child?
   public var first: Child? {
     get
   }
-  public func move(to folder: PackageResourcesFS::Folder) throws(PackageResourcesFS::LocationError)
-  public func delete() throws(PackageResourcesFS::LocationError)
+  public func move(to folder: PackageResourcesFS.Folder) throws(PackageResourcesFS.LocationError)
+  public func delete() throws(PackageResourcesFS.LocationError)
 }
-extension PackageResourcesFS::Folder {
-  public static var kind: PackageResourcesFS::LocationKind {
+extension PackageResourcesFS.Folder {
+  public static var kind: PackageResourcesFS.LocationKind {
     get
   }
-  public static var current: PackageResourcesFS::Folder {
+  public static var current: PackageResourcesFS.Folder {
     get
   }
-  public static var root: PackageResourcesFS::Folder {
+  public static var root: PackageResourcesFS.Folder {
     get
   }
-  public static var home: PackageResourcesFS::Folder {
+  public static var home: PackageResourcesFS.Folder {
     get
   }
-  public static var temporary: PackageResourcesFS::Folder {
+  public static var temporary: PackageResourcesFS.Folder {
     get
   }
-  public var subfolders: PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence<PackageResourcesFS::Folder> {
+  public var subfolders: PackageResourcesFS.Folder.ChildSequence<PackageResourcesFS.Folder> {
     get
   }
-  public var files: PackageResourcesFS::Folder.PackageResourcesFS::ChildSequence<PackageResourcesFS::File> {
+  public var files: PackageResourcesFS.Folder.ChildSequence<PackageResourcesFS.File> {
     get
   }
-  public func subfolder(at path: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::Folder
-  public func subfolder(named name: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::Folder
-  public func containsSubfolder(at path: Swift::String) -> Swift::Bool
-  public func containsSubfolder(named name: Swift::String) -> Swift::Bool
+  public func subfolder(at path: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.Folder
+  public func subfolder(named name: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.Folder
+  public func containsSubfolder(at path: Swift.String) -> Swift.Bool
+  public func containsSubfolder(named name: Swift.String) -> Swift.Bool
   @discardableResult
-  public func createSubfolder(at path: Swift::String) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::Folder
+  public func createSubfolder(at path: Swift.String) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.Folder
   @discardableResult
-  public func createSubfolder(named name: Swift::String) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::Folder
+  public func createSubfolder(named name: Swift.String) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.Folder
   @discardableResult
-  public func createSubfolderIfNeeded(at path: Swift::String) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::Folder
+  public func createSubfolderIfNeeded(at path: Swift.String) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.Folder
   @discardableResult
-  public func createSubfolderIfNeeded(withName name: Swift::String) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::Folder
-  public func file(at path: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::File
-  public func file(named name: Swift::String) throws(PackageResourcesFS::LocationError) -> PackageResourcesFS::File
-  public func containsFile(named name: Swift::String) -> Swift::Bool
+  public func createSubfolderIfNeeded(withName name: Swift.String) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.Folder
+  public func file(at path: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.File
+  public func file(named name: Swift.String) throws(PackageResourcesFS.LocationError) -> PackageResourcesFS.File
+  public func containsFile(named name: Swift.String) -> Swift.Bool
   @discardableResult
-  public func createFile(at path: Swift::String, contents: Foundation::Data? = nil) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::File
+  public func createFile(at path: Swift.String, contents: Foundation.Data? = nil) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.File
   @discardableResult
-  public func createFile(named fileName: Swift::String, contents: Foundation::Data? = nil) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::File
+  public func createFile(named fileName: Swift.String, contents: Foundation.Data? = nil) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.File
   @discardableResult
-  public func createFileIfNeeded(at path: Swift::String, contents: @autoclosure () -> Foundation::Data? = nil) throws(PackageResourcesFS::WriteError) -> PackageResourcesFS::File
+  public func createFileIfNeeded(at path: Swift.String, contents: @autoclosure () -> Foundation.Data? = nil) throws(PackageResourcesFS.WriteError) -> PackageResourcesFS.File
   @discardableResult
-  public func createFileIfNeeded(withName name: Swift::String, contents: @autoclosure () -> Foundation::Data? = nil) throws -> PackageResourcesFS::File
-  public func contains<T>(_ location: T) -> Swift::Bool where T : PackageResourcesFS::Location
-  public func moveContents(to folder: PackageResourcesFS::Folder, includeHidden: Swift::Bool = false) throws
-  public func empty(includingHidden includeHidden: Swift::Bool = false) throws
-  public func isEmpty(includingHidden includeHidden: Swift::Bool = false) -> Swift::Bool
+  public func createFileIfNeeded(withName name: Swift.String, contents: @autoclosure () -> Foundation.Data? = nil) throws -> PackageResourcesFS.File
+  public func contains<T>(_ location: T) -> Swift.Bool where T : PackageResourcesFS.Location
+  public func moveContents(to folder: PackageResourcesFS.Folder, includeHidden: Swift.Bool = false) throws
+  public func empty(includingHidden includeHidden: Swift.Bool = false) throws
+  public func isEmpty(includingHidden includeHidden: Swift.Bool = false) -> Swift.Bool
 }
-extension PackageResourcesFS::Folder {
-  public static func matching(_ searchPath: Foundation::FileManager.Foundation::SearchPathDirectory, in domain: Foundation::FileManager.Foundation::SearchPathDomainMask = .userDomainMask, resolvedBy fileManager: Foundation::FileManager = .default) throws -> PackageResourcesFS::Folder
-  public static var documents: PackageResourcesFS::Folder? {
+extension PackageResourcesFS.Folder {
+  public static func matching(_ searchPath: Foundation.FileManager.SearchPathDirectory, in domain: Foundation.FileManager.SearchPathDomainMask = .userDomainMask, resolvedBy fileManager: Foundation.FileManager = .default) throws -> PackageResourcesFS.Folder
+  public static var documents: PackageResourcesFS.Folder? {
     get
   }
-  public static var library: PackageResourcesFS::Folder? {
+  public static var library: PackageResourcesFS.Folder? {
     get
   }
 }
-public struct FilesError<Reason> : Swift::Error where Reason : Swift::Sendable {
-  @_hasStorage public var path: Swift::String {
+public struct FilesError<Reason> : Swift.Error where Reason : Swift.Sendable {
+  @_hasStorage public var path: Swift.String {
     get
   }
   @_hasStorage public var reason: Reason {
     get
   }
 }
-extension PackageResourcesFS::FilesError : Swift::CustomStringConvertible {
-  public var description: Swift::String {
+extension PackageResourcesFS.FilesError : Swift.CustomStringConvertible {
+  public var description: Swift.String {
     get
   }
 }
-public enum FilesErrorReason : Swift::Sendable {
-  case read(PackageResourcesFS::ReadErrorReason)
-  case write(PackageResourcesFS::WriteErrorReason)
-  case location(PackageResourcesFS::LocationErrorReason)
+public enum FilesErrorReason : Swift.Sendable {
+  case read(PackageResourcesFS.ReadErrorReason)
+  case write(PackageResourcesFS.WriteErrorReason)
+  case location(PackageResourcesFS.LocationErrorReason)
 }
-public enum ReadErrorReason : Swift::Sendable {
-  case readFailed(any Swift::Error)
+public enum ReadErrorReason : Swift.Sendable {
+  case readFailed(any Swift.Error)
   case stringDecodingFailed
-  case notAnInt(Swift::String)
+  case notAnInt(Swift.String)
 }
-public enum WriteErrorReason : Swift::Sendable {
+public enum WriteErrorReason : Swift.Sendable {
   case emptyPath
-  case folderCreationFailed(any Swift::Error)
+  case folderCreationFailed(any Swift.Error)
   case fileCreationFailed
-  case writeFailed(any Swift::Error)
-  case stringEncodingFailed(Swift::String)
+  case writeFailed(any Swift.Error)
+  case stringEncodingFailed(Swift.String)
 }
-public enum LocationErrorReason : Swift::Sendable {
+public enum LocationErrorReason : Swift.Sendable {
   case missing
   case emptyFilePath
   case cannotRenameRoot
-  case renameFailed(any Swift::Error)
-  case moveFailed(any Swift::Error)
-  case copyFailed(any Swift::Error)
-  case deleteFailed(any Swift::Error)
-  case unresolvedSearchPath(Foundation::FileManager.Foundation::SearchPathDirectory, domain: Foundation::FileManager.Foundation::SearchPathDomainMask)
+  case renameFailed(any Swift.Error)
+  case moveFailed(any Swift.Error)
+  case copyFailed(any Swift.Error)
+  case deleteFailed(any Swift.Error)
+  case unresolvedSearchPath(Foundation.FileManager.SearchPathDirectory, domain: Foundation.FileManager.SearchPathDomainMask)
 }
-public typealias ReadError = PackageResourcesFS::FilesError<PackageResourcesFS::ReadErrorReason>
-public typealias WriteError = PackageResourcesFS::FilesError<PackageResourcesFS::WriteErrorReason>
-public typealias LocationError = PackageResourcesFS::FilesError<PackageResourcesFS::LocationErrorReason>
-public typealias SomeFilesError = PackageResourcesFS::FilesError<PackageResourcesFS::FilesErrorReason>
+public typealias ReadError = PackageResourcesFS.FilesError<PackageResourcesFS.ReadErrorReason>
+public typealias WriteError = PackageResourcesFS.FilesError<PackageResourcesFS.WriteErrorReason>
+public typealias LocationError = PackageResourcesFS.FilesError<PackageResourcesFS.LocationErrorReason>
+public typealias SomeFilesError = PackageResourcesFS.FilesError<PackageResourcesFS.FilesErrorReason>
 public protocol _Location {
-  static var kind: PackageResourcesFS::LocationKind { get }
-  var description: Swift::String { get }
-  var path: Swift::String { get }
-  var url: Foundation::URL { get }
-  var name: Swift::String { get }
-  var nameExcludingExtension: Swift::String { get }
-  var `extension`: Swift::String? { get }
-  var parent: PackageResourcesFS::Folder? { get }
-  var creationDate: Foundation::Date? { get }
-  var modificationDate: Foundation::Date? { get }
-  func path(relativeTo folder: PackageResourcesFS::Folder) -> Swift::String
-  func rename(to newName: Swift::String, keepExtension: Swift::Bool) throws(PackageResourcesFS::LocationError) -> Self
-  func move(to newParent: PackageResourcesFS::Folder) throws(PackageResourcesFS::LocationError) -> Self
+  static var kind: PackageResourcesFS.LocationKind { get }
+  var description: Swift.String { get }
+  var path: Swift.String { get }
+  var url: Foundation.URL { get }
+  var name: Swift.String { get }
+  var nameExcludingExtension: Swift.String { get }
+  var `extension`: Swift.String? { get }
+  var parent: PackageResourcesFS.Folder? { get }
+  var creationDate: Foundation.Date? { get }
+  var modificationDate: Foundation.Date? { get }
+  func path(relativeTo folder: PackageResourcesFS.Folder) -> Swift.String
+  func rename(to newName: Swift.String, keepExtension: Swift.Bool) throws(PackageResourcesFS.LocationError) -> Self
+  func move(to newParent: PackageResourcesFS.Folder) throws(PackageResourcesFS.LocationError) -> Self
   func delete() throws
 }
-extension PackageResourcesFS::File : PackageResourcesFS::_Location {
+extension PackageResourcesFS.File : PackageResourcesFS._Location {
 }
-extension PackageResourcesFS::Folder : PackageResourcesFS::_Location {
+extension PackageResourcesFS.Folder : PackageResourcesFS._Location {
 }
 public enum FSObject {
-  case file(PackageResourcesFS::File)
-  case folder(PackageResourcesFS::Folder)
-  public var location: any PackageResourcesFS::_Location {
+  case file(PackageResourcesFS.File)
+  case folder(PackageResourcesFS.Folder)
+  public var location: any PackageResourcesFS._Location {
     get
   }
 }
-extension PackageResourcesFS::Folder {
-  public func compactMapContents<T>(recursive: Swift::Bool = false, _ f: (PackageResourcesFS::FSObject) throws -> T?) rethrows -> [T]
+extension PackageResourcesFS.Folder {
+  public func compactMapContents<T>(recursive: Swift.Bool = false, _ f: (PackageResourcesFS.FSObject) throws -> T?) rethrows -> [T]
 }
-extension PackageResourcesFS::LocationKind : Swift::Equatable {}
-extension PackageResourcesFS::LocationKind : Swift::Hashable {}
+extension PackageResourcesFS.LocationKind : Swift.Equatable {}
+extension PackageResourcesFS.LocationKind : Swift.Hashable {}
