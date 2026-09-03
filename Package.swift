@@ -44,7 +44,7 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
-			.upToNextMajor(from: "5.0.0")
+			.upToNextMajor(from: "5.0.1")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-xcstrings-catalog.git",
@@ -53,12 +53,12 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
-			.upToNextMinor(from: "0.0.2"),
+			.upToNextMinor(from: "0.0.3"),
 			traits: ["NominalTypes"]
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
-			.upToNextMinor(from: "0.2.0")
+			.upToNextMinor(from: "0.2.1")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swiftlang-snippets.git",
