@@ -48,7 +48,7 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-xcstrings-catalog.git",
-			.upToNextMajor(from: "1.0.1"),
+			.upToNextMajor(from: "1.0.2"),
 			traits: ["Parsing"]
 		),
 		.package(
@@ -62,15 +62,15 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swiftlang-snippets.git",
-			.upToNextMinor(from: "0.0.1")
+			.upToNextMinor(from: "0.1.0")
 		),
 		.package(
 			url: "https://github.com/pointfreeco/swift-case-paths.git",
-			.upToNextMajor(from: "1.7.0")
+			.upToNextMajor(from: "1.10.0")
 		),
 		.package(
 			url: "https://github.com/pointfreeco/swift-snapshot-testing.git",
-			.upToNextMajor(from: "1.19.2")
+			.upToNextMajor(from: "1.19.4")
 		),
 	],
 	targets: [
