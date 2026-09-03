@@ -53,16 +53,16 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
-			.upToNextMinor(from: "0.0.3"),
+			.upToNextMinor(from: "0.0.4"),
 			traits: ["NominalTypes"]
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
-			.upToNextMinor(from: "0.2.1")
+			.upToNextMinor(from: "0.2.2")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swiftlang-snippets.git",
-			.upToNextMinor(from: "0.1.0")
+			.upToNextMinor(from: "0.1.1")
 		),
 		.package(
 			url: "https://github.com/pointfreeco/swift-case-paths.git",
