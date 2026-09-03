@@ -25,7 +25,7 @@ let package = Package(
 	dependencies: [
 		.package(
 			url: "https://github.com/capturecontext/package-resources-cli.git",
-			.upToNextMajor(from: "5.0.0")
+			.upToNextMajor(from: "4.1.0")
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-package-resources.git",
