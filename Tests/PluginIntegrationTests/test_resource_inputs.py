@@ -22,7 +22,10 @@ class ResourceInputsTests(unittest.TestCase):
     def test_package_root_target_excludes_build_outputs(self):
         self.check_inputs(target_root=True)
 
-    def check_inputs(self, target_root=False):
+    def test_package_root_target_excludes_custom_scratch_outputs(self):
+        self.check_inputs(target_root=True, scratch_path="build-output")
+
+    def check_inputs(self, target_root=False, scratch_path=".build"):
         with tempfile.TemporaryDirectory(prefix="package-resource-inputs-") as temporary:
             root = Path(temporary)
             plugin = root / "Plugins/Resources/plugin.swift"
@@ -48,13 +51,21 @@ let package = Package(
                     'exclude: ["Plugins", "Sources/package-resources-cli", "Package.swift"], '
                     'resources: [.copy("Sources/Fixture/Resources")],',
                 ))
+            if target_root and scratch_path != ".build":
+                # Keep SwiftPM source discovery valid; plugin input traversal must also exclude it.
+                manifest.write_text(manifest.read_text().replace(
+                    '"Package.swift"]', f'"Package.swift", "{scratch_path}"]',
+                ))
             tool = root / "Sources/package-resources-cli/main.swift"
             tool.parent.mkdir(parents=True)
             tool.write_text(r'''import Foundation
 let arguments = CommandLine.arguments
 func argument(_ name: String) -> String { arguments[arguments.firstIndex(of: name)! + 1] }
 let input = URL(fileURLWithPath: argument("--input"))
-let files = FileManager.default.enumerator(at: input, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])!
+let rootResources = input.appending(path: "Sources/Fixture/Resources")
+let resources = FileManager.default.fileExists(atPath: rootResources.path)
+    ? rootResources : input.appending(path: "Resources")
+let files = FileManager.default.enumerator(at: resources, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])!
 var values: [String] = []
 for case let file as URL in files where file.pathExtension == "txt" {
     values.append(try String(contentsOf: file, encoding: .utf8))
@@ -76,11 +87,11 @@ try "public let resourceSnapshot = \(String(reflecting: snapshot))\n"
 
             def build_snapshot():
                 result = subprocess.run(
-                    ["swift", "build", "--target", "Fixture", "--build-system", "native"],
+                    ["swift", "build", "--scratch-path", str(root / scratch_path), "--target", "Fixture", "--build-system", "native"],
                     cwd=root, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
                 )
                 self.assertEqual(result.returncode, 0, result.stdout)
-                generated = list((root / ".build/plugins/outputs").rglob("Resources.generated.swift"))
+                generated = list((root / scratch_path / "plugins/outputs").rglob("Resources.generated.swift"))
                 self.assertEqual(len(generated), 1)
                 return generated[0].read_text()
 

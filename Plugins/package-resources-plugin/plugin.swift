@@ -46,7 +46,7 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 		} ?? []
 		var inputURLs = try resourceInputURLs(
 			in: target.directoryURL,
-			excluding: context.pluginWorkDirectoryURL.resolvingSymlinksInPath()
+			excluding: buildDirectory(containing: context.pluginWorkDirectoryURL)
 		)
 		if let configURL, !inputURLs.contains(configURL) {
 			inputURLs.append(configURL)
@@ -66,6 +66,22 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 				]
 			)
 		]
+	}
+
+	/// SwiftPM writes this state at the active scratch root before evaluating plugins.
+	/// Locate it from our output path so custom scratch directory names are also excluded.
+	private func buildDirectory(containing pluginWorkDirectory: URL) -> URL {
+		var directory = pluginWorkDirectory.resolvingSymlinksInPath()
+		while directory.path != "/" {
+			let state = directory.appending(component: "workspace-state.json")
+			let plugins = directory.appending(component: "plugins")
+			if FileManager.default.fileExists(atPath: state.path),
+				FileManager.default.fileExists(atPath: plugins.path) {
+				return directory
+			}
+			directory.deleteLastPathComponent()
+		}
+		return pluginWorkDirectory.resolvingSymlinksInPath()
 	}
 
 	/// Files track edits; directories also track additions and removals between builds.
