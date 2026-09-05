@@ -60,6 +60,11 @@ let package = Package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
 			.upToNextMinor(from: "0.2.2")
 		),
+		// Keep both Swift 6.2 and 6.4 dependency graphs compatible until the next release.
+		.package(
+			url: "https://github.com/capturecontext/swift-snippets.git",
+			revision: "aeb54d10efb0be0a2f3b5b70d3e88e2df0649281"
+		),
 		.package(
 			url: "https://github.com/capturecontext/swiftlang-snippets.git",
 			.upToNextMinor(from: "0.1.1")
