@@ -44,7 +44,10 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 		let configArgs: [String] = configURL.map { url in
 			["--config", url.path()]
 		} ?? []
-		var inputURLs = try resourceInputURLs(in: target.directoryURL)
+		var inputURLs = try resourceInputURLs(
+			in: target.directoryURL,
+			excluding: context.pluginWorkDirectoryURL.resolvingSymlinksInPath()
+		)
 		if let configURL, !inputURLs.contains(configURL) {
 			inputURLs.append(configURL)
 		}
@@ -66,7 +69,12 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 	}
 
 	/// Files track edits; directories also track additions and removals between builds.
-	private func resourceInputURLs(in directory: URL) throws -> [URL] {
+	private func resourceInputURLs(in directory: URL, excluding pluginWorkDirectory: URL) throws -> [URL] {
+		guard
+			![".build", ".git"].contains(directory.lastPathComponent),
+			directory.resolvingSymlinksInPath() != pluginWorkDirectory
+		else { return [] }
+
 		var inputs = [directory]
 		let children = try FileManager.default.contentsOfDirectory(
 			at: directory,
@@ -75,7 +83,7 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 		for child in children {
 			let values = try child.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
 			if values.isDirectory == true && values.isSymbolicLink != true {
-				inputs += try resourceInputURLs(in: child)
+				inputs += try resourceInputURLs(in: child, excluding: pluginWorkDirectory)
 			} else {
 				inputs.append(child)
 			}

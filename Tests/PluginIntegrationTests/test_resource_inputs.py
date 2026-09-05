@@ -17,6 +17,12 @@ ROOT = Path(__file__).resolve().parents[2]
 
 class ResourceInputsTests(unittest.TestCase):
     def test_edits_additions_removals_and_package_configuration(self):
+        self.check_inputs()
+
+    def test_package_root_target_excludes_build_outputs(self):
+        self.check_inputs(target_root=True)
+
+    def check_inputs(self, target_root=False):
         with tempfile.TemporaryDirectory(prefix="package-resource-inputs-") as temporary:
             root = Path(temporary)
             plugin = root / "Plugins/Resources/plugin.swift"
@@ -34,13 +40,21 @@ let package = Package(
     ]
 )
 ''')
+            if target_root:
+                manifest = root / "Package.swift"
+                manifest.write_text(manifest.read_text().replace(
+                    '.target(name: "Fixture", resources: [.copy("Resources")],',
+                    '.target(name: "Fixture", path: ".", '
+                    'exclude: ["Plugins", "Sources/package-resources-cli", "Package.swift"], '
+                    'resources: [.copy("Sources/Fixture/Resources")],',
+                ))
             tool = root / "Sources/package-resources-cli/main.swift"
             tool.parent.mkdir(parents=True)
             tool.write_text(r'''import Foundation
 let arguments = CommandLine.arguments
 func argument(_ name: String) -> String { arguments[arguments.firstIndex(of: name)! + 1] }
 let input = URL(fileURLWithPath: argument("--input"))
-let files = FileManager.default.enumerator(at: input, includingPropertiesForKeys: nil)!
+let files = FileManager.default.enumerator(at: input, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])!
 var values: [String] = []
 for case let file as URL in files where file.pathExtension == "txt" {
     values.append(try String(contentsOf: file, encoding: .utf8))
