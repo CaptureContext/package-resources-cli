@@ -37,3 +37,8 @@ jobs:
         action: xcodebuild-test
         platform: ${{ matrix.platform }}
         scheme: package-resources-cli-Package
+    - name: Report unfiltered dependency resolution failure
+      if: failure()
+      run: |
+        swift --version
+        swift package resolve
