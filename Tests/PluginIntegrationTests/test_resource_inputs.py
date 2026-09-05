@@ -25,7 +25,10 @@ class ResourceInputsTests(unittest.TestCase):
     def test_package_root_target_excludes_custom_scratch_outputs(self):
         self.check_inputs(target_root=True, scratch_path="build-output")
 
-    def check_inputs(self, target_root=False, scratch_path=".build"):
+    def test_symlinked_resource_directory_tracks_destination_edits(self):
+        self.check_inputs(symlink_resources=True)
+
+    def check_inputs(self, target_root=False, scratch_path=".build", symlink_resources=False):
         with tempfile.TemporaryDirectory(prefix="package-resource-inputs-") as temporary:
             root = Path(temporary)
             plugin = root / "Plugins/Resources/plugin.swift"
@@ -65,7 +68,7 @@ let input = URL(fileURLWithPath: argument("--input"))
 let rootResources = input.appending(path: "Sources/Fixture/Resources")
 let resources = FileManager.default.fileExists(atPath: rootResources.path)
     ? rootResources : input.appending(path: "Resources")
-let files = FileManager.default.enumerator(at: resources, includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])!
+let files = FileManager.default.enumerator(at: resources.resolvingSymlinksInPath(), includingPropertiesForKeys: nil, options: [.skipsHiddenFiles])!
 var values: [String] = []
 for case let file as URL in files where file.pathExtension == "txt" {
     values.append(try String(contentsOf: file, encoding: .utf8))
@@ -78,7 +81,13 @@ try "public let resourceSnapshot = \(String(reflecting: snapshot))\n"
     .write(toFile: argument("--output"), atomically: true, encoding: .utf8)
 ''')
             resources = root / "Sources/Fixture/Resources"
-            resources.mkdir(parents=True)
+            if symlink_resources:
+                shared = root / "SharedResources"
+                shared.mkdir()
+                resources.parent.mkdir(parents=True)
+                resources.symlink_to(shared, target_is_directory=True)
+            else:
+                resources.mkdir(parents=True)
             (resources.parent / "Fixture.swift").write_text("public enum Fixture {}\n")
             original = resources / "original.txt"
             original.write_text("first")
@@ -105,6 +114,13 @@ try "public let resourceSnapshot = \(String(reflecting: snapshot))\n"
             self.assertIn('"added|config-first"', build_snapshot())
             configuration.write_text("config-edited")
             self.assertIn('"added|config-edited"', build_snapshot())
+            if symlink_resources:
+                replacement = root / "ReplacementResources"
+                replacement.mkdir()
+                (replacement / "replacement.txt").write_text("replacement")
+                resources.unlink()
+                resources.symlink_to(replacement, target_is_directory=True)
+                self.assertIn('"config-edited|replacement"', build_snapshot())
 
 
 if __name__ == "__main__":
