@@ -42,3 +42,4 @@ jobs:
       run: |
         swift --version
         swift package resolve
+        xcodebuild -resolvePackageDependencies -scheme package-resources-cli-Package -workspace .swiftpm/xcode/package.xcworkspace
