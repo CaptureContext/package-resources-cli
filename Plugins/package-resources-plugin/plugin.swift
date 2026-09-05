@@ -44,7 +44,10 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 		let configArgs: [String] = configURL.map { url in
 			["--config", url.path()]
 		} ?? []
-
+		var inputURLs = try resourceInputURLs(in: target.directoryURL)
+		if let configURL, !inputURLs.contains(configURL) {
+			inputURLs.append(configURL)
+		}
 
 		return [
 			.buildCommand(
@@ -54,10 +57,29 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 				+ inputArgs
 				+ outputArgs
 				+ configArgs,
+				inputFiles: inputURLs,
 				outputFiles: [
 					outputURL
 				]
 			)
 		]
+	}
+
+	/// Files track edits; directories also track additions and removals between builds.
+	private func resourceInputURLs(in directory: URL) throws -> [URL] {
+		var inputs = [directory]
+		let children = try FileManager.default.contentsOfDirectory(
+			at: directory,
+			includingPropertiesForKeys: [.isDirectoryKey, .isSymbolicLinkKey]
+		).sorted { $0.path() < $1.path() }
+		for child in children {
+			let values = try child.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
+			if values.isDirectory == true && values.isSymbolicLink != true {
+				inputs += try resourceInputURLs(in: child)
+			} else {
+				inputs.append(child)
+			}
+		}
+		return inputs
 	}
 }

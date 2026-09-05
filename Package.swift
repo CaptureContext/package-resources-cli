@@ -53,7 +53,7 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
-			.upToNextMinor(from: "0.0.4"),
+			.upToNextMinor(from: "0.0.3"),
 			traits: ["NominalTypes"]
 		),
 		.package(

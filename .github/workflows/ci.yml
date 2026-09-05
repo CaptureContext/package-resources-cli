@@ -27,6 +27,8 @@ jobs:
     timeout-minutes: 30
     steps:
     - uses: actions/checkout@v7
+    - name: Check incremental resource generation
+      run: python3 Tests/PluginIntegrationTests/test_resource_inputs.py
     - name: Test
       uses: capturecontext/swift-package-action/build@3.0-beta.14
       with:
