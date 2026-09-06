@@ -53,12 +53,22 @@ let package = Package(
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-function-composition.git",
-			.upToNextMinor(from: "0.0.4"),
+			.upToNextMinor(from: "0.0.3"),
 			traits: ["NominalTypes"]
 		),
 		.package(
 			url: "https://github.com/capturecontext/swift-keypaths-extensions.git",
 			.upToNextMinor(from: "0.2.2")
+		),
+		// These merged revisions support checkout consumers on Swift 6.2 and 6.4.
+		// Replace with published version requirements before a semantic CLI release.
+		.package(
+			url: "https://github.com/capturecontext/swift-casification.git",
+			revision: "32a8de52e24cae336065925a0e3df2bfb2a9f010"
+		),
+		.package(
+			url: "https://github.com/capturecontext/swift-snippets.git",
+			revision: "aeb54d10efb0be0a2f3b5b70d3e88e2df0649281"
 		),
 		.package(
 			url: "https://github.com/capturecontext/swiftlang-snippets.git",
