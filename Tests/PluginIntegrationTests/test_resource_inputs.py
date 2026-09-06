@@ -28,7 +28,10 @@ class ResourceInputsTests(unittest.TestCase):
     def test_symlinked_resource_directory_tracks_destination_edits(self):
         self.check_inputs(symlink_resources=True)
 
-    def check_inputs(self, target_root=False, scratch_path=".build", symlink_resources=False):
+    def test_dangling_resource_symlink_is_ignored_until_replaced(self):
+        self.check_inputs(dangling_resource=True)
+
+    def check_inputs(self, target_root=False, scratch_path=".build", symlink_resources=False, dangling_resource=False):
         with tempfile.TemporaryDirectory(prefix="package-resource-inputs-") as temporary:
             root = Path(temporary)
             plugin = root / "Plugins/Resources/plugin.swift"
@@ -89,6 +92,9 @@ try "public let resourceSnapshot = \(String(reflecting: snapshot))\n"
             else:
                 resources.mkdir(parents=True)
             (resources.parent / "Fixture.swift").write_text("public enum Fixture {}\n")
+            if dangling_resource:
+                dangling = resources / "missing.asset"
+                dangling.symlink_to(root / "missing-destination")
             original = resources / "original.txt"
             original.write_text("first")
             configuration = root / ".packageresources"
@@ -114,6 +120,11 @@ try "public let resourceSnapshot = \(String(reflecting: snapshot))\n"
             self.assertIn('"added|config-first"', build_snapshot())
             configuration.write_text("config-edited")
             self.assertIn('"added|config-edited"', build_snapshot())
+            if dangling_resource:
+                dangling.unlink()
+                dangling.mkdir()
+                (dangling / "recovered.txt").write_text("recovered")
+                self.assertIn('"added|config-edited|recovered"', build_snapshot())
             if symlink_resources:
                 replacement = root / "ReplacementResources"
                 replacement.mkdir()

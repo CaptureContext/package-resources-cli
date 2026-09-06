@@ -109,7 +109,8 @@ struct PackageResourcesPlugin: BuildToolPlugin {
 			let values = try child.resourceValues(forKeys: [.isDirectoryKey, .isSymbolicLinkKey])
 			if values.isSymbolicLink == true {
 				let destination = child.resolvingSymlinksInPath()
-				guard destination != pluginWorkDirectory,
+				guard FileManager.default.fileExists(atPath: destination.path),
+					destination != pluginWorkDirectory,
 					!destination.path.hasPrefix(pluginWorkDirectory.path + "/") else { continue }
 				inputs.append(child) // Retargeting the link also invalidates generation.
 				if let destinationValues = try? destination.resourceValues(forKeys: [.isDirectoryKey]) {
